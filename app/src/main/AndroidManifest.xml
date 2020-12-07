@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DigiToursBreda">
-        <activity android:name=".MainActivity">
+        <activity android:name=".gui.activities.SplashScreenActivity"></activity>
+        <activity android:name=".gui.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
