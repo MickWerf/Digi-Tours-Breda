@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/SettingsScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".gui.fragments.SettingScreenFragment">
@@ -11,9 +12,13 @@
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="360dp"
-            android:layout_height="586dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.49"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,9 +80,11 @@
 
             <ImageView
                 android:id="@+id/imageView4"
-                android:layout_width="351dp"
+                android:layout_width="0dp"
                 android:layout_height="18dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="7dp"
+                android:layout_marginEnd="15dp"
                 android:src="@drawable/line_drawable"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.555"
@@ -88,22 +95,88 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="40dp"
                 android:fontFamily="@font/lato"
                 android:text="@string/HowToUse"
                 android:textColor="#000000"
                 android:textSize="20sp"
-                tools:layout_editor_absoluteX="5dp"
-                tools:layout_editor_absoluteY="159dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="20dp"
                 android:text="@string/InCaseOfNoGPS"
                 android:textColor="#000000"
                 android:textSize="20sp"
-                tools:layout_editor_absoluteX="5dp"
-                tools:layout_editor_absoluteY="225dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/HowToUseTV" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/line2_drawable"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="0dp"
+                android:layout_height="5dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/line2_drawable"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/HowToUseTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+
+            <TextView
+                android:id="@+id/NoGpsTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_baseline_play_arrow_24"
+                app:layout_constraintBottom_toTopOf="@+id/imageView6"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="15dp"
+                android:src="@drawable/ic_baseline_play_arrow_24"
+                app:layout_constraintBottom_toTopOf="@+id/imageView7"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -111,7 +184,7 @@
             android:id="@+id/SettingsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="18dp"
             android:fontFamily="@font/lato_bold"
             android:text="@string/Settings"
