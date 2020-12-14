@@ -6,4 +6,5 @@
     <string name="route_fragment_title2">Good Afternoon!</string>
     <string name="route_fragment_title3">Good Evening!</string>
     <string name="route_fragment_title4">Good Night!</string>
+    <string name="splash_screen_title">DigiTours Breda Edition</string>
 </resources>
