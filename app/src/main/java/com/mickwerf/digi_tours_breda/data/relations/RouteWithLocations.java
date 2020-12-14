@@ -20,4 +20,12 @@ public class RouteWithLocations {
             associateBy = @Junction(RouteLocationCrossReference.class)
     )
     private List<Location> locations;
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
+    }
 }
