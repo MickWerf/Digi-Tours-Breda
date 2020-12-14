@@ -15,4 +15,12 @@ public class LocationCoordinate {
             entityColumn = "location"
     )
     private GpsCoordinate gpsCoordinate;
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public GpsCoordinate getGpsCoordinate() {
+        return gpsCoordinate;
+    }
 }

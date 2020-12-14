@@ -16,4 +16,12 @@ public class LocationElements {
             entityColumn = "location"
     )
     private List<LocationElements> elements;
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public List<LocationElements> getElements() {
+        return elements;
+    }
 }

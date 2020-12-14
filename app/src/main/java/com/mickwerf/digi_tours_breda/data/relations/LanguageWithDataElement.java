@@ -17,4 +17,12 @@ public class LanguageWithDataElement {
             entityColumn = "language"
     )
     private List<DataElement> dataElements;
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public List<DataElement> getDataElements() {
+        return dataElements;
+    }
 }

@@ -15,4 +15,12 @@ public class LanguageUserSetting {
             entityColumn = "languageName"
     )
     private Language language;
+
+    public UserSettings getUserSettings() {
+        return userSettings;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
 }

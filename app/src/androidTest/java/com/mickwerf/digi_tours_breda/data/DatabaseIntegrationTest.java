@@ -14,15 +14,17 @@ import java.util.List;
 public class DatabaseIntegrationTest {
 
     private Database database;
+    private AdminDataAccess dataAdminAccess;
 
     @Before
     public void createNewDataBaseObject() {
         this.database = Database.getInstance(InstrumentationRegistry.getInstrumentation().getTargetContext());
+        this.dataAdminAccess = database.adminDataAccess();
     }
 
     @Test
     public void testRoutes() {
-        List<Route> routes = this.database.userDataAccess().getAllRoutes();
+        List<Route> routes = this.dataAdminAccess.getAllRoutes();
 
         Assert.assertEquals(20, routes.size());
 
@@ -30,9 +32,9 @@ public class DatabaseIntegrationTest {
         boolean previousStatus = route.isComplete();
 
         route.setComplete(!previousStatus);
-        this.database.userDataAccess().updateRoute(route);
+        this.dataAdminAccess.updateRoute(route);
 
-        RouteWithLocations routeWithLocations = this.database.userDataAccess().getRouteWithLocations(route.getRouteName());
+        RouteWithLocations routeWithLocations = this.dataAdminAccess.getRouteWithLocations(route.getRouteName());
 
         Assert.assertEquals(!previousStatus, routeWithLocations.getRoute().isComplete());
     }
