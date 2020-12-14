@@ -5,6 +5,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * Room entity which describes the user settings.
+ */
 @Entity(tableName = "user_settings")
 public class UserSettings {
 

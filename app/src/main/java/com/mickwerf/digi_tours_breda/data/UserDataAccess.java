@@ -14,6 +14,11 @@ import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 
 import java.util.List;
 
+/**
+ * Data Access Object for user level permissions.
+ *
+ * The Data Access Object defines the available queries.
+ */
 @Dao
 public interface UserDataAccess {
 

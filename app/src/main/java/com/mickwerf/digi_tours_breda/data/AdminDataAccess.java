@@ -11,6 +11,11 @@ import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
 
+/**
+ * Data Access Object for Admin level permissions.
+ *
+ * The Data Access Object defines the available queries.
+ */
 @Dao
 public interface AdminDataAccess extends UserDataAccess {
 

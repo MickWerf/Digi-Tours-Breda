@@ -10,6 +10,9 @@ import com.mickwerf.digi_tours_breda.data.entities.RouteLocationCrossReference;
 
 import java.util.List;
 
+/**
+ * Room relation which relates the route to a list of locations.
+ */
 public class RouteWithLocations {
     @Embedded
     private Route route;

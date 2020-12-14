@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 
+/**
+ * Room entity which describes a cross reference (more to more relation) between route and location tables.
+ */
 @Entity(tableName = "route_location_cross_reference", primaryKeys = {"routeName", "latitude", "longitude"})
 public class RouteLocationCrossReference {
     @NonNull

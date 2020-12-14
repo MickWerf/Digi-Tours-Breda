@@ -7,6 +7,9 @@ import com.mickwerf.digi_tours_breda.data.entities.Location;
 
 import java.util.List;
 
+/**
+ * Room relation which relates a location to a list of Data elements.
+ */
 public class LocationElements {
     @Embedded
     private Location location;

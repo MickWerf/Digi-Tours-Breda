@@ -6,6 +6,9 @@ import androidx.room.Relation;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 
+/**
+ * Room relation which relates a location to a gps coordinate.
+ */
 public class LocationCoordinate {
     @Embedded
     private Location location;
