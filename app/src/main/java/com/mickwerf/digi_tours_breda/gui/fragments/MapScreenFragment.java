@@ -104,19 +104,19 @@ public class MapScreenFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_map_screen, container, false);
 
-        this.mapView = getActivity().findViewById(R.id.map_view);
-        this.mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
-        this.mapView.setMultiTouchControls(true);
-        this.mapView.setTileSource(TileSourceFactory.MAPNIK);
-
-        this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()), this.mapView);
-        this.locationOverlay.enableMyLocation();
-        this.locationOverlay.enableFollowLocation();
-        this.mapView.getOverlays().add(this.locationOverlay);
-        this.mapController = new MapController(this.mapView);
-        this.mapController.zoomTo(19);
-        this.mapController.setCenter(locationOverlay.getMyLocation());
-        this.mapController.animateTo(locationOverlay.getMyLocation());
+//        this.mapView = getActivity().findViewById(R.id.map_view);
+//        this.mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
+//        this.mapView.setMultiTouchControls(true);
+//        this.mapView.setTileSource(TileSourceFactory.MAPNIK);
+//
+//        this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()), this.mapView);
+//        this.locationOverlay.enableMyLocation();
+//        this.locationOverlay.enableFollowLocation();
+//        this.mapView.getOverlays().add(this.locationOverlay);
+//        this.mapController = new MapController(this.mapView);
+//        this.mapController.zoomTo(19);
+//        this.mapController.setCenter(locationOverlay.getMyLocation());
+//        this.mapController.animateTo(locationOverlay.getMyLocation());
 
         return view;
     }
@@ -152,6 +152,20 @@ public class MapScreenFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        this.mapView = getActivity().findViewById(R.id.map_view);
+        this.mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
+        this.mapView.setMultiTouchControls(true);
+        this.mapView.setTileSource(TileSourceFactory.MAPNIK);
+
+        this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()), this.mapView);
+        this.locationOverlay.enableMyLocation();
+        this.locationOverlay.enableFollowLocation();
+        this.mapView.getOverlays().add(this.locationOverlay);
+        this.mapController = new MapController(this.mapView);
+        this.mapController.zoomTo(19);
+        this.mapController.setCenter(locationOverlay.getMyLocation());
+        this.mapController.animateTo(locationOverlay.getMyLocation());
 
         mLocationList.add(new NextLocationItem("test1"));
         mLocationList.add(new NextLocationItem("test2"));
