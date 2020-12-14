@@ -9,8 +9,10 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="370dp"
+        android:layout_width="0dp"
         android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginBottom="18dp"
         android:background="@drawable/layout_bg"
         android:orientation="horizontal"
@@ -56,6 +58,7 @@
                 android:id="@+id/SettingsTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
                 android:fontFamily="@font/lato"
                 android:text="@string/Settings"
                 android:textColor="#000000"
@@ -63,7 +66,6 @@
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.737"
                 app:layout_constraintStart_toEndOf="@+id/DirectionsImageView" />
 
             <ImageView
