@@ -3,7 +3,6 @@ package com.mickwerf.digi_tours_breda.gui.fragments;
 import android.Manifest;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -79,16 +78,22 @@ public class MapScreenFragment extends Fragment {
 
         Configuration.getInstance().load(getActivity().getApplication(), PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()));
 
-        this.mapView = getActivity().findViewById(R.id.map_view);
-        this.mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
-        this.mapView.setMultiTouchControls(true);
-        this.mapView.setTileSource(TileSourceFactory.MAPNIK);
-
         requestPermissions(new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_COARSE_LOCATION
         }, REQUEST_PERMISSIONS_REQUEST_CODE);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.fragment_map_screen, container, false);
+
+        this.mapView = getActivity().findViewById(R.id.map_view);
+        this.mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
+        this.mapView.setMultiTouchControls(true);
+        this.mapView.setTileSource(TileSourceFactory.MAPNIK);
 
         this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()), this.mapView);
         this.locationOverlay.enableMyLocation();
@@ -98,6 +103,8 @@ public class MapScreenFragment extends Fragment {
         this.mapController.zoomTo(19);
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
+
+        return view;
     }
 
     @Override
@@ -126,12 +133,5 @@ public class MapScreenFragment extends Fragment {
                     permissionsToRequest.toArray(new String[0]),
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map_screen, container, false);
     }
 }
