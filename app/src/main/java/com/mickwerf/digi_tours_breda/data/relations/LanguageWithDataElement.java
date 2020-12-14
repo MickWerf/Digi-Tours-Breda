@@ -21,6 +21,14 @@ public class LanguageWithDataElement {
     )
     private List<DataElement> dataElements;
 
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
+    public void setDataElements(List<DataElement> dataElements) {
+        this.dataElements = dataElements;
+    }
+
     public Language getLanguage() {
         return language;
     }

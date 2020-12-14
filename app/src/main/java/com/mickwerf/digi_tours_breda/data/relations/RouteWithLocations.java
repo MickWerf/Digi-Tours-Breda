@@ -24,6 +24,14 @@ public class RouteWithLocations {
     )
     private List<Location> locations;
 
+    public void setRoute(Route route) {
+        this.route = route;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
+    }
+
     public Route getRoute() {
         return route;
     }

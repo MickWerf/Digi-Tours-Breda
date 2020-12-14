@@ -19,6 +19,14 @@ public class LocationCoordinate {
     )
     private GpsCoordinate gpsCoordinate;
 
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public void setGpsCoordinate(GpsCoordinate gpsCoordinate) {
+        this.gpsCoordinate = gpsCoordinate;
+    }
+
     public Location getLocation() {
         return location;
     }
