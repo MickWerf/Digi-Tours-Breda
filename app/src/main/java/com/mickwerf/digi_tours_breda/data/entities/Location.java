@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 public class Location {
     @NonNull
     @PrimaryKey
-    private String name;
+    private String locationName;
 
     @ColumnInfo(name = "visited")
     private boolean visited;
@@ -17,19 +17,19 @@ public class Location {
     @ColumnInfo(name = "is_sight_seeing_location")
     private boolean isSightSeeingLocation;
 
-    public Location(@NonNull String name, boolean visited, boolean isSightSeeingLocation) {
-        this.name = name;
+    public Location(@NonNull String locationName, boolean visited, boolean isSightSeeingLocation) {
+        this.locationName = locationName;
         this.visited = visited;
         this.isSightSeeingLocation = isSightSeeingLocation;
     }
 
     @NonNull
     public String getName() {
-        return name;
+        return locationName;
     }
 
-    public void setName(@NonNull String name) {
-        this.name = name;
+    public void setName(@NonNull String locationName) {
+        this.locationName = locationName;
     }
 
     public boolean isVisited() {

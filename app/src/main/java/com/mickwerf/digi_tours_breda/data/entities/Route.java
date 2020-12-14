@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 public class Route {
     @NonNull
     @PrimaryKey
-    private String name;
+    private String routeName;
 
     @ColumnInfo(name = "complete")
     private boolean complete;
@@ -18,19 +18,19 @@ public class Route {
     @ColumnInfo(name = "route_image_path")
     private String routeImagePath;
 
-    public Route(@NonNull String name, boolean complete, @NonNull String routeImagePath) {
-        this.name = name;
+    public Route(@NonNull String routeName, boolean complete, @NonNull String routeImagePath) {
+        this.routeName = routeName;
         this.complete = complete;
         this.routeImagePath = routeImagePath;
     }
 
     @NonNull
     public String getName() {
-        return name;
+        return routeName;
     }
 
-    public void setName(@NonNull String name) {
-        this.name = name;
+    public void setName(@NonNull String routeName) {
+        this.routeName = routeName;
     }
 
     public boolean isComplete() {

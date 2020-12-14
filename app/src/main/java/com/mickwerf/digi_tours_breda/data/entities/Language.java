@@ -8,18 +8,18 @@ import androidx.room.PrimaryKey;
 public class Language {
     @NonNull
     @PrimaryKey
-    private String name;
+    private String languageName;
 
-    public Language(@NonNull String name) {
-        this.name = name;
+    public Language(@NonNull String languageName) {
+        this.languageName = languageName;
     }
 
     @NonNull
     public String getName() {
-        return name;
+        return languageName;
     }
 
     public void setName(@NonNull String name) {
-        this.name = name;
+        this.languageName = name;
     }
 }

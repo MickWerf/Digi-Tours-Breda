@@ -16,18 +16,18 @@ public class DataElement {
     private String dataType;
 
     @NonNull
-    @ColumnInfo(name = "location_name")
-    private String locationName;
+    @ColumnInfo(name = "location")
+    private String location;
 
     @NonNull
-    @ColumnInfo(name = "language_name")
-    private String languageName;
+    @ColumnInfo(name = "language")
+    private String language;
 
-    public DataElement(@NonNull String path, @NonNull String dataType, @NonNull String locationName, @NonNull String languageName) {
+    public DataElement(@NonNull String path, @NonNull String dataType, @NonNull String location, @NonNull String language) {
         this.path = path;
         this.dataType = dataType;
-        this.locationName = locationName;
-        this.languageName = languageName;
+        this.location = location;
+        this.language = language;
     }
 
     @NonNull
@@ -49,20 +49,20 @@ public class DataElement {
     }
 
     @NonNull
-    public String getLocationName() {
-        return locationName;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLocationName(@NonNull String locationName) {
-        this.locationName = locationName;
+    public void setLocation(@NonNull String location) {
+        this.location = location;
     }
 
     @NonNull
-    public String getLanguageName() {
-        return languageName;
+    public String getLanguage() {
+        return language;
     }
 
-    public void setLanguageName(@NonNull String languageName) {
-        this.languageName = languageName;
+    public void setLanguage(@NonNull String language) {
+        this.language = language;
     }
 }

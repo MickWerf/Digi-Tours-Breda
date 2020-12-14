@@ -1,19 +1,19 @@
 package com.mickwerf.digi_tours_breda.data.entities;
 
 import androidx.annotation.NonNull;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 
-@Entity(tableName = "route_location_cross_reference", primaryKeys = {"routeName", "longitude", "latitude"})
+@Entity(tableName = "route_location_cross_reference", primaryKeys = {"routeName", "gpsCoordinate"})
 public class RouteLocationCrossReference {
     @NonNull
     private String routeName;
-    private double longitude;
-    private double latitude;
+    @NonNull
+    @Embedded private GpsCoordinate gpsCoordinate;
 
-    public RouteLocationCrossReference(@NonNull String routeName, double longitude, double latitude) {
+    public RouteLocationCrossReference(@NonNull String routeName,@NonNull GpsCoordinate gpsCoordinate) {
         this.routeName = routeName;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.gpsCoordinate = gpsCoordinate;
     }
 
     @NonNull
@@ -25,19 +25,11 @@ public class RouteLocationCrossReference {
         this.routeName = routeName;
     }
 
-    public double getLongitude() {
-        return longitude;
+    public @NonNull GpsCoordinate getGpsCoordinate() {
+        return gpsCoordinate;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setGpsCoordinate(@NonNull GpsCoordinate gpsCoordinate) {
+        this.gpsCoordinate = gpsCoordinate;
     }
 }
