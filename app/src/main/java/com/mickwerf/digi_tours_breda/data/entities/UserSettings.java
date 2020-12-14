@@ -15,11 +15,11 @@ public class UserSettings {
     }
 
     @NonNull
-    public String getCurrentLanguage() {
+    public String getLanguage() {
         return language;
     }
 
-    public void setCurrentLanguage(@NonNull String language) {
+    public void setLanguage(@NonNull String language) {
         this.language = language;
     }
 }

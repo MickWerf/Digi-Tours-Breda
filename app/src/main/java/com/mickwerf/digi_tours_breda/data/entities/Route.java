@@ -25,11 +25,11 @@ public class Route {
     }
 
     @NonNull
-    public String getName() {
+    public String getRouteName() {
         return routeName;
     }
 
-    public void setName(@NonNull String routeName) {
+    public void setRouteName(@NonNull String routeName) {
         this.routeName = routeName;
     }
 

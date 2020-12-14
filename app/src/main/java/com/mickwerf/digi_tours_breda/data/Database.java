@@ -23,7 +23,8 @@ import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
                 RouteLocationCrossReference.class,
                 UserSettings.class
         },
-        version = 1
+        version = 1,
+        exportSchema = false
 )
 public abstract class Database extends RoomDatabase {
     private static volatile Database INSTANCE;

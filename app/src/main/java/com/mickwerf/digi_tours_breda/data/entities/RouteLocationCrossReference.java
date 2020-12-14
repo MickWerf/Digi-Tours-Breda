@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 
-@Entity(tableName = "route_location_cross_reference", primaryKeys = {"routeName", "gpsCoordinate"})
+@Entity(tableName = "route_location_cross_reference", primaryKeys = {"routeName", "latitude", "longitude"})
 public class RouteLocationCrossReference {
     @NonNull
     private String routeName;

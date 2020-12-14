@@ -24,11 +24,11 @@ public class Location {
     }
 
     @NonNull
-    public String getName() {
+    public String getLocationName() {
         return locationName;
     }
 
-    public void setName(@NonNull String locationName) {
+    public void setLocationName(@NonNull String locationName) {
         this.locationName = locationName;
     }
 

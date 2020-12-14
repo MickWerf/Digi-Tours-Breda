@@ -15,11 +15,11 @@ public class Language {
     }
 
     @NonNull
-    public String getName() {
+    public String getLanguageName() {
         return languageName;
     }
 
-    public void setName(@NonNull String name) {
+    public void setLanguageName(@NonNull String name) {
         this.languageName = name;
     }
 }
