@@ -29,6 +29,7 @@ import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
 public abstract class Database extends RoomDatabase {
     private static volatile Database INSTANCE;
     public abstract UserDataAccess userDataAccess();
+    public abstract AdminDataAccess adminDataAccess();
 
     public static Database getInstance(final Context context) {
         if (INSTANCE == null) {
