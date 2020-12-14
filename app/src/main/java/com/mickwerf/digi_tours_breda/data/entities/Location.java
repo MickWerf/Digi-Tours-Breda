@@ -5,6 +5,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * Room entity which describes a location.
+ */
 @Entity(tableName = "location")
 public class Location {
     @NonNull

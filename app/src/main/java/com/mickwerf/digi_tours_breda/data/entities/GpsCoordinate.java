@@ -3,6 +3,9 @@ package com.mickwerf.digi_tours_breda.data.entities;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 
+/**
+ * Room entity which describes a gps coordinate.
+ */
 @Entity(tableName = "gps_coordinate", primaryKeys = {"latitude", "longitude"})
 public class GpsCoordinate {
     private double latitude;

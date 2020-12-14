@@ -8,6 +8,9 @@ import com.mickwerf.digi_tours_breda.data.entities.Language;
 
 import java.util.List;
 
+/**
+ * Room relation which relates a language to a list of data elements.
+ */
 public class LanguageWithDataElement {
     @Embedded
     private Language language;
@@ -17,4 +20,12 @@ public class LanguageWithDataElement {
             entityColumn = "language"
     )
     private List<DataElement> dataElements;
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public List<DataElement> getDataElements() {
+        return dataElements;
+    }
 }
