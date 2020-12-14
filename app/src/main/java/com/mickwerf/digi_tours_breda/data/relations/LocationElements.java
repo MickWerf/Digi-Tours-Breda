@@ -3,6 +3,7 @@ package com.mickwerf.digi_tours_breda.data.relations;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
+import com.mickwerf.digi_tours_breda.data.entities.DataElement;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 
 import java.util.List;
@@ -18,13 +19,21 @@ public class LocationElements {
             parentColumn = "locationName",
             entityColumn = "location"
     )
-    private List<LocationElements> elements;
+    private List<DataElement> elements;
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public void setElements(List<DataElement> elements) {
+        this.elements = elements;
+    }
 
     public Location getLocation() {
         return location;
     }
 
-    public List<LocationElements> getElements() {
+    public List<DataElement> getElements() {
         return elements;
     }
 }
