@@ -4,6 +4,10 @@
     <string name="Settings">Settings</string>
     <string name="Directions">Directions</string>
     <string name="Language">Language:</string>
+    <string name="HowToUse">How to use:</string>
+    <string name="InCaseOfNoGPS">In case of no gps:</string>
+
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
