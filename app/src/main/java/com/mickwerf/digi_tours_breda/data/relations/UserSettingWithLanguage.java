@@ -19,6 +19,14 @@ public class UserSettingWithLanguage {
     )
     private Language language;
 
+    public void setUserSettings(UserSettings userSettings) {
+        this.userSettings = userSettings;
+    }
+
+    public void setLanguage(Language language) {
+        this.language = language;
+    }
+
     public UserSettings getUserSettings() {
         return userSettings;
     }
