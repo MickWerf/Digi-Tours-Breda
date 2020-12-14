@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * Room entity which describes a language.
+ */
 @Entity(tableName = "language")
 public class Language {
     @NonNull

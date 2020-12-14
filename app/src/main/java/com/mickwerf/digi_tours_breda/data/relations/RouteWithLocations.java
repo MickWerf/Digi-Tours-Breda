@@ -10,14 +10,25 @@ import com.mickwerf.digi_tours_breda.data.entities.RouteLocationCrossReference;
 
 import java.util.List;
 
-public class LocationWithRoutes {
+/**
+ * Room relation which relates the route to a list of locations.
+ */
+public class RouteWithLocations {
     @Embedded
-    private Location location;
+    private Route route;
 
     @Relation(
-            parentColumn = "locationName",
-            entityColumn = "routeName",
+            parentColumn = "routeName",
+            entityColumn = "locationName",
             associateBy = @Junction(RouteLocationCrossReference.class)
     )
-    private List<Route> routes;
+    private List<Location> locations;
+
+    public Route getRoute() {
+        return route;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
+    }
 }
