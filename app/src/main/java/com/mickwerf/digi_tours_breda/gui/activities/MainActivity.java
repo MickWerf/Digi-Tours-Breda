@@ -3,6 +3,7 @@ package com.mickwerf.digi_tours_breda.gui.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +13,8 @@ import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.gui.fragments.MapScreenFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.RouteOverviewFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.SettingScreenFragment;
+
+
 
 public class MainActivity extends AppCompatActivity {
 
