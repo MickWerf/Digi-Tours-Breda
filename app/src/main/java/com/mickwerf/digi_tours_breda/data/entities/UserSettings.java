@@ -18,9 +18,14 @@ public class UserSettings {
     @ColumnInfo(name = "language")
     private String language;
 
-    public UserSettings(int settingsId, @NonNull String language) {
+    @NonNull
+    @ColumnInfo(name = "route")
+    private String route;
+
+    public UserSettings(int settingsId, @NonNull String language, @NonNull String route) {
         this.settingsId = settingsId;
         this.language = language;
+        this.route = route;
     }
 
     @NonNull
@@ -38,5 +43,14 @@ public class UserSettings {
 
     public void setSettingsId(int settingsId) {
         this.settingsId = settingsId;
+    }
+
+    @NonNull
+    public String getRoute() {
+        return route;
+    }
+
+    public void setRoute(@NonNull String route) {
+        this.route = route;
     }
 }
