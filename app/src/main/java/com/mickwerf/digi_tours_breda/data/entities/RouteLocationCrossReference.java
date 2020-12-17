@@ -12,11 +12,11 @@ public class RouteLocationCrossReference {
     @NonNull
     private String routeName;
     @NonNull
-    @Embedded private Location location;
+    private String locationName;
 
-    public RouteLocationCrossReference(@NonNull String routeName,@NonNull Location location) {
+    public RouteLocationCrossReference(@NonNull String routeName, @NonNull String locationName) {
         this.routeName = routeName;
-        this.location = location;
+        this.locationName = locationName;
     }
 
     @NonNull
@@ -29,11 +29,11 @@ public class RouteLocationCrossReference {
     }
 
     @NonNull
-    public Location getLocation() {
-        return location;
+    public String getLocationName() {
+        return locationName;
     }
 
-    public void setLocation(@NonNull Location location) {
-        this.location = location;
+    public void setLocationName(@NonNull String locationName) {
+        this.locationName = locationName;
     }
 }
