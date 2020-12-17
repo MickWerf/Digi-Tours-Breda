@@ -40,7 +40,7 @@ public abstract class Database extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (Database.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "digi_tours_breda").build(); //sends all required data to the room database builder pattern.
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "DigiToursBredaEdition").build(); //sends all required data to the room database builder pattern.
                 }
             }
         }
