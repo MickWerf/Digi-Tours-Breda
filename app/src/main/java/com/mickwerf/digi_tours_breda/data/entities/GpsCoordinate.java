@@ -1,16 +1,29 @@
 package com.mickwerf.digi_tours_breda.data.entities;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 /**
  * Room entity which describes a gps coordinate.
  */
-@Entity(tableName = "gps_coordinate", primaryKeys = {"latitude", "longitude"})
+@Entity(tableName = "gps_coordinate")
 public class GpsCoordinate {
-    private double latitude;
-    private double longitude;
+
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
     @NonNull
+    @ColumnInfo(name = "latitude")
+    private double latitude;
+
+    @NonNull
+    @ColumnInfo(name = "longitude")
+    private double longitude;
+
+    @NonNull
+    @ColumnInfo(name = "location")
     private String location;
 
     public GpsCoordinate(double latitude, double longitude, @NonNull String location) {
@@ -42,5 +55,13 @@ public class GpsCoordinate {
 
     public void setLocation(@NonNull String location) {
         this.location = location;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

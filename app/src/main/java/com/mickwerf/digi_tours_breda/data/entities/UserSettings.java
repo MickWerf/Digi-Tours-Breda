@@ -18,7 +18,6 @@ public class UserSettings {
     @ColumnInfo(name = "language")
     private String language;
 
-    @NonNull
     @ColumnInfo(name = "route")
     private String route;
 
