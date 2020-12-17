@@ -56,4 +56,12 @@ public class GpsCoordinate {
     public void setLocation(@NonNull String location) {
         this.location = location;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
