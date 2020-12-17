@@ -13,6 +13,8 @@ import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.data.entities.RouteLocationCrossReference;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
 
+import java.io.File;
+
 /**
  * Database Singleton which represents the database instance.
  *
@@ -40,7 +42,9 @@ public abstract class Database extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (Database.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "DigiToursBredaEdition").build(); //sends all required data to the room database builder pattern.
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "DigiToursBredaEdition")
+                            .createFromFile(new File("/res/database/DigiToursBredaEdition.db"))
+                            .build(); //sends all required data to the room database builder pattern.
                 }
             }
         }
