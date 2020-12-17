@@ -43,8 +43,8 @@ public abstract class Database extends RoomDatabase {
             synchronized (Database.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "Database.db")
-                            .createFromAsset("Database.db")
-                            .build(); //sends all required data to the room database builder pattern.
+                            .createFromAsset("TemplateDatabase.db")
+                            .build();
                 }
             }
         }
