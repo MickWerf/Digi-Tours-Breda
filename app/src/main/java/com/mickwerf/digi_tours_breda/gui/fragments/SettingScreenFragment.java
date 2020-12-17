@@ -64,7 +64,6 @@ public class SettingScreenFragment extends Fragment {
         this.howToUseText = this.getView().findViewById(R.id.howToUseText);
 
         setOnClickListeners();
-
     }
 
     public void setOnClickListeners(){

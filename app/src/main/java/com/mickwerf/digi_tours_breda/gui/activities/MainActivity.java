@@ -2,18 +2,24 @@ package com.mickwerf.digi_tours_breda.gui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 
 
+import android.app.Application;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mickwerf.digi_tours_breda.R;
+import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.gui.fragments.MapScreenFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.RouteOverviewFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.SettingScreenFragment;
+import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
 
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -31,10 +37,14 @@ public class MainActivity extends AppCompatActivity {
     private RouteOverviewFragment routeOverviewFragment;
     private MapScreenFragment mapScreenFragment;
 
+    private MainViewModel mainViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.mainViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
 
         initialize();
         setClickListeners();
@@ -43,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Initialize all views
     public void initialize(){
+
         this.homeButton = findViewById(R.id.HomeImageView);
         this.settingsButton = findViewById(R.id.SettingsImageView);
         this.directionsButton = findViewById(R.id.DirectionsImageView);
@@ -54,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
         this.fragmentManager = getSupportFragmentManager();
 
         this.settingScreenFragment = new SettingScreenFragment();
-        this.routeOverviewFragment = new RouteOverviewFragment();
-        this.mapScreenFragment = new MapScreenFragment();
+        this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel.getRoutes());
+        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel.getActiveRoute());
 
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.routeOverviewFragment).commit();
 

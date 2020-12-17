@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,28 +29,33 @@ public class RouteOverviewFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RouteItemAdapter adapter;
+    private MutableLiveData<List<Route>> routesData;
     private List<Route> routes;
 
+    public RouteOverviewFragment(MutableLiveData<List<Route>> routesData){
+        this.routesData = routesData;
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_route_overview, container, false);
 
-        routes = new ArrayList<>();
+        this.routes = routesData.getValue();
 
-        recyclerView = view.findViewById(R.id.routeRecyclerView);
-        adapter = new RouteItemAdapter(routes);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        recyclerView.setAdapter(adapter);
+        if(this.routes == null){
+            this.routes = new ArrayList<>();
+        }
+        //TODO remove this if-statement
+
+        this.recyclerView = view.findViewById(R.id.routeRecyclerView);
+        this.adapter = new RouteItemAdapter(routes);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        this.recyclerView.setAdapter(adapter);
 
 
         TextView title = view.findViewById(R.id.title);
         title.setText(timeOfDay());
-
-
-
-
 
         return view;
     }

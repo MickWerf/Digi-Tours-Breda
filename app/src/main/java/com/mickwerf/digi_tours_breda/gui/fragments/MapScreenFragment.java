@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,6 +19,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mickwerf.digi_tours_breda.R;
+import com.mickwerf.digi_tours_breda.data.entities.Location;
+import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 import com.mickwerf.digi_tours_breda.gui.NextLocationAdapter;
 import com.mickwerf.digi_tours_breda.gui.NextLocationItem;
 
@@ -33,11 +36,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MapScreenFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MapScreenFragment extends Fragment {
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
@@ -60,27 +59,12 @@ public class MapScreenFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public MapScreenFragment() {
-        // Required empty public constructor
+    private MutableLiveData<RouteWithLocations> routeData;
+
+    public MapScreenFragment(MutableLiveData<RouteWithLocations> routeData) {
+        this.routeData = routeData;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MapScreenFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MapScreenFragment newInstance(String param1, String param2) {
-        MapScreenFragment fragment = new MapScreenFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,6 +151,12 @@ public class MapScreenFragment extends Fragment {
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
 
+        if(this.routeData.getValue() != null) {
+            for (Location location : this.routeData.getValue().getLocations()) {
+                mLocationList.add(new NextLocationItem(location.getLocationName()));
+            }
+        }else {
+
         mLocationList.add(new NextLocationItem("test1"));
         mLocationList.add(new NextLocationItem("test2"));
         mLocationList.add(new NextLocationItem("test3"));
@@ -174,7 +164,8 @@ public class MapScreenFragment extends Fragment {
         mLocationList.add(new NextLocationItem("test5"));
         mLocationList.add(new NextLocationItem("test6"));
         mLocationList.add(new NextLocationItem("test7"));
-        //TODO: deletetest code ^
+            //TODO: deletetest code ^
+        }
 
         // Create recycler view.
         mRecyclerView = getView().findViewById(R.id.NextLocationRecyclerview);

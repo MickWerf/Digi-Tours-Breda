@@ -49,11 +49,10 @@
                     android:id="@+id/germanButton"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="60dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_weight="1"
                     android:src="@drawable/germany"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/dutchButton"
                     tools:layout_editor_absoluteY="5dp" />
 
                 <ImageView
@@ -70,10 +69,9 @@
                     android:id="@+id/englishButton"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="60dp"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:src="@drawable/united_kingdom"
-                    app:layout_constraintEnd_toStartOf="@+id/dutchButton"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:layout_editor_absoluteY="6dp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
