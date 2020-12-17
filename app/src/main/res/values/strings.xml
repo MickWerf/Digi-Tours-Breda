@@ -11,9 +11,30 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    //Strings for the route overview fragment
     <string name="route_fragment_title1">Good Morning!</string>
     <string name="route_fragment_title2">Good Afternoon!</string>
     <string name="route_fragment_title3">Good Evening!</string>
     <string name="route_fragment_title4">Good Night!</string>
+
+    //Strings for the splash screen activity
     <string name="splash_screen_title">DigiTours Breda Edition</string>
+
+    //Strings for the no GPS signal pop up
+    <string name="no_gps_title">No GPS signal</string>
+    <string name="no_gps_text">We can not locate your current position at the moment.</string>
+
+    //Strings for the skip location pop up
+    <string name="skip_location_title">Titel</string>
+    <string name="skip_location_button">Skip</string>
+
+    //Strings for the ok location pop up
+    <string name="ok_location_popup_title">Titel</string>
+    <string name="ok_location_popup_text">Mooie gebouw</string>
+    <string name="ok_location_popup_button">ok</string>
+
+
+
 </resources>

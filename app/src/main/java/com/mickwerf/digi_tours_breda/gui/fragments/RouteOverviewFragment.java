@@ -14,9 +14,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mickwerf.digi_tours_breda.R;
+import com.mickwerf.digi_tours_breda.data.Database;
+import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.gui.RouteItemAdapter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class RouteOverviewFragment extends Fragment {
@@ -24,6 +28,7 @@ public class RouteOverviewFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RouteItemAdapter adapter;
+    private List<Route> routes;
 
 
     @Nullable
@@ -31,13 +36,19 @@ public class RouteOverviewFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_route_overview, container, false);
 
+        routes = new ArrayList<>();
+
         recyclerView = view.findViewById(R.id.routeRecyclerView);
-        adapter = new RouteItemAdapter();
+        adapter = new RouteItemAdapter(routes);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
 
+
         TextView title = view.findViewById(R.id.title);
         title.setText(timeOfDay());
+
+
+
 
 
         return view;

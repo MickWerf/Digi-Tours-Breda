@@ -4,16 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 
-@Entity(tableName = "route_location_cross_reference", primaryKeys = {"routeName", "latitude", "longitude"})
+/**
+ * Room entity which describes a cross reference (more to more relation) between route and location tables.
+ */
+@Entity(tableName = "route_location_cross_reference", primaryKeys = {"routeName", "locationName"})
 public class RouteLocationCrossReference {
     @NonNull
     private String routeName;
     @NonNull
-    @Embedded private GpsCoordinate gpsCoordinate;
+    @Embedded private Location location;
 
-    public RouteLocationCrossReference(@NonNull String routeName,@NonNull GpsCoordinate gpsCoordinate) {
+    public RouteLocationCrossReference(@NonNull String routeName,@NonNull Location location) {
         this.routeName = routeName;
-        this.gpsCoordinate = gpsCoordinate;
+        this.location = location;
     }
 
     @NonNull
@@ -25,11 +28,12 @@ public class RouteLocationCrossReference {
         this.routeName = routeName;
     }
 
-    public @NonNull GpsCoordinate getGpsCoordinate() {
-        return gpsCoordinate;
+    @NonNull
+    public Location getLocation() {
+        return location;
     }
 
-    public void setGpsCoordinate(@NonNull GpsCoordinate gpsCoordinate) {
-        this.gpsCoordinate = gpsCoordinate;
+    public void setLocation(@NonNull Location location) {
+        this.location = location;
     }
 }
