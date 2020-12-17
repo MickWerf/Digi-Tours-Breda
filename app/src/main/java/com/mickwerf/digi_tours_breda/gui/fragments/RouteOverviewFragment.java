@@ -61,6 +61,7 @@ public class RouteOverviewFragment extends Fragment {
             this.routes = new ArrayList<>();
         }
 
+
         this.recyclerView = view.findViewById(R.id.routeRecyclerView);
         this.adapter = new RouteItemAdapter(routes);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
