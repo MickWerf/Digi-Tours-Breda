@@ -5,6 +5,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
@@ -70,5 +71,11 @@ public interface UserDataAccess {
 
     @Update
     void updateCurrentUserSettings(UserSettings userSetting);
+    //endregion
+
+    //region Language
+    @Query("SELECT * FROM language")
+    List<Language> getLanguages();
+
     //endregion
 }
