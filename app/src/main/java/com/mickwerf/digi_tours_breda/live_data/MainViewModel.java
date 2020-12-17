@@ -36,17 +36,17 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<List<Route>> getRoutes() {
-        this.routes.setValue(Repository.getInstance().getRoutes(getApplication().getApplicationContext()));
+        this.routes.postValue(Repository.getInstance().getRoutes(getApplication().getApplicationContext()));
         return routes;
     }
 
     public MutableLiveData<UserSettings> getUserSettings() {
-        this.userSettings.setValue(Repository.getInstance().getUserSettings(getApplication().getApplicationContext()));
+        this.userSettings.postValue(Repository.getInstance().getUserSettings(getApplication().getApplicationContext()));
         return userSettings;
     }
 
     public MutableLiveData<GpsCoordinate> getGpsCoordinate() {
-        this.gpsCoordinate.setValue(Repository.getInstance().getGpsCoordinate());
+        this.gpsCoordinate.postValue(Repository.getInstance().getGpsCoordinate());
         return gpsCoordinate;
     }
 
@@ -55,7 +55,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<RouteWithLocations> getActiveRoute() {
-        activeRoute.setValue(Repository.getInstance().getActiveRoute(getApplication().getApplicationContext()));
+        activeRoute.postValue(Repository.getInstance().getActiveRoute(getApplication().getApplicationContext()));
         return activeRoute;
     }
 

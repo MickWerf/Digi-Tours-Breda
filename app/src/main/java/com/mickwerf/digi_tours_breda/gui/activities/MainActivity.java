@@ -1,8 +1,10 @@
 package com.mickwerf.digi_tours_breda.gui.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -65,8 +67,10 @@ public class MainActivity extends AppCompatActivity {
         this.fragmentManager = getSupportFragmentManager();
 
         this.settingScreenFragment = new SettingScreenFragment();
-        this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel.getRoutes());
-        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel.getActiveRoute());
+
+        this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel);
+
+        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel);
 
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.routeOverviewFragment).commit();
 

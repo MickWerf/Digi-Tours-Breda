@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,9 +21,11 @@ import android.view.ViewGroup;
 
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
+import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 import com.mickwerf.digi_tours_breda.gui.NextLocationAdapter;
 import com.mickwerf.digi_tours_breda.gui.NextLocationItem;
+import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
 
 import java.util.LinkedList;
 
@@ -35,6 +38,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MapScreenFragment extends Fragment {
@@ -46,42 +50,35 @@ public class MapScreenFragment extends Fragment {
     private MyLocationNewOverlay locationOverlay;
     private MapController mapController;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private final LinkedList<NextLocationItem> mLocationList = new LinkedList<>();
     private RecyclerView mRecyclerView;
     private NextLocationAdapter mAdapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private MainViewModel mainViewModel;
+    private RouteWithLocations activeRoute;
 
-    private MutableLiveData<RouteWithLocations> routeData;
 
-    public MapScreenFragment(MutableLiveData<RouteWithLocations> routeData) {
-        this.routeData = routeData;
+    public MapScreenFragment(MainViewModel mainViewModel) {
+        this.mainViewModel = mainViewModel;
     }
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        Configuration.getInstance().load(getActivity().getApplication(), PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()));
-
-        requestPermissions(new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-        }, REQUEST_PERMISSIONS_REQUEST_CODE);
-    }
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+//        }
+//
+//        Configuration.getInstance().load(getActivity().getApplication(), PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()));
+//
+//        requestPermissions(new String[]{
+//                Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//        }, REQUEST_PERMISSIONS_REQUEST_CODE);
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -151,8 +148,22 @@ public class MapScreenFragment extends Fragment {
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
 
-        if(this.routeData.getValue() != null) {
-            for (Location location : this.routeData.getValue().getLocations()) {
+        Runnable runnable = () -> {
+            this.activeRoute = this.mainViewModel.getActiveRoute().getValue();
+
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+        if(this.activeRoute != null) {
+            for (Location location : activeRoute.getLocations()) {
                 mLocationList.add(new NextLocationItem(location.getLocationName()));
             }
         }else {
