@@ -2,6 +2,7 @@ package com.mickwerf.digi_tours_breda.data;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Database Singleton which represents the database instance.
  *
@@ -50,30 +53,26 @@ public abstract class Database extends RoomDatabase {
     public abstract UserDataAccess userDataAccess();
     public abstract AdminDataAccess adminDataAccess();
 
+    private static final String USER_DATA = "userData";
+    private static SharedPreferences userPref;
+
     public static Database getInstance(final Context context) {
         if (INSTANCE == null) {
             synchronized (Database.class) {
                 if (INSTANCE == null) {
 
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "Database.db")
-                                .addCallback(new Callback() {
-                                    @Override
-                                    public void onCreate(@NonNull SupportSQLiteDatabase db) {
-                                        super.onCreate(db);
+                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db.db").build();
 
-                                        db.compileStatement(readLinesFromFile("src\\main\\assets\\TemplateDatabase.db"));
-                                    }
+                        userPref = context.getSharedPreferences(USER_DATA, MODE_PRIVATE);
+                        if (userPref.getBoolean("firstTime", true)) {
+                            insertAllData(context);
 
-                                    @Override
-                                    public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                                        super.onOpen(db);
+                            SharedPreferences.Editor editor = userPref.edit();
+                            editor.putBoolean("firstTime", false);
+                            editor.apply();
+                        }
 
-                                        db.compileStatement(readLinesFromFile("src\\main\\assets\\fillDatabase.db"));
-                                    }
-                                })
-                                .createFromAsset("TemplateDatabase.db")
-                                .build();
                     } else {
                         System.out.println("NO PERMISSION TO ACCESS DATABASE");
                     }
@@ -83,20 +82,19 @@ public abstract class Database extends RoomDatabase {
         return INSTANCE;
     }
 
-    public static String readLinesFromFile(String fileName) {
-        try {
-            List<String> lines = Files.readAllLines(Paths.get(fileName));
-            String query = "";
-
-            for (String line : lines) {
-                query += line;
-            }
-
-            return query;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
+    private static void insertAllData(Context context) {
+        AdminDataAccess adminAccess = Database.getInstance(context).adminDataAccess();
+        adminAccess.insertLanguages(new Language("Nederlands"));
+        adminAccess.insertLanguages(new Language("Engels"));
+        adminAccess.insertLocations(new Location("Grote Kerk", false, true));
+        adminAccess.insertLocations(new Location("Foodhall", false, false));
+        adminAccess.insertRoutes(new Route("Stapje uit", false, "/res/stapje_uit"));
+        adminAccess.insertDataElement(new DataElement("/res/grote_kerk_nl","VISUAL","Grote Kerk","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/grote_kerk_en","VISUAL","Grote Kerk","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/foodhall_nl","VISUAL","Foodhall","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/foodhall_en","VISUAL","Foodhall","Engels"));
+        adminAccess.insertCoordinates(new GpsCoordinate(51.589031658516780964,4.7756363470046441221, "Grote Kerk"));
+        adminAccess.insertCoordinates(new GpsCoordinate(51.589479884555643706,4.775059648793251732, "FoodHall"));
+        adminAccess.insertUserSettings(new UserSettings(1, "Nederlands", "Stapje uit"));
     }
 }

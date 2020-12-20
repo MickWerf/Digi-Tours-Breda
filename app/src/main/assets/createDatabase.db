@@ -1,29 +1,22 @@
 CREATE TABLE IF NOT EXISTS language(
 languageName VARCHAR(30) PRIMARY KEY NOT NULL
 );
-INSERT INTO language VALUES('Nederlands');
-INSERT INTO language VALUES('Engels');
 CREATE TABLE IF NOT EXISTS location(
 locationName VARCHAR(30) PRIMARY KEY NOT NULL,
 visited BOOLEAN,
 is_sight_seeing_location BOOLEAN
 );
-INSERT INTO location VALUES('Grote Kerk', 0,1);
-INSERT INTO location VALUES('Foodhall',0,0);
 CREATE TABLE IF NOT EXISTS route(
 routeName VARCHAR(30)) PRIMARY KEY NOT NULL,
 complete BOOLEAN,
 routeImagePath VARCHAR(30) NOT NULL
 );
-INSERT INTO route VALUES('Stapje uit',0,'/res/stapje_uit');
 CREATE TABLE IF NOT EXISTS route_location_cross_reference(
 routeName VARCHAR(30) NOT NULL,
 locationName VARCHAR(30) NOT NULL,
 FOREIGN KEY(routeName) REFERENCES route(routeName),
 FOREIGN KEY(locationName) REFERENCES location(locationName)
 );
-INSERT INTO route_location_cross_reference VALUES('Stapje uit','Grote Kerk');
-INSERT INTO route_location_cross_reference VALUES('Stapje uit','Foodhall');
 CREATE TABLE IF NOT EXISTS data_element(
 path VARCHAR(30) PRIMARY KEY NOT NULL,
 data_type VARCHAR(30) NOT NULL,
@@ -32,10 +25,6 @@ language VARCHAR(30) NOT NULL,
 FOREIGN KEY(location) REFERENCES location(locationName),
 FOREIGN KEY(language) REFERENCES language(languageName)
 );
-INSERT INTO data_element VALUES('/res/grote_kerk_nl','VISUAL','Grote Kerk','Nederlands');
-INSERT INTO data_element VALUES('/res/grote_kerk_en','VISUAL','Grote Kerk','Engels');
-INSERT INTO data_element VALUES('/res/foodhall_nl','VISUAL','Foodhall','Nederlands');
-INSERT INTO data_element VALUES('/res/foodhall_en','VISUAL','Foodhall','Engels');
 CREATE TABLE IF NOT EXISTS gps_coordinate(
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 latitude REAL NOT NULL,
@@ -43,8 +32,6 @@ longitude REAL NOT NULL,
 location VARCHAR(30) NOT NULL,
 FOREIGN KEY(location) REFERENCES location(locationName)
 );
-INSERT INTO gps_coordinate VALUES(1,51.589031658516780964,4.7756363470046441221,'Grote Kerk');
-INSERT INTO gps_coordinate VALUES(2,51.589479884555643706,4.775059648793251732,'Foodhall');
 CREATE TABLE IF NOT EXISTS user_settings(
 settingsId INT PRIMARY KEY,
 language VARCHAR(30) NOT NULL,
@@ -52,4 +39,3 @@ route VARCHAR(30),
 FOREIGN KEY(language) REFERENCES language(languageName),
 FOREIGN KEY(route) REFERENCES route(routeName)
 );
-INSERT INTO user_settings VALUES(1,'Nederlands','Stapje uit');
