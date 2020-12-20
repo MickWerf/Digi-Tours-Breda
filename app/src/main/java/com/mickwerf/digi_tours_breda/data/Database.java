@@ -1,9 +1,15 @@
 package com.mickwerf.digi_tours_breda.data;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.sqlite.db.SupportSQLiteStatement;
 
 import com.mickwerf.digi_tours_breda.data.entities.DataElement;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
@@ -42,9 +48,16 @@ public abstract class Database extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (Database.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "Database.db")
-                            .createFromAsset("TemplateDatabase.db")
-                            .build();
+
+                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "Database.db")
+                                .createFromAsset("TemplateDatabase.db")
+                                .build();
+                    } else {
+                        System.out.println("NO PERMISSION TO ACCESS DATABASE");
+                    }
+
+
                 }
             }
         }
