@@ -1,0 +1,14 @@
+INSERT INTO language VALUES('Nederlands');
+INSERT INTO language VALUES('Engels');
+INSERT INTO location VALUES('Grote Kerk',0,1);
+INSERT INTO location VALUES('Foodhall',0,0);
+INSERT INTO route VALUES('Stapje uit',0,'/res/stapje_uit');
+INSERT INTO route_location_cross_reference VALUES('Stapje uit','Grote Kerk');
+INSERT INTO route_location_cross_reference VALUES('Stapje uit','Foodhall');
+INSERT INTO data_element VALUES('/res/grote_kerk_nl','VISUAL','Grote Kerk','Nederlands');
+INSERT INTO data_element VALUES('/res/grote_kerk_en','VISUAL','Grote Kerk','Engels');
+INSERT INTO data_element VALUES('/res/foodhall_nl','VISUAL','Foodhall','Nederlands');
+INSERT INTO data_element VALUES('/res/foodhall_en','VISUAL','Foodhall','Engels');
+INSERT INTO gps_coordinate VALUES(1,51.589031658516780964,4.7756363470046441221,'Grote Kerk');
+INSERT INTO gps_coordinate VALUES(2,51.589479884555643706,4.775059648793251732,'Foodhall');
+INSERT INTO user_settings VALUES(1,'Nederlands','Stapje uit');

@@ -1,5 +1,3 @@
-PRAGMA foreign_keys=OFF;
-BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS language(
 languageName VARCHAR(30) PRIMARY KEY NOT NULL
 );
@@ -55,6 +53,3 @@ FOREIGN KEY(language) REFERENCES language(languageName),
 FOREIGN KEY(route) REFERENCES route(routeName)
 );
 INSERT INTO user_settings VALUES(1,'Nederlands','Stapje uit');
-DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('gps_coordinate',2);
-COMMIT;
