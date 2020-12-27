@@ -10,6 +10,7 @@ import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
+import com.mickwerf.digi_tours_breda.data.entities.RouteLocationCrossReference;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
 
 /**
@@ -38,6 +39,9 @@ public interface AdminDataAccess extends UserDataAccess {
 
     @Insert
     void insertUserSettings(UserSettings... userSettings);
+
+    @Insert
+    void insertRouteLocationCross(RouteLocationCrossReference... crossReferences);
     //endregion
 
     //region Delete
