@@ -51,7 +51,6 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
         holder.routeTitle.setText(mCurrent);
 
 
-        int id = context.getResources().getIdentifier(routes.get(position).getRouteImagePath(), "drawable", context.getPackageName());
 
         String text = "";
         String filename = "";
@@ -82,6 +81,9 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
             e.printStackTrace();
         }
         holder.routeText.setText(text);
+
+
+        int id = context.getResources().getIdentifier(routes.get(position).getRouteImagePath(), "drawable", context.getPackageName());
 
         holder.routeImage.setImageResource(id);
 

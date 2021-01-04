@@ -31,7 +31,7 @@ import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
                 RouteLocationCrossReference.class,
                 UserSettings.class
         },
-        version = 3, //sets the version to 3.
+        version = 4, //sets the version to 3.
         exportSchema = false //disable exporting schema, this is unneeded for implementation.
 )
 public abstract class Database extends RoomDatabase {
