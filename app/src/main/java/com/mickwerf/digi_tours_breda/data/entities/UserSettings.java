@@ -3,6 +3,7 @@ package com.mickwerf.digi_tours_breda.data.entities;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 /**
@@ -10,14 +11,24 @@ import androidx.room.PrimaryKey;
  */
 @Entity(tableName = "user_settings")
 public class UserSettings {
-
     @PrimaryKey
     private int settingsId;
 
+    @ForeignKey(
+            entity = Language.class,
+            parentColumns = "language",
+            childColumns = "languageName"
+    )
     @NonNull
     @ColumnInfo(name = "language")
     private String language;
 
+    @NonNull
+    @ForeignKey(
+            entity = Route.class,
+            parentColumns = "route",
+            childColumns = "routeName"
+    )
     @ColumnInfo(name = "route")
     private String route;
 

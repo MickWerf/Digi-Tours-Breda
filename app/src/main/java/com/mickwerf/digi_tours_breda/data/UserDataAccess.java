@@ -1,6 +1,7 @@
 package com.mickwerf.digi_tours_breda.data;
 
 import androidx.room.Dao;
+import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
@@ -31,11 +32,9 @@ public interface UserDataAccess {
     @Query("SELECT * FROM route WHERE routeName LIKE :routeName")
     RouteWithLocations getRouteWithLocations(String routeName);
 
-
     @Update
     void updateRoute(Route... routes);
     //endregion
-
 
     //region Location & DataElement
     @Query("SELECT * FROM location WHERE is_sight_seeing_location LIKE 1")
@@ -58,16 +57,13 @@ public interface UserDataAccess {
             "language.languageName LIKE :language")
     List<LocationElements> getLocationElementsFromLanguage(String locationName, String language);
 
-
     @Update
     void updateLocation(Location... locations);
     //endregion
 
-
     //region UserSettings
     @Query("SELECT * FROM user_settings")
     UserSettings getUserSettings();
-
 
     @Update
     void updateCurrentUserSettings(UserSettings userSetting);
@@ -76,6 +72,5 @@ public interface UserDataAccess {
     //region Language
     @Query("SELECT * FROM language")
     List<Language> getLanguages();
-
     //endregion
 }

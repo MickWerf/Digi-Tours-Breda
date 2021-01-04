@@ -1,7 +1,10 @@
 package com.mickwerf.digi_tours_breda.data;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 
+import androidx.core.app.ActivityCompat;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
@@ -28,7 +31,7 @@ import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
                 RouteLocationCrossReference.class,
                 UserSettings.class
         },
-        version = 1, //sets the version to 1.
+        version = 3, //sets the version to 3.
         exportSchema = false //disable exporting schema, this is unneeded for implementation.
 )
 public abstract class Database extends RoomDatabase {
@@ -40,7 +43,15 @@ public abstract class Database extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (Database.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "DigiToursBredaEdition").build(); //sends all required data to the room database builder pattern.
+
+                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db1.db")
+                                .fallbackToDestructiveMigration()
+                                .createFromAsset("TemplateDatabaseV3.db")
+                                .build();
+                    } else {
+                        System.out.println("NO PERMISSION TO ACCESS DATABASE");
+                    }
                 }
             }
         }
