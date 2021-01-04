@@ -8,6 +8,9 @@
     <string name="InCaseOfNoGPS">In case of no gps:</string>
     <string name="NextUp">Next up:</string>
 
+    <!-- TODO: fill in these 2 -->
+    <string name="CaseOfNoGpsText">AAA</string>
+    <string name="HowToUseText">AAA</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

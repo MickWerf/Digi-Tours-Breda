@@ -21,6 +21,10 @@ import java.util.List;
 class Repository {
     private static volatile Repository INSTANCE;
 
+    private List<Route> routes;
+    private RouteWithLocations activeRoute;
+    private UserSettings userSettings;
+
     public static Repository getInstance() {
         if (INSTANCE == null) {
             synchronized (Repository.class) {
@@ -31,15 +35,51 @@ class Repository {
     }
 
     public List<Route> getRoutes(Context context) {
-        return Database.getInstance(context).userDataAccess().getAllRoutes();
+
+        Runnable runnable = () -> {
+            routes = Database.getInstance(context).userDataAccess().getAllRoutes();
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return routes;
     }
 
     public RouteWithLocations getActiveRoute(Context context) {
-        return Database.getInstance(context).userDataAccess().getRouteWithLocations(getUserSettings(context).getRoute());
+
+        Runnable runnable = () -> {
+            activeRoute = Database.getInstance(context).userDataAccess().getRouteWithLocations(getUserSettings(context).getRoute());
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return activeRoute;
     }
 
     public UserSettings getUserSettings(Context context) {
-        return Database.getInstance(context).userDataAccess().getUserSettings();
+
+        Runnable runnable = () -> {
+            this.userSettings = Database.getInstance(context).userDataAccess().getUserSettings();
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return this.userSettings;
     }
 
     public GpsCoordinate getGpsCoordinate() {

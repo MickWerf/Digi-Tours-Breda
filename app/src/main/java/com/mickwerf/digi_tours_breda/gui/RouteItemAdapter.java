@@ -1,5 +1,10 @@
 package com.mickwerf.digi_tours_breda.gui;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +18,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Scanner;
 
 public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.RouteItemViewholder> {
 
     private List<Route> routes;
+    private Context context;
+    private String language;
 
-    public RouteItemAdapter(List<Route> routes){
+    public RouteItemAdapter(List<Route> routes, Context context, String language){
         this.routes = routes;
+        this.context = context;
+        this.language = language;
     }
 
     @NonNull
@@ -34,7 +47,51 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
     @Override
     public void onBindViewHolder(@NonNull RouteItemViewholder holder, int position) {
 
-        //TODO set holders
+        String mCurrent = routes.get(position).getRouteName();
+        holder.routeTitle.setText(mCurrent);
+
+
+
+        String text = "";
+        String filename = "";
+
+        System.out.println("TAAL"+this.language);
+        switch(this.language){
+            case "Nederlands":
+                filename = routes.get(position).getRouteDescriptionNL();
+                System.out.println("PATH: "+filename);
+                break;
+            case "Engels":
+                filename = routes.get(position).getRouteDescriptionEN();
+                break;
+            case "Duits":
+                filename = routes.get(position).getRouteDescriptionDE();
+                break;
+        }
+
+        try (InputStream inputStream = context.getAssets().open(filename)) {
+            Scanner reader = new Scanner(inputStream);
+            while (reader.hasNext()) {
+                text += reader.nextLine();
+            }
+
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        holder.routeText.setText(text);
+
+
+        int id = context.getResources().getIdentifier(routes.get(position).getRouteImagePath(), "drawable", context.getPackageName());
+
+        holder.routeImage.setImageResource(id);
+
+
+//        String mImage = routes.get(position).getRouteImagePath();
+//        Bitmap myBitmap = BitmapFactory.decodeFile(mImage);
+//        System.out.println("NULLCHECK: "+myBitmap);
+//        holder.routeImage.setImageResource(id);
 
     }
 
