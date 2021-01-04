@@ -90,6 +90,7 @@ public abstract class Database extends RoomDatabase {
 
     private static void insertAllData(Context context) {
         AdminDataAccess adminAccess = Database.getInstance(context).adminDataAccess();
+
         adminAccess.insertLanguages(new Language("Nederlands"));
         adminAccess.insertLanguages(new Language("Engels"));
         adminAccess.insertLanguages(new Language("Duits"));
@@ -225,6 +226,38 @@ public abstract class Database extends RoomDatabase {
         adminAccess.insertDataElement(new DataElement("/res/location/sint_antoniuskathedraal_nl.txt","TEXT","Sint-Antoniuskathedraal","Nederlands"));
         adminAccess.insertDataElement(new DataElement("/res/location/sint_antoniuskathedraal_en.txt","TEXT","Sint-Antoniuskathedraal","Engels"));
         adminAccess.insertDataElement(new DataElement("/res/location/sint_antoniuskathedraal.png","VISUAL","Sint-Antoniuskathedraal","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/kasteel_bouvigne_nl.txt","TEXT","Kasteel Bouvigne","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/kasteel_bouvigne_en.txt","TEXT","Kasteel Bouvigne","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/kasteel_bouvigne.png","VISUAL","Kasteel Bouvigne","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/het_poolse_oorlogskerkhof_nl.txt","TEXT","Het Poolse oorlogskerkhof","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/het_poolse_oorlogskerkhof_en.txt","TEXT","Het Poolse oorlogskerkhof","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/het_poolse_oorlogskerkhof.png","VISUAL","Het Poolse oorlogskerkhof","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/grote_markt_nl.txt","TEXT","Grote Markt","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/grote_markt_en.txt","TEXT","Grote Markt","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/grote_markt.png","VISUAL","Grote Markt","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/wolfslaar_nl.txt","TEXT","Wolfslaar","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/wolfslaar_en.txt","TEXT","Wolfslaar","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/wolfslaar.png","VISUAL","Wolfslaar","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/futurodome_nl.txt","TEXT","Futurodome","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/futurodome_en.txt","TEXT","Futurodome","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/futurodome.png","VISUAL","Futurodome","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/nac_nl.txt","TEXT","NAC","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/nac_en.txt","TEXT","NAC","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/nac.png","VISUAL","NAC","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/onderwijshotel_de_rooi_pannen_nl.txt","TEXT","Onderwijshotel De Rooi Pannen","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/onderwijshotel_de_rooi_pannen_en.txt","TEXT","Onderwijshotel De Rooi Pannen","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/onderwijshotel_de_rooi_pannen.png","VISUAL","Onderwijshotel De Rooi Pannen","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/apollo_hotel_nl.txt","TEXT","Apollo Hotel","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/apollo_hotel_en.txt","TEXT","Apollo Hotel","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/apollo_hotel.png","VISUAL","Apollo Hotel","Generic"));
 
 
         adminAccess.insertCoordinates(new GpsCoordinate(51.589031658516780964,4.7756363470046441221, "Grote Kerk"));
