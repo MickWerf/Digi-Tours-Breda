@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.mickwerf.digi_tours_breda.data.entities.DataElement;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
