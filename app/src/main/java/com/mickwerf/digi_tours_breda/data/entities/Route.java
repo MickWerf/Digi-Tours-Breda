@@ -21,10 +21,25 @@ public class Route {
     @ColumnInfo(name = "route_image_path")
     private String routeImagePath;
 
-    public Route(@NonNull String routeName, boolean complete, @NonNull String routeImagePath) {
+    @NonNull
+    @ColumnInfo(name = "route_description_nl")
+    private String routeDescriptionNL;
+
+    @NonNull
+    @ColumnInfo(name = "route_description_en")
+    private String routeDescriptionEN;
+
+    @NonNull
+    @ColumnInfo(name = "route_description_de")
+    private String routeDescriptionDE;
+
+    public Route(@NonNull String routeName, boolean complete, @NonNull String routeImagePath, @NonNull String routeDescriptionNL, @NonNull String routeDescriptionEN, @NonNull String routeDescriptionDE) {
         this.routeName = routeName;
         this.complete = complete;
         this.routeImagePath = routeImagePath;
+        this.routeDescriptionNL = routeDescriptionNL;
+        this.routeDescriptionEN = routeDescriptionEN;
+        this.routeDescriptionDE = routeDescriptionDE;
     }
 
     @NonNull
@@ -51,5 +66,32 @@ public class Route {
 
     public void setRouteImagePath(@NonNull String routeImagePath) {
         this.routeImagePath = routeImagePath;
+    }
+
+    @NonNull
+    public String getRouteDescriptionNL() {
+        return routeDescriptionNL;
+    }
+
+    public void setRouteDescriptionNL(@NonNull String routeDescriptionNL) {
+        this.routeDescriptionNL = routeDescriptionNL;
+    }
+
+    @NonNull
+    public String getRouteDescriptionEN() {
+        return routeDescriptionEN;
+    }
+
+    public void setRouteDescriptionEN(@NonNull String routeDescriptionEN) {
+        this.routeDescriptionEN = routeDescriptionEN;
+    }
+
+    @NonNull
+    public String getRouteDescriptionDE() {
+        return routeDescriptionDE;
+    }
+
+    public void setRouteDescriptionDE(@NonNull String routeDescriptionDE) {
+        this.routeDescriptionDE = routeDescriptionDE;
     }
 }

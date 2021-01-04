@@ -12,6 +12,7 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 import androidx.sqlite.db.SupportSQLiteStatement;
 
+import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.DataElement;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
@@ -45,8 +46,8 @@ import static android.content.Context.MODE_PRIVATE;
                 RouteLocationCrossReference.class,
                 UserSettings.class
         },
-        version = 2, //sets the version to 2.
-        exportSchema = true //disable exporting schema, this is unneeded for implementation.
+        version = 3, //sets the version to 3.
+        exportSchema = false //disable exporting schema, this is unneeded for implementation.
 )
 public abstract class Database extends RoomDatabase {
     private static volatile Database INSTANCE;
@@ -62,21 +63,21 @@ public abstract class Database extends RoomDatabase {
                 if (INSTANCE == null) {
 
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db1")
-                                .fallbackToDestructiveMigration()
-                                .createFromAsset("TemplateDatabaseV2.db")
+                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db1.db")
+//                                .fallbackToDestructiveMigration()
+//                                .createFromAsset("newDatabase.db")
                                 .build();
 
 
 
-//                        userPref = context.getSharedPreferences(USER_DATA, MODE_PRIVATE);
-//                        if (userPref.getBoolean("firstTime", true)) {
-//                            insertAllData(context);
-//
-//                            SharedPreferences.Editor editor = userPref.edit();
-//                            editor.putBoolean("firstTime", false);
-//                            editor.apply();
-//                        }
+                        userPref = context.getSharedPreferences(USER_DATA, MODE_PRIVATE);
+                        if (userPref.getBoolean("first_time", true)) {
+                            insertAllData(context);
+
+                            SharedPreferences.Editor editor = userPref.edit();
+                            editor.putBoolean("first_time", false);
+                            editor.apply();
+                        }
 
                     } else {
                         System.out.println("NO PERMISSION TO ACCESS DATABASE");
@@ -91,6 +92,8 @@ public abstract class Database extends RoomDatabase {
         AdminDataAccess adminAccess = Database.getInstance(context).adminDataAccess();
         adminAccess.insertLanguages(new Language("Nederlands"));
         adminAccess.insertLanguages(new Language("Engels"));
+        adminAccess.insertLanguages(new Language("Duits"));
+        adminAccess.insertLanguages(new Language("Generic"));
 
 
         adminAccess.insertLocations(new Location("Grote Kerk", false, true));
@@ -125,17 +128,103 @@ public abstract class Database extends RoomDatabase {
         adminAccess.insertLocations(new Location("Avans Hogeschool", false, true));
 
 
-        //TODO routes maken en invullen
-        adminAccess.insertRoutes(new Route("Stapje uit", false, "/res/stapje_uit"));
-        adminAccess.insertRouteLocationCross(new RouteLocationCrossReference("Stapje uit", "Grote Kerk"),
-                new RouteLocationCrossReference("Stapje uit", "Foodhall"));
+        adminAccess.insertRoutes(new Route("Stapje uit", false, "/res/route/stapje_uit.png", "/res/route/stapje_uit_nl.txt", "/res/route/stapje_uit_en.txt", "/res/route/stapje_uit_de.txt"));
+        adminAccess.insertRouteLocationCross(
+                new RouteLocationCrossReference("Stapje uit", "Grote Kerk"),
+                new RouteLocationCrossReference("Stapje uit", "Foodhall"),
+                new RouteLocationCrossReference("Stapje uit", "Spanjaardsgat"),
+                new RouteLocationCrossReference("Stapje uit", "Het Kasteel van Breda"),
+                new RouteLocationCrossReference("Stapje uit", "Valkenberg Stadspark")
+        );
+
+        adminAccess.insertRoutes(new Route("Lekker op stap", false, "/res/route/lekker_op_stap.png", "/res/route/lekker_op_stap_nl.txt", "/res/route/lekker_op_stap_en.txt", "/res/route/lekker_op_stap_de.txt"));
+        adminAccess.insertRouteLocationCross(
+                new RouteLocationCrossReference("Lekker op stap", "Begijnhof van Breda"),
+                new RouteLocationCrossReference("Lekker op stap", "Eglise Wallonne"),
+                new RouteLocationCrossReference("Lekker op stap", "Stedelijk Museum Breda"),
+                new RouteLocationCrossReference("Lekker op stap", "Brouwerij De Beyerd"),
+                new RouteLocationCrossReference("Lekker op stap", "Sint-Antoniuskathedraal"),
+                new RouteLocationCrossReference("Lekker op stap", "Kasteel Bouvigne"),
+                new RouteLocationCrossReference("Lekker op stap", "Het Poolse oorlogskerkhof"),
+                new RouteLocationCrossReference("Lekker op stap", "Grote Markt"),
+                new RouteLocationCrossReference("Lekker op stap", "Wolfslaar"),
+                new RouteLocationCrossReference("Lekker op stap", "Futurodome")
+        );
+
+        adminAccess.insertRoutes(new Route("Girls night out!", false, "/res/route/girls_night_out.png", "/res/route/girls_night_out_nl.txt", "/res/route/girls_night_out_en.txt", "/res/route/girls_night_out_de.txt"));
+        adminAccess.insertRouteLocationCross(
+                new RouteLocationCrossReference("Girls night out!", "NAC"),
+                new RouteLocationCrossReference("Girls night out!", "Onderwijshotel De Rooi Pannen"),
+                new RouteLocationCrossReference("Girls night out!", "Apollo Hotel"),
+                new RouteLocationCrossReference("Girls night out!", "Hotel Nassau Breda")
+        );
+
+        adminAccess.insertRoutes(new Route("De gamer route", false, "/res/route/gamer_route.png", "/res/route/gamer_route_nl.txt", "/res/route/gamer_route_en.txt", "/res/route/gamer_route_de.txt"));
+        adminAccess.insertRouteLocationCross(
+                new RouteLocationCrossReference("De gamer route", "Haven"),
+                new RouteLocationCrossReference("De gamer route", "De Barones")
+        );
+
+        adminAccess.insertRoutes(new Route("De benenwagen", false, "/res/route/benenwagen.png", "/res/route/benenwagen_nl.txt", "/res/route/benenwagen_en.txt", "/res/route/benenwagen_de.txt"));
+        adminAccess.insertRouteLocationCross(
+                new RouteLocationCrossReference("De benenwagen", "'t Sas"),
+                new RouteLocationCrossReference("De benenwagen", "Sint Joostkapel"),
+                new RouteLocationCrossReference("De benenwagen", "Nassau-Baroniemonument"),
+                new RouteLocationCrossReference("De benenwagen", "Waalse Kerk Breda"),
+                new RouteLocationCrossReference("De benenwagen", "Station Breda"),
+                new RouteLocationCrossReference("De benenwagen", "La Source"),
+                new RouteLocationCrossReference("De benenwagen", "Sinte Juttemis"),
+                new RouteLocationCrossReference("De benenwagen", "Amphia ziekenhuis"),
+                new RouteLocationCrossReference("De benenwagen", "Avans Hogeschool")
+        );
+
+        adminAccess.insertRoutes(new Route("Avans test route", false, "/res/route/test_route.png", "/res/route/test_route_nl.txt", "/res/route/test_route_en.txt", "/res/route/test_route_de.txt"));
+        adminAccess.insertRouteLocationCross(
+                new RouteLocationCrossReference("Avans test route", "Valkenberg Stadspark"),
+                new RouteLocationCrossReference("Avans test route", "Avans Hogeschool")
+        );
 
 
         //TODO alle data elementen aanmaken
-        adminAccess.insertDataElement(new DataElement("/res/grote_kerk_nl","VISUAL","Grote Kerk","Nederlands"));
-        adminAccess.insertDataElement(new DataElement("/res/grote_kerk_en","VISUAL","Grote Kerk","Engels"));
-        adminAccess.insertDataElement(new DataElement("/res/foodhall_nl","VISUAL","Foodhall","Nederlands"));
-        adminAccess.insertDataElement(new DataElement("/res/foodhall_en","VISUAL","Foodhall","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/grote_kerk_nl.txt","TEXT","Grote Kerk","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/grote_kerk_en.txt","TEXT","Grote Kerk","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/grote_kerk.png","VISUAL","Grote Kerk","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/foodhall_nl.txt","TEXT","Foodhall","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/foodhall_en.txt","TEXT","Foodhall","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/foodhall.png","VISUAL","Foodhall","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/spanjaardsgat_nl.txt","TEXT","Spanjaardsgat","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/spanjaardsgat_en.txt","TEXT","Spanjaardsgat","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/spanjaardsgat.png","VISUAL","Spanjaardsgat","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/het_kasteel_van_breda_nl.txt","TEXT","Het Kasteel van Breda","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/het_kasteel_van_breda_en.txt","TEXT","Het Kasteel van Breda","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/het_kasteel_van_breda.png","VISUAL","Het Kasteel van Breda","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/valkenberg_stadspark_nl.txt","TEXT","Valkenberg Stadspark","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/valkenberg_stadspark_en.txt","TEXT","Valkenberg Stadspark","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/valkenberg_stadspark.png","VISUAL","Valkenberg Stadspark","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/begijnhof_van_breda_nl.txt","TEXT","Begijnhof van Breda","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/begijnhof_van_breda_en.txt","TEXT","Begijnhof van Breda","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/begijnhof_van_breda.png","VISUAL","Begijnhof van Breda","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/eglise_wallonne_nl.txt","TEXT","Eglise Wallonne","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/eglise_wallonne_en.txt","TEXT","Eglise Wallonne","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/eglise_wallonne.png","VISUAL","Eglise Wallonne","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/stedelijk_museum_breda_nl.txt","TEXT","Stedelijk Museum Breda","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/stedelijk_museum_breda_en.txt","TEXT","Stedelijk Museum Breda","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/stedelijk_museum_breda.png","VISUAL","Stedelijk Museum Breda","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/brouwerij_de_beyerd_nl.txt","TEXT","Brouwerij De Beyerd","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/brouwerij_de_beyerd_en.txt","TEXT","Brouwerij De Beyerd","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/brouwerij_de_beyerd.png","VISUAL","Brouwerij De Beyerd","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/sint_antoniuskathedraal_nl.txt","TEXT","Sint-Antoniuskathedraal","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/sint_antoniuskathedraal_en.txt","TEXT","Sint-Antoniuskathedraal","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/sint_antoniuskathedraal.png","VISUAL","Sint-Antoniuskathedraal","Generic"));
 
 
         adminAccess.insertCoordinates(new GpsCoordinate(51.589031658516780964,4.7756363470046441221, "Grote Kerk"));
