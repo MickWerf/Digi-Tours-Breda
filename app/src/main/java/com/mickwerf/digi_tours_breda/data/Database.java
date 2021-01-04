@@ -45,7 +45,7 @@ import static android.content.Context.MODE_PRIVATE;
                 RouteLocationCrossReference.class,
                 UserSettings.class
         },
-        version = 1, //sets the version to 1.
+        version = 2, //sets the version to 2.
         exportSchema = false //disable exporting schema, this is unneeded for implementation.
 )
 public abstract class Database extends RoomDatabase {
@@ -62,16 +62,21 @@ public abstract class Database extends RoomDatabase {
                 if (INSTANCE == null) {
 
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db.db").build();
+                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db1.db")
+                                .fallbackToDestructiveMigration()
+                                .createFromAsset("TemplateDatabase.db")
+                                .build();
 
-                        userPref = context.getSharedPreferences(USER_DATA, MODE_PRIVATE);
-                        if (userPref.getBoolean("firstTime", true)) {
-                            insertAllData(context);
 
-                            SharedPreferences.Editor editor = userPref.edit();
-                            editor.putBoolean("firstTime", false);
-                            editor.apply();
-                        }
+
+//                        userPref = context.getSharedPreferences(USER_DATA, MODE_PRIVATE);
+//                        if (userPref.getBoolean("firstTime", true)) {
+//                            insertAllData(context);
+//
+//                            SharedPreferences.Editor editor = userPref.edit();
+//                            editor.putBoolean("firstTime", false);
+//                            editor.apply();
+//                        }
 
                     } else {
                         System.out.println("NO PERMISSION TO ACCESS DATABASE");
