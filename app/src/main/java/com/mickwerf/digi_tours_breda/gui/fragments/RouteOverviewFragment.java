@@ -1,5 +1,7 @@
 package com.mickwerf.digi_tours_breda.gui.fragments;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -34,8 +36,20 @@ public class RouteOverviewFragment extends Fragment {
     private MainViewModel mainViewModel;
     private List<Route> routes;
 
-    public RouteOverviewFragment(MainViewModel mainViewModel){
+    private Context context;
+    private String language;
+
+    Observer<List<Route>> routesUpdateObserver = new Observer<List<Route>>() {
+        @Override
+        public void onChanged(List<Route> newRoutes) {
+            routes = newRoutes;
+        }
+    };
+
+    public RouteOverviewFragment(MainViewModel mainViewModel, Context context){
         this.mainViewModel = mainViewModel;
+        this.context = context;
+        this.language = mainViewModel.getUserSettings2().getLanguage();
     }
 
 
@@ -46,26 +60,32 @@ public class RouteOverviewFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_route_overview, container, false);
 
-        Runnable runnable = () -> {
-            this.routes = this.mainViewModel.getRoutes().getValue();
-        };
-        Thread t = new Thread(runnable);
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        if(this.routes == null){
-            this.routes = new ArrayList<>();
-        }
+        this.mainViewModel.getRoutes().observe(this, this.routesUpdateObserver);
+        this.routes = this.mainViewModel.getRoutes2();
+
+//        Runnable runnable = () -> {
+////            this.routes = this.mainViewModel.getRoutes().getValue();
+//            this.mainViewModel.getRoutes().observe(this, this.routesUpdateObserver);
+//
+//        };
+//        Thread t = new Thread(runnable);
+//        t.start();
+//        try {
+//            t.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if(this.routes == null){
+//            this.routes = new ArrayList<>();
+//        }
 
 
-        this.recyclerView = view.findViewById(R.id.routeRecyclerView);
-        this.adapter = new RouteItemAdapter(routes);
-        this.recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        this.recyclerView.setAdapter(adapter);
+        recyclerView = view.findViewById(R.id.routeRecyclerView);
+        adapter = new RouteItemAdapter(routes,this.context,this.language);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        recyclerView.setAdapter(adapter);
 
 
         TextView title = view.findViewById(R.id.title);

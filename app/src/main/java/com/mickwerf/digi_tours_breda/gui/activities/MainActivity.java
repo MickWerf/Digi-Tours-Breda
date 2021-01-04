@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,12 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel mainViewModel;
 
+    private boolean isRequested = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.mainViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
 
         requestPermissions(new String[] {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialise notification settings.
         Notify.initialise(getApplicationContext());
+        this.mainViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
     }
 
     //Initialize all views
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.settingScreenFragment = new SettingScreenFragment();
 
-        this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel);
+        this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel,this);
 
         this.mapScreenFragment = new MapScreenFragment(this.mainViewModel);
 
@@ -81,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Set all on-click listeners
     public void setClickListeners(){
+
         this.settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,22 +136,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (int i = 0; i < grantResults.length; i++) {
-            permissionsToRequest.add(permissions[i]);
-        }
+        if(!isRequested) {
+            ArrayList<String> permissionsToRequest = new ArrayList<>();
+            for (int i = 0; i < grantResults.length; i++) {
+                permissionsToRequest.add(permissions[i]);
+            }
 
-        if (permissionsToRequest.size() > 0) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    permissionsToRequest.toArray(new String[0]),
-                    1);
-        }
+            if (permissionsToRequest.size() > 0) {
+                ActivityCompat.requestPermissions(
+                        this,
+                        permissionsToRequest.toArray(new String[0]),
+                        1);
+            }
 
-        if (grantResults.length > 0 &&
-                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            initialize();
-            setClickListeners();
+            if (grantResults.length > 0 &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED && !isRequested) {
+                initialize();
+                setClickListeners();
+                this.isRequested = true;
+            }
         }
     }
 }

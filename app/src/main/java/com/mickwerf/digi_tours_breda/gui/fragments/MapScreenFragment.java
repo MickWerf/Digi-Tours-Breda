@@ -31,9 +31,12 @@ import java.util.LinkedList;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -56,6 +59,13 @@ public class MapScreenFragment extends Fragment {
 
     private MainViewModel mainViewModel;
     private RouteWithLocations activeRoute;
+
+    Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
+        @Override
+        public void onChanged(RouteWithLocations newActiveRoute) {
+            activeRoute = newActiveRoute;
+        }
+    };
 
 
     public MapScreenFragment(MainViewModel mainViewModel) {
@@ -148,21 +158,25 @@ public class MapScreenFragment extends Fragment {
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
 
-        Runnable runnable = () -> {
-            this.activeRoute = this.mainViewModel.getActiveRoute().getValue();
+        this.mainViewModel.getActiveRoute().observe(this,this.activeRouteObserver);
+        this.activeRoute = this.mainViewModel.getActiveRoute2();
 
-        };
-        Thread t = new Thread(runnable);
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        Runnable runnable = () -> {
+//            this.activeRoute = this.mainViewModel.getActiveRoute().getValue();
+//
+//        };
+//        Thread t = new Thread(runnable);
+//        t.start();
+//        try {
+//            t.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
 
 
         if(this.activeRoute != null) {
+            mLocationList.clear();
             for (Location location : activeRoute.getLocations()) {
                 mLocationList.add(new NextLocationItem(location.getLocationName()));
             }
@@ -186,5 +200,24 @@ public class MapScreenFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         // Give the recycler view a default layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        GeoPoint startPoint = new GeoPoint(20.5992, 72.9342);
+        Marker startMarker = new Marker(mapView);
+        startMarker.setPosition(startPoint);
+        startMarker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
+        mapView.getOverlays().add(startMarker);
+    }
+
+    public void DrawRoute(ArrayList<GeoPoint> geoPoints){
+        Polyline line = new Polyline();
+        line.setPoints(geoPoints);
+        mapView.getOverlayManager().add(line);
+    }
+
+    public void DrawWayPoint(GeoPoint geoPoint){
+        Marker marker = new Marker(mapView);
+        marker.setPosition(geoPoint);
+        marker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
+        mapView.getOverlays().add(marker);
     }
 }
