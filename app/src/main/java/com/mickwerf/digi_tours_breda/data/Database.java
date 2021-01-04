@@ -65,7 +65,7 @@ public abstract class Database extends RoomDatabase {
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db1.db")
                                 .fallbackToDestructiveMigration()
-                                .createFromAsset("TemplateDatabaseV2.2.db")
+                                .createFromAsset("TemplateDatabaseV3.db")
                                 .build();
 
 

@@ -30,7 +30,7 @@ public class DatabaseIntegrationTest {
     public void testRoutes() {
         List<Route> routes = this.dataAdminAccess.getAllRoutes();
 
-        Assert.assertEquals(20, routes.size());
+        Assert.assertEquals(6, routes.size());
 
         Route route = routes.get(0);
         boolean previousStatus = route.isComplete();
