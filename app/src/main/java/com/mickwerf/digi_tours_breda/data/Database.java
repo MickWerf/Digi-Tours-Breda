@@ -64,20 +64,20 @@ public abstract class Database extends RoomDatabase {
 
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db1.db")
-//                                .fallbackToDestructiveMigration()
-//                                .createFromAsset("newDatabase.db")
+                                .fallbackToDestructiveMigration()
+                                .createFromAsset("TemplateDatabaseV2.2.db")
                                 .build();
 
 
 
-                        userPref = context.getSharedPreferences(USER_DATA, MODE_PRIVATE);
-                        if (userPref.getBoolean("first_time", true)) {
-                            insertAllData(context);
-
-                            SharedPreferences.Editor editor = userPref.edit();
-                            editor.putBoolean("first_time", false);
-                            editor.apply();
-                        }
+//                        userPref = context.getSharedPreferences(USER_DATA, MODE_PRIVATE);
+//                        if (userPref.getBoolean("first_time", true)) {
+//                            insertAllData(context);
+//
+//                            SharedPreferences.Editor editor = userPref.edit();
+//                            editor.putBoolean("first_time", false);
+//                            editor.apply();
+//                        }
 
                     } else {
                         System.out.println("NO PERMISSION TO ACCESS DATABASE");
