@@ -3,6 +3,7 @@ package com.mickwerf.digi_tours_breda.data.entities;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 /**
@@ -18,10 +19,20 @@ public class DataElement {
     @ColumnInfo(name = "data_type")
     private String dataType;
 
+    @ForeignKey(
+            entity = Location.class,
+            parentColumns = "location",
+            childColumns = "locationName"
+    )
     @NonNull
     @ColumnInfo(name = "location")
     private String location;
 
+    @ForeignKey(
+            entity = Language.class,
+            parentColumns = "language",
+            childColumns = "languageName"
+    )
     @NonNull
     @ColumnInfo(name = "language")
     private String language;
