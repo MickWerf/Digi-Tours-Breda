@@ -3,10 +3,10 @@
     <string name="app_name">Digi-Tours-Breda</string>
     <string name="NextUp">Volgende:</string>
     <string name="hello_blank_fragment">Hallo blank fragment</string>
-    <string name="route_fragment_title1">Goede Morgen</string>
-    <string name="route_fragment_title2">Goede Middag</string>
-    <string name="route_fragment_title3">Goede Avond</string>
-    <string name="route_fragment_title4">Goede Nacht</string>
+    <string name="route_fragment_title1">Goede Morgen!</string>
+    <string name="route_fragment_title2">Goede Middag!</string>
+    <string name="route_fragment_title3">Goede Avond!</string>
+    <string name="route_fragment_title4">Goede Nacht!</string>
     <string name="splash_screen_title">DigiTours Breda Editie</string>
     <string name="no_gps_text">We kunnen uw huidige positie niet vinden</string>
     <string name="no_gps_title">Geen GPS signaal</string>
