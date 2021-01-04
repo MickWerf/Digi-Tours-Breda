@@ -23,6 +23,7 @@ public class UserSettings {
     @ColumnInfo(name = "language")
     private String language;
 
+    @NonNull
     @ForeignKey(
             entity = Route.class,
             parentColumns = "route",
