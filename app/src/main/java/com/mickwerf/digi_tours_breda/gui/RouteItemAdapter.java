@@ -1,5 +1,10 @@
 package com.mickwerf.digi_tours_breda.gui;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +23,11 @@ import java.util.List;
 public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.RouteItemViewholder> {
 
     private List<Route> routes;
+    private Context context;
 
-    public RouteItemAdapter(List<Route> routes){
+    public RouteItemAdapter(List<Route> routes, Context context){
         this.routes = routes;
+        this.context = context;
     }
 
     @NonNull
@@ -34,7 +41,19 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
     @Override
     public void onBindViewHolder(@NonNull RouteItemViewholder holder, int position) {
 
-        //TODO set holders
+        String mCurrent = routes.get(position).getRouteName();
+        holder.routeTitle.setText(mCurrent);
+
+
+        int id = context.getResources().getIdentifier(routes.get(position).getRouteImagePath(), "drawable", context.getPackageName());
+
+        holder.routeImage.setImageResource(id);
+
+
+//        String mImage = routes.get(position).getRouteImagePath();
+//        Bitmap myBitmap = BitmapFactory.decodeFile(mImage);
+//        System.out.println("NULLCHECK: "+myBitmap);
+//        holder.routeImage.setImageResource(id);
 
     }
 

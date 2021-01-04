@@ -57,6 +57,13 @@ public class MapScreenFragment extends Fragment {
     private MainViewModel mainViewModel;
     private RouteWithLocations activeRoute;
 
+    Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
+        @Override
+        public void onChanged(RouteWithLocations newActiveRoute) {
+            activeRoute = newActiveRoute;
+        }
+    };
+
 
     public MapScreenFragment(MainViewModel mainViewModel) {
         this.mainViewModel = mainViewModel;
@@ -148,21 +155,25 @@ public class MapScreenFragment extends Fragment {
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
 
-        Runnable runnable = () -> {
-            this.activeRoute = this.mainViewModel.getActiveRoute().getValue();
+        this.mainViewModel.getActiveRoute().observe(this,this.activeRouteObserver);
+        this.activeRoute = this.mainViewModel.getActiveRoute2();
 
-        };
-        Thread t = new Thread(runnable);
-        t.start();
-        try {
-            t.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        Runnable runnable = () -> {
+//            this.activeRoute = this.mainViewModel.getActiveRoute().getValue();
+//
+//        };
+//        Thread t = new Thread(runnable);
+//        t.start();
+//        try {
+//            t.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
 
 
         if(this.activeRoute != null) {
+            mLocationList.clear();
             for (Location location : activeRoute.getLocations()) {
                 mLocationList.add(new NextLocationItem(location.getLocationName()));
             }

@@ -121,9 +121,26 @@ public abstract class Database extends RoomDatabase {
 
 
         //TODO routes maken en invullen
-        adminAccess.insertRoutes(new Route("Stapje uit", false, "/res/stapje_uit"));
+        adminAccess.insertRoutes(new Route("Stapje uit", false, "stapje_uit"));
         adminAccess.insertRouteLocationCross(new RouteLocationCrossReference("Stapje uit", "Grote Kerk"),
                 new RouteLocationCrossReference("Stapje uit", "Foodhall"));
+
+        adminAccess.insertRoutes(new Route("Stapje uit2", false, "/res/stapje_uit.png"));
+        adminAccess.insertRouteLocationCross(new RouteLocationCrossReference("Stapje uit2", "Grote Kerk"),
+                new RouteLocationCrossReference("Stapje uit2", "Foodhall"));
+
+        adminAccess.insertRoutes(new Route("Stapje uit3", false, "/res/stapje_uit.png"));
+        adminAccess.insertRouteLocationCross(new RouteLocationCrossReference("Stapje uit3", "Grote Kerk"),
+                new RouteLocationCrossReference("Stapje uit3", "Foodhall"));
+
+        adminAccess.insertRoutes(new Route("Girls night out!", false, "/res/girls_night_out.png"));
+        adminAccess.insertRouteLocationCross(
+                new RouteLocationCrossReference("Girls night out!", "NAC"),
+                new RouteLocationCrossReference("Girls night out!", "Onderwijshotel De Rooi Pannen"),
+                new RouteLocationCrossReference("Girls night out!", "Apollo Hotel"),
+                new RouteLocationCrossReference("Girls night out!", "Hotel Nassau Breda")
+        );
+
 
 
         //TODO alle data elementen aanmaken

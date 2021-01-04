@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
+import com.mickwerf.digi_tours_breda.data.Database;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
@@ -36,8 +37,12 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<List<Route>> getRoutes() {
-        this.routes.postValue(Repository.getInstance().getRoutes(getApplication().getApplicationContext()));
+        this.routes.setValue(Repository.getInstance().getRoutes(getApplication().getApplicationContext()));
         return routes;
+    }
+
+    public List<Route> getRoutes2(){
+        return Repository.getInstance().getRoutes(getApplication().getApplicationContext());
     }
 
     public MutableLiveData<UserSettings> getUserSettings() {
@@ -57,6 +62,10 @@ public class MainViewModel extends AndroidViewModel {
     public MutableLiveData<RouteWithLocations> getActiveRoute() {
         activeRoute.postValue(Repository.getInstance().getActiveRoute(getApplication().getApplicationContext()));
         return activeRoute;
+    }
+
+    public RouteWithLocations getActiveRoute2(){
+        return Repository.getInstance().getActiveRoute(getApplication().getApplicationContext());
     }
 
     public void setActiveRoute(Route newRoute) {
