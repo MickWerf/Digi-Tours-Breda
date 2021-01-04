@@ -46,7 +46,7 @@ import static android.content.Context.MODE_PRIVATE;
                 UserSettings.class
         },
         version = 2, //sets the version to 2.
-        exportSchema = false //disable exporting schema, this is unneeded for implementation.
+        exportSchema = true //disable exporting schema, this is unneeded for implementation.
 )
 public abstract class Database extends RoomDatabase {
     private static volatile Database INSTANCE;
@@ -62,9 +62,9 @@ public abstract class Database extends RoomDatabase {
                 if (INSTANCE == null) {
 
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db1.db")
+                        INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db1")
                                 .fallbackToDestructiveMigration()
-                                .createFromAsset("TemplateDatabase.db")
+                                .createFromAsset("TemplateDatabaseV2.db")
                                 .build();
 
 
