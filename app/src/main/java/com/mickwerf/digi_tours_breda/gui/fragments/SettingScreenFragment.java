@@ -148,6 +148,9 @@ public class SettingScreenFragment extends Fragment {
         if(!this.howToUseOpen){
             this.howToUseIV.setRotation(90);
             this.howToUseTV.setVisibility(View.VISIBLE);
+            if(noGpsOpen){
+                showNoGpsCase();
+            }
             this.howToUseOpen = true;
 
         }else {
@@ -161,6 +164,9 @@ public class SettingScreenFragment extends Fragment {
         if(!this.noGpsOpen){
             this.noGpsIV.setRotation(90);
             this.noGpsTV.setVisibility(View.VISIBLE);
+            if(howToUseOpen){
+                showHowToUse();
+            }
             this.noGpsOpen = true;
 
         }else {
