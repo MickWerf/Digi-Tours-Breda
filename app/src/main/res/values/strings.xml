@@ -1,3 +1,4 @@
+
 <resources>
     <string name="app_name">Digi-Tours-Breda</string>
     <string name="Routes">Routes</string>
@@ -9,10 +10,17 @@
     <string name="NextUp">Next up:</string>
 
     <!-- TODO: fill in these 2 -->
-    <string name="CaseOfNoGpsText">AAA</string>
-    <string name="HowToUseText">AAA</string>
+    <string name="CaseOfNoGpsText" translatable="false">AAA</string>
+    <string name="HowToUseText" translatable="false">AAA</string>
+
+
+
+
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
     //Strings for the route overview fragment
     <string name="route_fragment_title1">Good Morning!</string>
@@ -28,12 +36,14 @@
     <string name="no_gps_text">We can not locate your current position at the moment.</string>
 
     //Strings for the skip location pop up
-    <string name="skip_location_title">Titel</string>
-    <string name="skip_location_button">Skip</string>
+    <string name="skip_location_title" translatable="false">Titel</string>
+    <string name="skip_location_button" translatable="false">Skip</string>
 
     //Strings for the ok location pop up
-    <string name="ok_location_popup_title">Titel</string>
-    <string name="ok_location_popup_text">Mooie gebouw</string>
-    <string name="ok_location_popup_button">ok</string>
-    <string name="channel_name">Navigation</string>
+    <string name="ok_location_popup_title" translatable="false">Titel</string>
+    <string name="ok_location_popup_text" translatable="false">Mooie gebouw</string>
+    <string name="ok_location_popup_button" translatable="false">ok</string>
+    <string name="channel_name" translatable="false">something</string>
+
+
 </resources>
