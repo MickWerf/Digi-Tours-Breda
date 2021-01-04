@@ -11,9 +11,9 @@ is_sight_seeing_location BOOLEAN
 INSERT INTO location VALUES('Grote Kerk', 0,1);
 INSERT INTO location VALUES('Foodhall',0,0);
 CREATE TABLE IF NOT EXISTS route(
-routeName VARCHAR(30)) PRIMARY KEY NOT NULL,
+routeName VARCHAR(30) PRIMARY KEY NOT NULL,
 complete BOOLEAN,
-routeImagePath VARCHAR(30) NOT NULL
+route_image_path VARCHAR(30) NOT NULL
 );
 INSERT INTO route VALUES('Stapje uit',0,'/res/stapje_uit');
 CREATE TABLE IF NOT EXISTS route_location_cross_reference(
@@ -43,8 +43,8 @@ longitude REAL NOT NULL,
 location VARCHAR(30) NOT NULL,
 FOREIGN KEY(location) REFERENCES location(locationName)
 );
-INSERT INTO gps_coordinate VALUES(1,51.589031658516780964,4.7756363470046441221,'Grote Kerk');
-INSERT INTO gps_coordinate VALUES(2,51.589479884555643706,4.775059648793251732,'Foodhall');
+INSERT INTO gps_coordinate(latitude, longitude, location) VALUES(51.589031658516780964,4.7756363470046441221,'Grote Kerk');
+INSERT INTO gps_coordinate(latitude, longitude, location) VALUES(51.589479884555643706,4.775059648793251732,'Foodhall');
 CREATE TABLE IF NOT EXISTS user_settings(
 settingsId INT PRIMARY KEY,
 language VARCHAR(30) NOT NULL,

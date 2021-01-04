@@ -18,16 +18,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Scanner;
 
 public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.RouteItemViewholder> {
 
     private List<Route> routes;
     private Context context;
+    private String language;
 
-    public RouteItemAdapter(List<Route> routes, Context context){
+    public RouteItemAdapter(List<Route> routes, Context context, String language){
         this.routes = routes;
         this.context = context;
+        this.language = language;
     }
 
     @NonNull
@@ -46,6 +52,36 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
 
 
         int id = context.getResources().getIdentifier(routes.get(position).getRouteImagePath(), "drawable", context.getPackageName());
+
+        String text = "";
+        String filename = "";
+
+        System.out.println("TAAL"+this.language);
+        switch(this.language){
+            case "Nederlands":
+                filename = routes.get(position).getRouteDescriptionNL();
+                System.out.println("PATH: "+filename);
+                break;
+            case "Engels":
+                filename = routes.get(position).getRouteDescriptionEN();
+                break;
+            case "Duits":
+                filename = routes.get(position).getRouteDescriptionDE();
+                break;
+        }
+
+        try (InputStream inputStream = context.getAssets().open(filename)) {
+            Scanner reader = new Scanner(inputStream);
+            while (reader.hasNext()) {
+                text += reader.nextLine();
+            }
+
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        holder.routeText.setText(text);
 
         holder.routeImage.setImageResource(id);
 

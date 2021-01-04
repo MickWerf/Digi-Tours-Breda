@@ -45,6 +45,10 @@ public class MainViewModel extends AndroidViewModel {
         return Repository.getInstance().getRoutes(getApplication().getApplicationContext());
     }
 
+    public UserSettings getUserSettings2(){
+        return Repository.getInstance().getUserSettings(getApplication().getApplicationContext());
+    }
+
     public MutableLiveData<UserSettings> getUserSettings() {
         this.userSettings.postValue(Repository.getInstance().getUserSettings(getApplication().getApplicationContext()));
         return userSettings;

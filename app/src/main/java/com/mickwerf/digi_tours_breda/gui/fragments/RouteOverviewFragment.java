@@ -37,6 +37,7 @@ public class RouteOverviewFragment extends Fragment {
     private List<Route> routes;
 
     private Context context;
+    private String language;
 
     Observer<List<Route>> routesUpdateObserver = new Observer<List<Route>>() {
         @Override
@@ -48,6 +49,7 @@ public class RouteOverviewFragment extends Fragment {
     public RouteOverviewFragment(MainViewModel mainViewModel, Context context){
         this.mainViewModel = mainViewModel;
         this.context = context;
+        this.language = mainViewModel.getUserSettings2().getLanguage();
     }
 
 
@@ -81,7 +83,7 @@ public class RouteOverviewFragment extends Fragment {
 
 
         recyclerView = view.findViewById(R.id.routeRecyclerView);
-        adapter = new RouteItemAdapter(routes,this.context);
+        adapter = new RouteItemAdapter(routes,this.context,this.language);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
 

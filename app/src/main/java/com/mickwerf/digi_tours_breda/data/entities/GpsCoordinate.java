@@ -3,6 +3,7 @@ package com.mickwerf.digi_tours_breda.data.entities;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 /**
@@ -10,18 +11,20 @@ import androidx.room.PrimaryKey;
  */
 @Entity(tableName = "gps_coordinate")
 public class GpsCoordinate {
-
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    @NonNull
     @ColumnInfo(name = "latitude")
     private double latitude;
 
-    @NonNull
     @ColumnInfo(name = "longitude")
     private double longitude;
 
+    @ForeignKey(
+            entity = Location.class,
+            parentColumns = "location",
+            childColumns = "locationName"
+    )
     @NonNull
     @ColumnInfo(name = "location")
     private String location;

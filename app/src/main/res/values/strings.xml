@@ -8,6 +8,12 @@
     <string name="InCaseOfNoGPS">In case of no gps:</string>
     <string name="NextUp">Next up:</string>
 
+    <!-- TODO: fill in these 2 -->
+    <string name="CaseOfNoGpsText">AAA</string>
+    <string name="HowToUseText">AAA</string>
+
+
+
 
 
 
