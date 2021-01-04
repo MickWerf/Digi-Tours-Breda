@@ -23,6 +23,7 @@ class Repository {
 
     private List<Route> routes;
     private RouteWithLocations activeRoute;
+    private UserSettings userSettings;
 
     public static Repository getInstance() {
         if (INSTANCE == null) {
@@ -66,7 +67,19 @@ class Repository {
     }
 
     public UserSettings getUserSettings(Context context) {
-        return Database.getInstance(context).userDataAccess().getUserSettings();
+
+        Runnable runnable = () -> {
+            this.userSettings = Database.getInstance(context).userDataAccess().getUserSettings();
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return this.userSettings;
     }
 
     public GpsCoordinate getGpsCoordinate() {

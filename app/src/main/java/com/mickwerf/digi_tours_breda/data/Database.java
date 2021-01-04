@@ -129,7 +129,7 @@ public abstract class Database extends RoomDatabase {
         adminAccess.insertLocations(new Location("Avans Hogeschool", false, true));
 
 
-        adminAccess.insertRoutes(new Route("Stapje uit", false, "/res/route/stapje_uit.png", "/res/route/stapje_uit_nl.txt", "/res/route/stapje_uit_en.txt", "/res/route/stapje_uit_de.txt"));
+        adminAccess.insertRoutes(new Route("Stapje uit", false, "stapje_uit", "descriptions/stapje_uit_en.txt", "descriptions/stapje_uit_en.txt", "descriptions/stapje_uit_en.txt"));
         adminAccess.insertRouteLocationCross(
                 new RouteLocationCrossReference("Stapje uit", "Grote Kerk"),
                 new RouteLocationCrossReference("Stapje uit", "Foodhall"),
