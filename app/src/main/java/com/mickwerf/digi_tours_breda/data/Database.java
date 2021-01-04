@@ -259,6 +259,54 @@ public abstract class Database extends RoomDatabase {
         adminAccess.insertDataElement(new DataElement("/res/location/apollo_hotel_en.txt","TEXT","Apollo Hotel","Engels"));
         adminAccess.insertDataElement(new DataElement("/res/location/apollo_hotel.png","VISUAL","Apollo Hotel","Generic"));
 
+        adminAccess.insertDataElement(new DataElement("/res/location/hotel_nassau_breda_nl.txt","TEXT","Hotel Nassau Breda","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/hotel_nassau_breda_en.txt","TEXT","Hotel Nassau Breda","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/hotel_nassau_breda.png","VISUAL","Hotel Nassau Breda","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/haven_nl.txt","TEXT","Haven","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/haven_en.txt","TEXT","Haven","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/haven.png","VISUAL","Haven","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/de_barones_nl.txt","TEXT","De Barones","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/de_barones_en.txt","TEXT","De Barones","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/de_barones.png","VISUAL","De Barones","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/t_sas_nl.txt","TEXT","'t Sas","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/t_sas_en.txt","TEXT","'t Sas","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/t_sas.png","VISUAL","'t Sas","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/sint_joostkapel_nl.txt","TEXT","Sint Joostkapel","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/sint_joostkapel_en.txt","TEXT","Sint Joostkapel","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/sint_joostkapel.png","VISUAL","Sint Joostkapel","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/nassau_baroniemonument_nl.txt","TEXT","Nassau-Baroniemonument","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/nassau_baroniemonument_en.txt","TEXT","Nassau-Baroniemonument","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/nassau_baroniemonument.png","VISUAL","Nassau-Baroniemonument","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/waalse_kerk_breda_nl.txt","TEXT","Waalse Kerk Breda","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/waalse_kerk_breda_en.txt","TEXT","Waalse Kerk Breda","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/waalse_kerk_breda.png","VISUAL","Waalse Kerk Breda","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/station_breda_nl.txt","TEXT","Station Breda","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/station_breda_en.txt","TEXT","Station Breda","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/station_breda.png","VISUAL","Station Breda","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/la_source_nl.txt","TEXT","La Source","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/la_source_en.txt","TEXT","La Source","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/la_source.png","VISUAL","La Source","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/sinte_juttemis_nl.txt","TEXT","Sinte Juttemis","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/sinte_juttemis_en.txt","TEXT","Sinte Juttemis","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/sinte_juttemis.png","VISUAL","Sinte Juttemis","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/amphia_ziekenhuis_nl.txt","TEXT","Amphia ziekenhuis","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/amphia_ziekenhuis_en.txt","TEXT","Amphia ziekenhuis","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/amphia_ziekenhuis.png","VISUAL","Amphia ziekenhuis","Generic"));
+
+        adminAccess.insertDataElement(new DataElement("/res/location/avans_hogeschool_nl.txt","TEXT","Avans Hogeschool","Nederlands"));
+        adminAccess.insertDataElement(new DataElement("/res/location/avans_hogeschool_en.txt","TEXT","Avans Hogeschool","Engels"));
+        adminAccess.insertDataElement(new DataElement("/res/location/avans_hogeschool.png","VISUAL","Avans Hogeschool","Generic"));
+
 
         adminAccess.insertCoordinates(new GpsCoordinate(51.589031658516780964,4.7756363470046441221, "Grote Kerk"));
         adminAccess.insertCoordinates(new GpsCoordinate(51.589479884555643706,4.775059648793251732, "FoodHall"));
