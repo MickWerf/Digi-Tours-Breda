@@ -26,11 +26,11 @@ public class Route {
     private String routeDescriptionNL;
 
     @NonNull
-    @ColumnInfo(name = "route_description_nl")
+    @ColumnInfo(name = "route_description_en")
     private String routeDescriptionEN;
 
     @NonNull
-    @ColumnInfo(name = "route_description_nl")
+    @ColumnInfo(name = "route_description_de")
     private String routeDescriptionDE;
 
     public Route(@NonNull String routeName, boolean complete, @NonNull String routeImagePath, @NonNull String routeDescriptionNL, @NonNull String routeDescriptionEN, @NonNull String routeDescriptionDE) {

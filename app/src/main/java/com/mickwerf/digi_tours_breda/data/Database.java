@@ -46,7 +46,7 @@ import static android.content.Context.MODE_PRIVATE;
                 RouteLocationCrossReference.class,
                 UserSettings.class
         },
-        version = 2, //sets the version to 2.
+        version = 3, //sets the version to 3.
         exportSchema = false //disable exporting schema, this is unneeded for implementation.
 )
 public abstract class Database extends RoomDatabase {
@@ -64,8 +64,8 @@ public abstract class Database extends RoomDatabase {
 
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db1.db")
-                                //.fallbackToDestructiveMigration()
-                                //.createFromAsset("TemplateDatabase.db")
+//                                .fallbackToDestructiveMigration()
+//                                .createFromAsset("newDatabase.db")
                                 .build();
 
 
