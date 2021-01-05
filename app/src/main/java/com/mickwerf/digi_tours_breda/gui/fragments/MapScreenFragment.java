@@ -161,6 +161,7 @@ public class MapScreenFragment extends Fragment {
         this.mapController.zoomTo(19);
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
+//        this.mapController.setCenter(new GeoPoint(4.780642,51.588949));
 
         this.mainViewModel.getActiveRoute().observe(this,this.activeRouteObserver);
         this.activeRoute = this.mainViewModel.getActiveRoute2();
@@ -216,10 +217,13 @@ public class MapScreenFragment extends Fragment {
 //        Coordinate start = new Coordinate(-122.086549, 37.421034);
 //        Coordinate end = new Coordinate(-122.077987, 37.423411);
 
+        GeoPoint start2 = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
+        DrawWayPoint(start2);
+
         for(int i = 0; i<LocationCoordinateList.size()-1;i++) {
 
-            Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
-            Coordinate end = new Coordinate(LocationCoordinateList.get(i+1).getLongitude(), LocationCoordinateList.get(i+1).getLatitude());
+            Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLatitude(), LocationCoordinateList.get(i).getLongitude());
+            Coordinate end = new Coordinate(LocationCoordinateList.get(i+1).getLatitude(), LocationCoordinateList.get(i+1).getLongitude());
 
 
             new RouteCallGet.Builder(
