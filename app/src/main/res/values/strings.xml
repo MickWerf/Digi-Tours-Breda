@@ -36,4 +36,5 @@
     <string name="ok_location_popup_text">Mooie gebouw</string>
     <string name="ok_location_popup_button">ok</string>
     <string name="channel_name">Navigation</string>
+    <string name="NotStartableRoute">Could not start route</string>
 </resources>

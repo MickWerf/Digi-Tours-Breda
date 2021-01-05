@@ -32,6 +32,9 @@ public interface UserDataAccess {
     @Query("SELECT * FROM route WHERE routeName LIKE :routeName")
     RouteWithLocations getRouteWithLocations(String routeName);
 
+    @Query("SELECT * FROM route WHERE routeName Like :routeName")
+    Route getRoute(String routeName);
+
     @Update
     void updateRoute(Route... routes);
     //endregion

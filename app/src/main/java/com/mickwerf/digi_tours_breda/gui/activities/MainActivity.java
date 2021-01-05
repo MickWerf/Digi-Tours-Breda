@@ -157,4 +157,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+    public MainViewModel getMainViewModel() {
+        return mainViewModel;
+    }
 }

@@ -112,4 +112,8 @@ class Repository {
         location.setVisited(true);
         Database.getInstance(context).userDataAccess().updateLocation(location);
     }
+
+    public Route getRoute(Context context, String routeName) {
+        return Database.getInstance(context).userDataAccess().getRoute(routeName);
+    }
 }

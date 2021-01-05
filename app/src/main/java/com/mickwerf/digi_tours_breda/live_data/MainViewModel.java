@@ -91,4 +91,14 @@ public class MainViewModel extends AndroidViewModel {
         UserSettings settings = Repository.getInstance().getUserSettings(getApplication().getApplicationContext());
         return Repository.getInstance().getLocationElements(getApplication().getApplicationContext(), location, settings);
     }
+
+    public Boolean setCurrentRoute(String routeName){
+        if(getUserSettings2().getRoute() == null){
+            Route activeRoute = Repository.getInstance().getRoute(getApplication().getApplicationContext(), routeName);
+            Repository.getInstance().setActiveRoute(getApplication().getApplicationContext(), activeRoute);
+            return true;
+        }
+        return false;
+
+    }
 }
