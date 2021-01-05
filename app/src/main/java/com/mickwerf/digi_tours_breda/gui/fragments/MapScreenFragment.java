@@ -29,6 +29,8 @@ import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate
 
 import java.util.LinkedList;
 
+import org.osmdroid.config.Configuration;
+import org.osmdroid.library.BuildConfig;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
@@ -158,13 +160,17 @@ public class MapScreenFragment extends Fragment {
         this.locationOverlay.enableFollowLocation();
         this.mapView.getOverlays().add(this.locationOverlay);
         this.mapController = new MapController(this.mapView);
-        this.mapController.zoomTo(19);
+        this.mapController.zoomTo(5);
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
 //        this.mapController.setCenter(new GeoPoint(4.780642,51.588949));
 
         this.mainViewModel.getActiveRoute().observe(this,this.activeRouteObserver);
         this.activeRoute = this.mainViewModel.getActiveRoute2();
+
+        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
+
+
 
 //        Runnable runnable = () -> {
 //            this.activeRoute = this.mainViewModel.getActiveRoute().getValue();
@@ -209,6 +215,11 @@ public class MapScreenFragment extends Fragment {
         RouteWithLocations route = mainViewModel.getActiveRoute2();
 
         List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(route.getLocations());
+//        LocationCoordinateList.clear();
+//        LocationCoordinateList.add(new GpsCoordinate(37.421022, -122.086627,"AA"));
+//        LocationCoordinateList.add(new GpsCoordinate(37.423834, -122.090104,"BB"));
+//        LocationCoordinateList.add(new GpsCoordinate(37.427498, -122.099427,"AA"));
+
 
         System.out.println("SIZE1: "+LocationCoordinateList.size());
 //        System.out.println("GPS COORD: "+ LocationCoordinateList.get(0).getLocation().getLocationName());
@@ -217,14 +228,19 @@ public class MapScreenFragment extends Fragment {
 //        Coordinate start = new Coordinate(-122.086549, 37.421034);
 //        Coordinate end = new Coordinate(-122.077987, 37.423411);
 
-        GeoPoint start2 = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
-        DrawWayPoint(start2);
+        GeoPoint startPoint = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
+        DrawWayPoint(startPoint);
+
+//        GeoPoint start3 = new GeoPoint(LocationCoordinateList.get(1).getLatitude(), LocationCoordinateList.get(1).getLongitude());
+//        DrawWayPoint(start3);
 
         for(int i = 0; i<LocationCoordinateList.size()-1;i++) {
 
-            Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLatitude(), LocationCoordinateList.get(i).getLongitude());
-            Coordinate end = new Coordinate(LocationCoordinateList.get(i+1).getLatitude(), LocationCoordinateList.get(i+1).getLongitude());
+            Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
+            Coordinate end = new Coordinate(LocationCoordinateList.get(i+1).getLongitude(), LocationCoordinateList.get(i+1).getLatitude());
 
+            GeoPoint point = new GeoPoint(LocationCoordinateList.get(i+1).getLatitude(), LocationCoordinateList.get(i+1).getLongitude());
+            DrawWayPoint(point);
 
             new RouteCallGet.Builder(
                     start,
