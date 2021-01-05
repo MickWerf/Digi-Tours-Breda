@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        requestPermissions(new String[] {
+        requestPermissions(new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.MANAGE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (presetFragment == null) {
             fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
-        }else if (presetFragment.equals("settings")){
+        } else if (presetFragment.equals("settings")) {
             toSettingsView();
             presetFragment = null;
         }
@@ -111,9 +111,9 @@ public class MainActivity extends AppCompatActivity {
         this.hasGpsSignal = checkGpsPermission();
 
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
+    }
 
-
-    public void updateUserSettings(String localeCode, String Language){
+    public void updateUserSettings(String localeCode, String Language) {
         Runnable runnable = () -> {
             mainViewModel.setCurrentLanguage(new Language(Language), new Locale(localeCode.toLowerCase()));
         };
@@ -126,13 +126,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void restartActivity(){
+    public void restartActivity() {
         Objects.requireNonNull(this).finish();
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("loadFragment", "settings");
         startActivity(intent);
         toSettingsView();
-        Toast toast=Toast. makeText(getApplicationContext(),R.string.changedLanguage,Toast. LENGTH_SHORT);
+        Toast toast = Toast.makeText(getApplicationContext(), R.string.changedLanguage, Toast.LENGTH_SHORT);
         toast.show();
     }
 
@@ -177,12 +177,20 @@ public class MainActivity extends AppCompatActivity {
             if (hasGpsSignal) {
                 Log.d("No GPS popup", "GPS deactivated.");
                 hasGpsSignal = false;
-                fragmentManager.beginTransaction().add(R.id.fragmentContainer, gpsLossPopup).commit();
+                try {
+                    fragmentManager.beginTransaction().add(R.id.fragmentContainer, gpsLossPopup).commit();
+                } catch (IllegalStateException e) {
+                    e.getLocalizedMessage();
+                }
             }
         } else if (!hasGpsSignal) {
             Log.d("No GPS popup", "GPS activated.");
             hasGpsSignal = true;
-            fragmentManager.beginTransaction().remove(gpsLossPopup).commit();
+            try {
+                fragmentManager.beginTransaction().remove(gpsLossPopup).commit();
+            } catch (IllegalStateException e) {
+                e.getLocalizedMessage();
+            }
         }
     }
 
