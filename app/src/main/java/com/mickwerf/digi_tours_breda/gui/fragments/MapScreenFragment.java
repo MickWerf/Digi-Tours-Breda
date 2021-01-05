@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mickwerf.digi_tours_breda.R;
@@ -301,6 +302,7 @@ public class MapScreenFragment extends Fragment {
     private TextView infoTV;
     private TextView titleTV;
     private Button okButton;
+    private ImageView imageView;
 
     @SuppressLint("SetTextI18n")
     public void CreateInfoPopup(Location location){
@@ -309,10 +311,16 @@ public class MapScreenFragment extends Fragment {
         this.titleTV = (TextView) popup.findViewById(R.id.infoLocationTitle);
         this.titleTV.setText(location.getLocationName());
         this.infoTV = (TextView) popup.findViewById(R.id.infoLocationText);
+        this.imageView = (ImageView) popup.findViewById(R.id.infoLocationImage);
 
         String textPath = this.mainViewModel.getLocationElements(location).getPath();
 
         String imagePath = this.mainViewModel.getLocationImagePath(location);
+
+        int id = context.getResources().getIdentifier(imagePath, "drawable", context.getPackageName());
+
+        this.imageView.setImageResource(id);
+
 
         this.infoTV.setText(textPath + "\n"+imagePath);
 
