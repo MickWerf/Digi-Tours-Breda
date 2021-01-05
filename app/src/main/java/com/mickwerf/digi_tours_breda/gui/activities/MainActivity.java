@@ -1,6 +1,5 @@
 package com.mickwerf.digi_tours_breda.gui.activities;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
@@ -8,8 +7,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +18,9 @@ import com.mickwerf.digi_tours_breda.gui.fragments.MapScreenFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.RouteOverviewFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.SettingScreenFragment;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.ApiCallback;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 import com.mickwerf.digi_tours_breda.services.Notify;
 
 import java.util.ArrayList;
@@ -47,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        // TODO: remove when you understand the working of the RouteCallGet.
+//        new RouteCallGet.Builder(
+//                new Coordinate(4.789647,51.585497),
+//                new Coordinate(4.764318,51.591666),
+//                getApplicationContext()
+//        ).Call(apiResponse -> {
+//            // Fill the Open Street Map here.
+//        });
 
         requestPermissions(new String[] {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
