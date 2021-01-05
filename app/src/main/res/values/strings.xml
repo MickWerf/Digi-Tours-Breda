@@ -49,7 +49,8 @@
 
     <string name="NotStartableRoute">Could not start route</string>
     <string name="NotifyCompleteRoute">"You have complete route: "</string>
-    <string name="NotifyIllegalStopRoute">You cannot stop a Route that hasnt been started</string>
+    <string name="NotifyIllegalStopRoute">You cannot stop a route that hasnt been started.</string>
     <string name="NotifyUncompleteRoute">"You haven't finished route: "</string>
     <string name="ContinueLater">. You can finish it later.</string>
+    <string name="NotifyDeleteProgress">"Deleted progress of route: "</string>
 </resources>

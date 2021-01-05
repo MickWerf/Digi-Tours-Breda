@@ -18,4 +18,10 @@
     <string name="no_gps_title">No GPS signal</string>
     <string name="channel_name">Navigation</string>
     <string name="changedLanguage">You changed the language to: English</string>
+    <string name="NotStartableRoute">Could not start route</string>
+    <string name="NotifyCompleteRoute">"You have complete route: "</string>
+    <string name="NotifyIllegalStopRoute">You cannot stop a route that hasnt been started.</string>
+    <string name="NotifyUncompleteRoute">"You haven't finished route: "</string>
+    <string name="ContinueLater">. You can finish it later.</string>
+    <string name="NotifyDeleteProgress">"Deleted progress of route: "</string>
 </resources>
