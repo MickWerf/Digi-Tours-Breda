@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mickwerf.digi_tours_breda.R;
+import com.mickwerf.digi_tours_breda.gui.activities.MainActivity;
 
 
 public class SettingScreenFragment extends Fragment {
@@ -33,6 +34,13 @@ public class SettingScreenFragment extends Fragment {
     private ImageView dutchButton;
     private ImageView germanButton;
     private ImageView englishButton;
+
+    private MainActivity mainActivity;
+
+    public SettingScreenFragment(MainActivity mainActivity){
+        this.mainActivity = mainActivity;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -132,16 +140,22 @@ public class SettingScreenFragment extends Fragment {
         });
     }
 
-    public void changeToEnglish(){
+    public void changeToEnglish() {
         //TODO change language to English
+        mainActivity.updateUserSettings("en", "Engels");
+        mainActivity.restartActivity();
     }
 
-    public void changeToDutch(){
+    public void changeToDutch() {
         //TODO change language to Dutch
+        mainActivity.updateUserSettings("nl", "Nederlands");
+        mainActivity.restartActivity();
     }
 
-    public void changeToGerman(){
+    public void changeToGerman() {
         //TODO change language to German
+        mainActivity.updateUserSettings("de", "Duits");
+        mainActivity.restartActivity();
     }
 
     public void showHowToUse(){

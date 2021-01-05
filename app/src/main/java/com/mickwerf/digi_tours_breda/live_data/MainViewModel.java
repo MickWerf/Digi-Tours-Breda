@@ -36,6 +36,12 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull Application application) {
         super(application);
+        //TODO: change this to be more good looking V
+        try{
+            Lingver.init(application);
+        }catch (Exception e){
+
+        }
     }
 
     public MutableLiveData<List<Route>> getRoutes() {
@@ -82,9 +88,9 @@ public class MainViewModel extends AndroidViewModel {
         Repository.getInstance().setActiveRoute(getApplication().getApplicationContext(), newRoute);
     }
 
-    public void setCurrentLanguage(Language language) {
+    public void setCurrentLanguage(Language language, Locale newLocale) {
         Repository.getInstance().setLanguage(getApplication().getApplicationContext(), language);
-        Lingver.getInstance().setLocale(getApplication().getApplicationContext(), LOCALE_DEFAULT);
+        Lingver.getInstance().setLocale(getApplication().getApplicationContext(), newLocale);
     }
 
     public void visitLocation(Location location) {
