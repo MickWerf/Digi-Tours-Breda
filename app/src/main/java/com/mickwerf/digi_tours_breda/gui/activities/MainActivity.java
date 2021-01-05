@@ -2,12 +2,14 @@ package com.mickwerf.digi_tours_breda.gui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,13 +22,13 @@ import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.gui.fragments.MapScreenFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.RouteOverviewFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.SettingScreenFragment;
+import com.mickwerf.digi_tours_breda.gui.popups.GPSLossPopup;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
-import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.ApiCallback;
-import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
-import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 import com.mickwerf.digi_tours_breda.services.Notify;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -40,14 +42,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView directionsTextView;
 
     private FragmentManager fragmentManager;
+    private LocationManager locationManager;
 
     private SettingScreenFragment settingScreenFragment;
     private RouteOverviewFragment routeOverviewFragment;
     private MapScreenFragment mapScreenFragment;
+    private GPSLossPopup gpsLossPopup;
 
     private MainViewModel mainViewModel;
 
     private boolean isRequested = false;
+    private boolean hasGpsSignal;
     private String presetFragment = null;
 
     @Override
@@ -64,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
 
         requestPermissions(new String[] {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
         }, 1);
 
         // Initialise notification settings.
@@ -74,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Initialize all views
-    public void initialize(){
+    public void initialize() {
 
         this.homeButton = findViewById(R.id.HomeImageView);
         this.settingsButton = findViewById(R.id.SettingsImageView);
@@ -85,12 +92,13 @@ public class MainActivity extends AppCompatActivity {
         this.settingsTextView = findViewById(R.id.SettingsTV);
 
         this.fragmentManager = getSupportFragmentManager();
+        this.locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         this.settingScreenFragment = new SettingScreenFragment(this);
 
-        this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel,this);
+        this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel, this);
 
-        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel,this);
+        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel, this);
 
         if (presetFragment == null) {
             fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
@@ -98,8 +106,12 @@ public class MainActivity extends AppCompatActivity {
             toSettingsView();
             presetFragment = null;
         }
+        this.gpsLossPopup = new GPSLossPopup();
 
-    }
+        this.hasGpsSignal = checkGpsPermission();
+
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
+
 
     public void updateUserSettings(String localeCode, String Language){
         Runnable runnable = () -> {
@@ -126,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Set all on-click listeners
-    public void setClickListeners(){
+    public void setClickListeners() {
 
         this.settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,38 +160,68 @@ public class MainActivity extends AppCompatActivity {
                 toDirectionsView();
             }
         });
+
+        // Timer to check GPS availability
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                checkGpsBlock();
+            }
+        }, 0, 500);
+    }
+
+    private void checkGpsBlock() {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            if (hasGpsSignal) {
+                Log.d("No GPS popup", "GPS deactivated.");
+                hasGpsSignal = false;
+                fragmentManager.beginTransaction().add(R.id.fragmentContainer, gpsLossPopup).commit();
+            }
+        } else if (!hasGpsSignal) {
+            Log.d("No GPS popup", "GPS activated.");
+            hasGpsSignal = true;
+            fragmentManager.beginTransaction().remove(gpsLossPopup).commit();
+        }
+    }
+
+    private boolean checkGpsPermission() {
+        return !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     //Open settings view
-    public void toSettingsView(){
+    public void toSettingsView() {
         this.homeTextView.setVisibility(View.GONE);
         this.directionsTextView.setVisibility(View.GONE);
         this.settingsTextView.setVisibility(View.VISIBLE);
 
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.settingScreenFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.settingScreenFragment).commit();
     }
 
     //Open home view
-    public void toHomeView(){
+    public void toHomeView() {
         this.homeTextView.setVisibility(View.VISIBLE);
         this.directionsTextView.setVisibility(View.GONE);
         this.settingsTextView.setVisibility(View.GONE);
 
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.routeOverviewFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
     }
 
     //Open directions view
-    public void toDirectionsView(){
+    public void toDirectionsView() {
         this.homeTextView.setVisibility(View.GONE);
         this.directionsTextView.setVisibility(View.VISIBLE);
         this.settingsTextView.setVisibility(View.GONE);
 
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.mapScreenFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.mapScreenFragment).commit();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if(!isRequested) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (!isRequested) {
             ArrayList<String> permissionsToRequest = new ArrayList<>();
             for (int i = 0; i < grantResults.length; i++) {
                 permissionsToRequest.add(permissions[i]);
@@ -201,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public MapScreenFragment getMapScreenFragment(){
+    public MapScreenFragment getMapScreenFragment() {
         return this.mapScreenFragment;
     }
 
