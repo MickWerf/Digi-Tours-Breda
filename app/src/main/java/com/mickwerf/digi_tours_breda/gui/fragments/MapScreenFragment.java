@@ -32,6 +32,8 @@ import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 
 import org.osmdroid.config.Configuration;
@@ -48,6 +50,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class MapScreenFragment extends Fragment {
@@ -314,6 +317,7 @@ public class MapScreenFragment extends Fragment {
         this.imageView = (ImageView) popup.findViewById(R.id.infoLocationImage);
 
         String textPath = this.mainViewModel.getLocationElements(location).getPath();
+        System.out.println("TEXTPATH: "+textPath);
 
         String imagePath = this.mainViewModel.getLocationImagePath(location);
 
@@ -321,8 +325,19 @@ public class MapScreenFragment extends Fragment {
 
         this.imageView.setImageResource(id);
 
+        String text = "";
+        try (InputStream inputStream = context.getAssets().open(textPath)) {
+            Scanner reader = new Scanner(inputStream);
+            while (reader.hasNext()) {
+                text += reader.nextLine();
+            }
 
-        this.infoTV.setText(textPath + "\n"+imagePath);
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.infoTV.setText(text);
 
         this.okButton = (Button) popup.findViewById(R.id.OkLocationButton);
 
@@ -342,9 +357,16 @@ public class MapScreenFragment extends Fragment {
 
     private TextView titleTVskipPopup;
     private Button skipButton;
+    private ImageView skipImageView;
 
     public void CreateSkipPopup(Location location){
         View popup = getLayoutInflater().inflate(R.layout.skip_location_popup,null);
+
+        this.skipImageView = (ImageView) popup.findViewById(R.id.skipLocationImage);
+        String imagePath = this.mainViewModel.getLocationImagePath(location);
+
+        int id = context.getResources().getIdentifier(imagePath, "drawable", context.getPackageName());
+        this.skipImageView.setImageResource(id);
 
         this.titleTVskipPopup = (TextView) popup.findViewById(R.id.skipLocationTitle);
         this.titleTVskipPopup.setText(location.getLocationName());

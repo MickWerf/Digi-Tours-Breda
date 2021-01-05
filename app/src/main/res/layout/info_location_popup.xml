@@ -7,13 +7,31 @@
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_view_white">
 
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/OkLocationButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infoLocationTitle">
+
+        <TextView
+            android:id="@+id/infoLocationText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="TextView" />
+    </ScrollView>
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/infoLocationImage"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="14dp"
         android:background="@drawable/rounded_view_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,35 +53,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/infoLocationImage" />
 
-    <TextView
-        android:id="@+id/infoLocationText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:fontFamily="@font/lato"
-        android:text="@string/ok_location_popup_text"
-        android:textAlignment="center"
-        android:textColor="@color/rich_black"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/infoLocationTitle" />
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/OkLocationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_textview"
         android:fontFamily="@font/lato"
         android:text="@string/ok_location_popup_button"
         android:textColor="@color/rich_black"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/infoLocationText" />
+        app:layout_constraintTop_toBottomOf="@id/scrollView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
