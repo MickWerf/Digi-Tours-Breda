@@ -171,8 +171,19 @@ class Repository {
     }
 
     public void visitLocation(Context context, Location location) {
-        location.setVisited(true);
-        Database.getInstance(context).userDataAccess().updateLocation(location);
+        Runnable runnable = () -> {
+            location.setVisited(true);
+            Database.getInstance(context).userDataAccess().updateLocation(location);
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public List<GpsCoordinate> getLocationCoordinates(Context context, List<Location> locations) {

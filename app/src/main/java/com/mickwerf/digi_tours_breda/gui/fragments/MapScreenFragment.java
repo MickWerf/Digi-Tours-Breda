@@ -286,7 +286,11 @@ public class MapScreenFragment extends Fragment {
     @SuppressLint("UseCompatLoadingForDrawables")
     public void DrawWayPoint(GeoPoint geoPoint, Location location){
         Marker marker = new Marker(mapView);
-        marker.setIcon(getResources().getDrawable(R.drawable.place_icon_gray, context.getTheme()));
+        if(location.isVisited()){
+            marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+        }else {
+            marker.setIcon(getResources().getDrawable(R.drawable.place_icon_gray, context.getTheme()));
+        }
         marker.setTitle(location.getLocationName());
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
@@ -294,7 +298,7 @@ public class MapScreenFragment extends Fragment {
         marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker, MapView mapView) {
-                CreateInfoPopup(location);
+                CreateInfoPopup(location,marker);
                 return true;
             }
         });
@@ -308,7 +312,7 @@ public class MapScreenFragment extends Fragment {
     private ImageView imageView;
 
     @SuppressLint("SetTextI18n")
-    public void CreateInfoPopup(Location location){
+    public void CreateInfoPopup(Location location, Marker marker){
         View popup = getLayoutInflater().inflate(R.layout.info_location_popup,null);
 
         this.titleTV = (TextView) popup.findViewById(R.id.infoLocationTitle);
@@ -317,7 +321,6 @@ public class MapScreenFragment extends Fragment {
         this.imageView = (ImageView) popup.findViewById(R.id.infoLocationImage);
 
         String textPath = this.mainViewModel.getLocationElements(location).getPath();
-        System.out.println("TEXTPATH: "+textPath);
 
         String imagePath = this.mainViewModel.getLocationImagePath(location);
 
@@ -341,17 +344,19 @@ public class MapScreenFragment extends Fragment {
 
         this.okButton = (Button) popup.findViewById(R.id.OkLocationButton);
 
+       this.okButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               mainViewModel.visitLocation(location);
+               marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+               dialog.cancel();
+           }
+       });
+
 
 
         dialogBuilder.setView(popup);
         dialog = dialogBuilder.create();
-
-        this.okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.cancel();
-            }
-        });
         dialog.show();
     }
 
