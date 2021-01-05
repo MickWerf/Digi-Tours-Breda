@@ -1,6 +1,8 @@
 package com.mickwerf.digi_tours_breda.gui.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -15,11 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
-import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
 import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 import com.mickwerf.digi_tours_breda.gui.NextLocationAdapter;
 import com.mickwerf.digi_tours_breda.gui.NextLocationItem;
@@ -43,7 +46,6 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 
 public class MapScreenFragment extends Fragment {
@@ -66,6 +68,11 @@ public class MapScreenFragment extends Fragment {
 
     private ArrayList<Coordinate> coordinates;
 
+    private List<Location> locations;
+
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+
 
 
     Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
@@ -79,6 +86,7 @@ public class MapScreenFragment extends Fragment {
     public MapScreenFragment(MainViewModel mainViewModel, Context context) {
         this.mainViewModel = mainViewModel;
         this.context = context;
+        this.dialogBuilder = new AlertDialog.Builder(context);
     }
 
 
@@ -221,7 +229,7 @@ public class MapScreenFragment extends Fragment {
 //        LocationCoordinateList.add(new GpsCoordinate(37.427498, -122.099427,"AA"));
 
 
-        System.out.println("SIZE1: "+LocationCoordinateList.size());
+//        System.out.println("SIZE1: "+LocationCoordinateList.size());
 //        System.out.println("GPS COORD: "+ LocationCoordinateList.get(0).getLocation().getLocationName());
 
 
@@ -229,7 +237,7 @@ public class MapScreenFragment extends Fragment {
 //        Coordinate end = new Coordinate(-122.077987, 37.423411);
 
         GeoPoint startPoint = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
-        DrawWayPoint(startPoint);
+        DrawWayPoint(startPoint,LocationCoordinateList.get(0).getLocation());
 
 //        GeoPoint start3 = new GeoPoint(LocationCoordinateList.get(1).getLatitude(), LocationCoordinateList.get(1).getLongitude());
 //        DrawWayPoint(start3);
@@ -240,7 +248,7 @@ public class MapScreenFragment extends Fragment {
             Coordinate end = new Coordinate(LocationCoordinateList.get(i+1).getLongitude(), LocationCoordinateList.get(i+1).getLatitude());
 
             GeoPoint point = new GeoPoint(LocationCoordinateList.get(i+1).getLatitude(), LocationCoordinateList.get(i+1).getLongitude());
-            DrawWayPoint(point);
+            DrawWayPoint(point,LocationCoordinateList.get(i+1).getLocation());
 
             new RouteCallGet.Builder(
                     start,
@@ -267,10 +275,72 @@ public class MapScreenFragment extends Fragment {
         mapView.getOverlayManager().add(line);
     }
 
-    public void DrawWayPoint(GeoPoint geoPoint){
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void DrawWayPoint(GeoPoint geoPoint, String locationName){
         Marker marker = new Marker(mapView);
+        marker.setIcon(getResources().getDrawable(R.drawable.place_icon_gray, context.getTheme()));
+        marker.setTitle(locationName);
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
+
+        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                CreateSkipPopup(locationName);
+                return true;
+            }
+        });
+
         mapView.getOverlays().add(marker);
+    }
+
+    private TextView infoTV;
+    private TextView titleTV;
+    private Button okButton;
+
+    public void CreateInfoPopup(String title){
+        View popup = getLayoutInflater().inflate(R.layout.info_location_popup,null);
+
+        this.titleTV = (TextView) popup.findViewById(R.id.infoLocationTitle);
+        this.titleTV.setText(title);
+        this.infoTV = (TextView) popup.findViewById(R.id.infoLocationText);
+        this.okButton = (Button) popup.findViewById(R.id.OkLocationButton);
+
+
+
+        dialogBuilder.setView(popup);
+        dialog = dialogBuilder.create();
+
+        this.okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+    }
+
+    private TextView titleTVskipPopup;
+    private Button skipButton;
+
+    public void CreateSkipPopup(String title){
+        View popup = getLayoutInflater().inflate(R.layout.skip_location_popup,null);
+
+        this.titleTVskipPopup = (TextView) popup.findViewById(R.id.skipLocationTitle);
+        this.titleTVskipPopup.setText(title);
+        this.skipButton = (Button) popup.findViewById(R.id.skipLocationButton);
+
+
+
+        dialogBuilder.setView(popup);
+        dialog = dialogBuilder.create();
+
+        this.skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 }
