@@ -16,4 +16,5 @@
     <string name="splash_screen_title">DigiTours Breda Edition</string>
     <string name="no_gps_text">We can not locate your current position at the moment.</string>
     <string name="no_gps_title">No GPS signal</string>
+    <string name="channel_name">Navigation</string>
 </resources>

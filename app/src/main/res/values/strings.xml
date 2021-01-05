@@ -43,7 +43,7 @@
     <string name="ok_location_popup_title" translatable="false">Titel</string>
     <string name="ok_location_popup_text" translatable="false">Mooie gebouw</string>
     <string name="ok_location_popup_button" translatable="false">ok</string>
-    <string name="channel_name" translatable="false">something</string>
+    <string name="channel_name">Navigation</string>
 
 
 </resources>

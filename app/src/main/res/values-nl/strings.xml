@@ -16,4 +16,5 @@
     <string name="Directions">Richtingen</string>
     <string name="Settings">Opties</string>
     <string name="Routes">Routes</string>
+    <string name="channel_name" translatable="false">Navigatie</string>
 </resources>
