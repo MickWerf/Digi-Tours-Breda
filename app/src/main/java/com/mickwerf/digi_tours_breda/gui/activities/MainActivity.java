@@ -1,20 +1,21 @@
 package com.mickwerf.digi_tours_breda.gui.activities;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mickwerf.digi_tours_breda.R;
+import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.gui.fragments.MapScreenFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.RouteOverviewFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.SettingScreenFragment;
@@ -22,6 +23,8 @@ import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
 import com.mickwerf.digi_tours_breda.services.Notify;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,11 +44,18 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel;
 
     private boolean isRequested = false;
+    private String presetFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+
+        if (intent.hasExtra("loadFragment")) {
+            presetFragment = getIntent().getExtras().getString("loadFragment");
+        }
 
 
         requestPermissions(new String[] {
@@ -56,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialise notification settings.
         Notify.initialise(getApplicationContext());
         this.mainViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
+
     }
 
     //Initialize all views
@@ -71,16 +82,44 @@ public class MainActivity extends AppCompatActivity {
 
         this.fragmentManager = getSupportFragmentManager();
 
-        this.settingScreenFragment = new SettingScreenFragment();
+        this.settingScreenFragment = new SettingScreenFragment(this);
 
         this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel,this);
 
         this.mapScreenFragment = new MapScreenFragment(this.mainViewModel);
 
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.routeOverviewFragment).commit();
-
+        if (presetFragment == null) {
+            fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
+        }else if (presetFragment.equals("settings")){
+            toSettingsView();
+            presetFragment = null;
+        }
 
     }
+
+    public void updateUserSettings(String localeCode, String Language){
+        Runnable runnable = () -> {
+            mainViewModel.setCurrentLanguage(new Language(Language), new Locale(localeCode.toLowerCase()));
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void restartActivity(){
+        Objects.requireNonNull(this).finish();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("loadFragment", "settings");
+        startActivity(intent);
+        toSettingsView();
+        Toast toast=Toast. makeText(getApplicationContext(),R.string.changedLanguage,Toast. LENGTH_SHORT);
+        toast.show();
+    }
+
 
     //Set all on-click listeners
     public void setClickListeners(){

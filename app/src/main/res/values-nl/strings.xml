@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Digi-Tours-Breda</string>
+    <string name="NextUp">Volgende:</string>
+    <string name="hello_blank_fragment">Hallo blank fragment</string>
+    <string name="route_fragment_title1">Goede Morgen!</string>
+    <string name="route_fragment_title2">Goede Middag!</string>
+    <string name="route_fragment_title3">Goede Avond!</string>
+    <string name="route_fragment_title4">Goede Nacht!</string>
+    <string name="splash_screen_title">DigiTours Breda Editie</string>
+    <string name="no_gps_text">We kunnen uw huidige positie niet vinden</string>
+    <string name="no_gps_title">Geen GPS signaal</string>
+    <string name="InCaseOfNoGPS">In geval van geen GPS:</string>
+    <string name="HowToUse">Hoe te gebruik:</string>
+    <string name="Language">"Taal: "</string>
+    <string name="Directions">Richtingen</string>
+    <string name="Settings">Opties</string>
+    <string name="Routes">Routes</string>
+    <string name="channel_name" translatable="false">Navigatie</string>
+    <string name="changedLanguage">Je hebt de taal veranderd naar: Nederlands</string>
+</resources>

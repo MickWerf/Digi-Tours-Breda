@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Digi-Tours-Breda</string>
+    <string name="Routes">Routen</string>
+    <string name="Settings">Einstellungen</string>
+    <string name="Directions">Richtungen</string>
+    <string name="Language">Sprache:</string>
+    <string name="HowToUse">Wie benutzt man:</string>
+    <string name="InCaseOfNoGPS">falls kein GPS vorhanden ist:</string>
+    <string name="NextUp">" Nächster:"</string>
+    <string name="hello_blank_fragment">leer</string>
+    <string name="route_fragment_title1">" Guten Morgen!"</string>
+    <string name="route_fragment_title2">Guten Nachmittag!</string>
+    <string name="route_fragment_title3">Guten Abend!</string>
+    <string name="route_fragment_title4">Gute Nacht!</string>
+    <string name="splash_screen_title">DigiTours Breda Auflage</string>
+    <string name="no_gps_title">" Kein GPS-Signal"</string>
+    <string name="no_gps_text">Wir können Ihre aktuelle Position derzeit nicht finden.</string>
+    <string name="channel_name">Navigation</string>
+    <string name="changedLanguage">Sie haben die Sprache in Deutsch geändert</string>
+</resources>
