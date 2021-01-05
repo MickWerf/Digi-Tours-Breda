@@ -18,4 +18,10 @@
     <string name="no_gps_text">Wir können Ihre aktuelle Position derzeit nicht finden.</string>
     <string name="channel_name">Navigation</string>
     <string name="changedLanguage">Sie haben die Sprache in Deutsch geändert</string>
+    <string name="NotifyDeleteProgress">" Fortschritt von dieser Route entfernt:"</string>
+    <string name="ContinueLater">" . Sie können es später fortsetzen"</string>
+    <string name="NotifyUncompleteRoute">" Sie haben diese Route nicht abgeschlossen:"</string>
+    <string name="NotifyIllegalStopRoute">" Sie können eine nicht gestartete Route nicht stoppen."</string>
+    <string name="NotifyCompleteRoute">" Sie haben diese Route abgeschlossen:"</string>
+    <string name="NotStartableRoute">" Route konnte nicht gestartet werden."</string>
 </resources>

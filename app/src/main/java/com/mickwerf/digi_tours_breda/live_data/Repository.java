@@ -217,4 +217,14 @@ class Repository {
             }
         }
     }
+
+    public void deleteRouteProgress(Context applicationContext, Route route) {
+        RouteWithLocations resetRoute = Database.getInstance(applicationContext).userDataAccess().getRouteWithLocations(route.getRouteName());
+        for (Location location: resetRoute.getLocations()) {
+            location.setVisited(false);
+            Database.getInstance(applicationContext).userDataAccess().updateLocation(location);
+        }
+        resetRoute.getRoute().setComplete(false);
+        Database.getInstance(applicationContext).userDataAccess().updateRoute(resetRoute.getRoute());
+    }
 }

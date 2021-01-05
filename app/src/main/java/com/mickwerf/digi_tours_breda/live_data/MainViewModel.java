@@ -145,4 +145,8 @@ public class MainViewModel extends AndroidViewModel {
         Repository.getInstance().setActiveRoute(getApplication().getApplicationContext(), nullRoute);
         return result;
     }
+
+    public void deleteRouteProgress(Route route) {
+        Repository.getInstance().deleteRouteProgress(getApplication().getApplicationContext(), route);
+    }
 }

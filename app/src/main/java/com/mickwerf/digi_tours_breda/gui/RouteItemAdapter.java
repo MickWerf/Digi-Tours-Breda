@@ -151,14 +151,17 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
                     if (isSameRoute) {
                         do {
                             if (hasCompletedRoute) {
-                                Toast.makeText(context, R.string.NotifyCompleteRoute + routes.get(position).getRouteName(), Toast.LENGTH_SHORT).show();
+                                String completeStopText = activity.getString(R.string.NotifyCompleteRoute)+ routes.get(position).getRouteName();
+                                Toast.makeText(context, completeStopText, Toast.LENGTH_SHORT).show();
                             } else if (!hasCompletedRoute) {
-                                Toast.makeText(context, R.string.NotifyUncompleteRoute + routes.get(position).getRouteName() + R.string.ContinueLater, Toast.LENGTH_SHORT).show();
+                                String incompletestopText = activity.getString(R.string.NotifyUncompleteRoute) + routes.get(position).getRouteName() + activity.getString(R.string.ContinueLater);
+                                Toast.makeText(context,   incompletestopText , Toast.LENGTH_SHORT).show();
                             }
                         }
                         while (hasCompletedRoute == null);
                     }
                     else{
+
                         Toast.makeText(context, R.string.NotifyIllegalStopRoute, Toast.LENGTH_SHORT).show();
                     }
                 } catch (InterruptedException e) {
@@ -175,13 +178,14 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
             public void onClick(View v) {
                 MainActivity activity = (MainActivity) context;
                 Runnable runnable = () -> {
-                    //TODO: delete progress
+                    activity.getMainViewModel().deleteRouteProgress(routes.get(position));
                 };
                 Thread t = new Thread(runnable);
                 t.start();
                 try {
                     t.join();
-                    //TODO: toast whether successfull?
+                    String text = activity.getString(R.string.NotifyDeleteProgress) + routes.get(position).getRouteName();
+                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
