@@ -1,5 +1,6 @@
 package com.mickwerf.digi_tours_breda.gui.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
@@ -7,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.gui.fragments.MapScreenFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.RouteOverviewFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.SettingScreenFragment;
+import com.mickwerf.digi_tours_breda.gui.popups.GPSLossPopup;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.ApiCallback;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
@@ -24,6 +27,8 @@ import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate
 import com.mickwerf.digi_tours_breda.services.Notify;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,10 +40,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView directionsTextView;
 
     private FragmentManager fragmentManager;
+    private LocationManager locationManager;
 
     private SettingScreenFragment settingScreenFragment;
     private RouteOverviewFragment routeOverviewFragment;
     private MapScreenFragment mapScreenFragment;
+    private GPSLossPopup gpsLossPopup;
 
     private MainViewModel mainViewModel;
 
@@ -60,7 +67,9 @@ public class MainActivity extends AppCompatActivity {
 
         requestPermissions(new String[] {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
         }, 1);
 
         // Initialise notification settings.
@@ -80,12 +89,15 @@ public class MainActivity extends AppCompatActivity {
         this.settingsTextView = findViewById(R.id.SettingsTV);
 
         this.fragmentManager = getSupportFragmentManager();
+        this.locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         this.settingScreenFragment = new SettingScreenFragment();
 
         this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel,this);
 
         this.mapScreenFragment = new MapScreenFragment(this.mainViewModel,this);
+
+        this.gpsLossPopup = new GPSLossPopup();
 
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.routeOverviewFragment).commit();
 
@@ -115,6 +127,23 @@ public class MainActivity extends AppCompatActivity {
                 toDirectionsView();
             }
         });
+
+        // Timer to check GPS availability
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    if (fragmentManager.getPrimaryNavigationFragment()) {
+                        Log.d("No GPS popup", "GPS deactivated.");
+                        fragmentManager.beginTransaction().add(R.id.fragmentContainer, gpsLossPopup).commit();
+                    }
+                } else if (fragmentManager.getPrimaryNavigationFragment()){
+                    Log.d("No GPS popup", "GPS activated.");
+                    fragmentManager.beginTransaction().remove(gpsLossPopup).commit();
+                }
+            }
+        }, 0, 1000);
     }
 
     //Open settings view
