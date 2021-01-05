@@ -44,6 +44,7 @@
     <string name="ok_location_popup_text" translatable="false">Mooie gebouw</string>
     <string name="ok_location_popup_button" translatable="false">ok</string>
     <string name="channel_name">Navigation</string>
+    <string name="changedLanguage" >You changed the language to: English</string>
 
 
 </resources>

@@ -17,4 +17,5 @@
     <string name="no_gps_title">" Kein GPS-Signal"</string>
     <string name="no_gps_text">Wir können Ihre aktuelle Position derzeit nicht finden.</string>
     <string name="channel_name">Navigation</string>
+    <string name="changedLanguage">Sie haben die Sprache in Deutsch geändert</string>
 </resources>
