@@ -79,7 +79,6 @@ public class MapScreenFragment extends Fragment {
     private AlertDialog dialog;
 
 
-
     Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
         @Override
         public void onChanged(RouteWithLocations newActiveRoute) {
@@ -178,11 +177,10 @@ public class MapScreenFragment extends Fragment {
         this.mapController.animateTo(locationOverlay.getMyLocation());
 //        this.mapController.setCenter(new GeoPoint(4.780642,51.588949));
 
-        this.mainViewModel.getActiveRoute().observe(this,this.activeRouteObserver);
+        this.mainViewModel.getActiveRoute().observe(this, this.activeRouteObserver);
         this.activeRoute = this.mainViewModel.getActiveRoute2();
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
-
 
 
 //        Runnable runnable = () -> {
@@ -198,21 +196,20 @@ public class MapScreenFragment extends Fragment {
 //        }
 
 
-
-        if(this.activeRoute != null) {
+        if (this.activeRoute != null) {
             mLocationList.clear();
             for (Location location : activeRoute.getLocations()) {
                 mLocationList.add(new NextLocationItem(location.getLocationName()));
             }
-        }else {
+        } else {
 
-        mLocationList.add(new NextLocationItem("test1"));
-        mLocationList.add(new NextLocationItem("test2"));
-        mLocationList.add(new NextLocationItem("test3"));
-        mLocationList.add(new NextLocationItem("test4"));
-        mLocationList.add(new NextLocationItem("test5"));
-        mLocationList.add(new NextLocationItem("test6"));
-        mLocationList.add(new NextLocationItem("test7"));
+            mLocationList.add(new NextLocationItem("test1"));
+            mLocationList.add(new NextLocationItem("test2"));
+            mLocationList.add(new NextLocationItem("test3"));
+            mLocationList.add(new NextLocationItem("test4"));
+            mLocationList.add(new NextLocationItem("test5"));
+            mLocationList.add(new NextLocationItem("test6"));
+            mLocationList.add(new NextLocationItem("test7"));
             //TODO: deletetest code ^
         }
 
@@ -226,10 +223,10 @@ public class MapScreenFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         RouteWithLocations route = mainViewModel.getActiveRoute2();
+        if (route!=null){
+            List<Location> locations = route.getLocations();
 
-        List<Location> locations = route.getLocations();
-
-        List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
+            List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
 
 //        LocationCoordinateList.clear();
 //        LocationCoordinateList.add(new GpsCoordinate(37.421022, -122.086627,"AA"));
@@ -244,38 +241,38 @@ public class MapScreenFragment extends Fragment {
 //        Coordinate start = new Coordinate(-122.086549, 37.421034);
 //        Coordinate end = new Coordinate(-122.077987, 37.423411);
 
-        GeoPoint startPoint = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
-        DrawWayPoint(startPoint,locations.get(0));
+            GeoPoint startPoint = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
+            DrawWayPoint(startPoint, locations.get(0));
 
 //        GeoPoint start3 = new GeoPoint(LocationCoordinateList.get(1).getLatitude(), LocationCoordinateList.get(1).getLongitude());
 //        DrawWayPoint(start3);
 
-        for(int i = 0; i<LocationCoordinateList.size()-1;i++) {
+            for (int i = 0; i < LocationCoordinateList.size() - 1; i++) {
 
-            Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
-            Coordinate end = new Coordinate(LocationCoordinateList.get(i+1).getLongitude(), LocationCoordinateList.get(i+1).getLatitude());
+                Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
+                Coordinate end = new Coordinate(LocationCoordinateList.get(i + 1).getLongitude(), LocationCoordinateList.get(i + 1).getLatitude());
 
-            GeoPoint point = new GeoPoint(LocationCoordinateList.get(i+1).getLatitude(), LocationCoordinateList.get(i+1).getLongitude());
-            DrawWayPoint(point,locations.get(i+1));
+                GeoPoint point = new GeoPoint(LocationCoordinateList.get(i + 1).getLatitude(), LocationCoordinateList.get(i + 1).getLongitude());
+                DrawWayPoint(point, locations.get(i + 1));
 
-            new RouteCallGet.Builder(
-                    start,
-                    end,
-                    this.context
-            ).Call(apiResponse -> {
-                coordinates = apiResponse.getCoordinates();
-                DrawRoute(coordinates);
-            });
+                new RouteCallGet.Builder(
+                        start,
+                        end,
+                        this.context
+                ).Call(apiResponse -> {
+                    coordinates = apiResponse.getCoordinates();
+                    DrawRoute(coordinates);
+                });
+
+            }
 
         }
-
-
     }
 
-    public void DrawRoute(ArrayList<Coordinate> coordinates){
+    public void DrawRoute(ArrayList<Coordinate> coordinates) {
         ArrayList<GeoPoint> geoPoints = new ArrayList<>();
-        for (Coordinate coordinate : coordinates){
-            geoPoints.add(new GeoPoint(coordinate.getLatitude(),coordinate.getLongitude()));
+        for (Coordinate coordinate : coordinates) {
+            geoPoints.add(new GeoPoint(coordinate.getLatitude(), coordinate.getLongitude()));
         }
 
         Polyline line = new Polyline();
@@ -284,21 +281,21 @@ public class MapScreenFragment extends Fragment {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public void DrawWayPoint(GeoPoint geoPoint, Location location){
+    public void DrawWayPoint(GeoPoint geoPoint, Location location) {
         Marker marker = new Marker(mapView);
-        if(location.isVisited()){
+        if (location.isVisited()) {
             marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
-        }else {
+        } else {
             marker.setIcon(getResources().getDrawable(R.drawable.place_icon_gray, context.getTheme()));
         }
         marker.setTitle(location.getLocationName());
         marker.setPosition(geoPoint);
-        marker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
         marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker, MapView mapView) {
-                CreateInfoPopup(location,marker);
+                CreateInfoPopup(location, marker);
                 return true;
             }
         });
@@ -312,8 +309,8 @@ public class MapScreenFragment extends Fragment {
     private ImageView imageView;
 
     @SuppressLint("SetTextI18n")
-    public void CreateInfoPopup(Location location, Marker marker){
-        View popup = getLayoutInflater().inflate(R.layout.info_location_popup,null);
+    public void CreateInfoPopup(Location location, Marker marker) {
+        View popup = getLayoutInflater().inflate(R.layout.info_location_popup, null);
 
         this.titleTV = (TextView) popup.findViewById(R.id.infoLocationTitle);
         this.titleTV.setText(location.getLocationName());
@@ -344,15 +341,14 @@ public class MapScreenFragment extends Fragment {
 
         this.okButton = (Button) popup.findViewById(R.id.OkLocationButton);
 
-       this.okButton.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View view) {
-               mainViewModel.visitLocation(location);
-               marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
-               dialog.cancel();
-           }
-       });
-
+        this.okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainViewModel.visitLocation(location);
+                marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+                dialog.cancel();
+            }
+        });
 
 
         dialogBuilder.setView(popup);
@@ -364,8 +360,8 @@ public class MapScreenFragment extends Fragment {
     private Button skipButton;
     private ImageView skipImageView;
 
-    public void CreateSkipPopup(Location location){
-        View popup = getLayoutInflater().inflate(R.layout.skip_location_popup,null);
+    public void CreateSkipPopup(Location location) {
+        View popup = getLayoutInflater().inflate(R.layout.skip_location_popup, null);
 
         this.skipImageView = (ImageView) popup.findViewById(R.id.skipLocationImage);
         String imagePath = this.mainViewModel.getLocationImagePath(location);
@@ -376,7 +372,6 @@ public class MapScreenFragment extends Fragment {
         this.titleTVskipPopup = (TextView) popup.findViewById(R.id.skipLocationTitle);
         this.titleTVskipPopup.setText(location.getLocationName());
         this.skipButton = (Button) popup.findViewById(R.id.skipLocationButton);
-
 
 
         dialogBuilder.setView(popup);

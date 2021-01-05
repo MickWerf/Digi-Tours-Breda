@@ -208,4 +208,23 @@ class Repository {
     public Route getRoute(Context context, String routeName) {
         return Database.getInstance(context).userDataAccess().getRoute(routeName);
     }
+
+    public void CompleteRoute(Context context, String completedRoute){
+        for (Route route:routes) {
+            if (route.getRouteName().equals(completedRoute)){
+                route.setComplete(true);
+                Database.getInstance(context).userDataAccess().updateRoute(route);
+            }
+        }
+    }
+
+    public void deleteRouteProgress(Context applicationContext, Route route) {
+        RouteWithLocations resetRoute = Database.getInstance(applicationContext).userDataAccess().getRouteWithLocations(route.getRouteName());
+        for (Location location: resetRoute.getLocations()) {
+            location.setVisited(false);
+            Database.getInstance(applicationContext).userDataAccess().updateLocation(location);
+        }
+        resetRoute.getRoute().setComplete(false);
+        Database.getInstance(applicationContext).userDataAccess().updateRoute(resetRoute.getRoute());
+    }
 }

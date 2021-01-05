@@ -18,4 +18,10 @@
     <string name="Routes">Routes</string>
     <string name="channel_name" translatable="false">Navigatie</string>
     <string name="changedLanguage">Je hebt de taal veranderd naar: Nederlands</string>
+    <string name="NotStartableRoute">Kon de route niet starten.</string>
+    <string name="NotifyCompleteRoute">Je hebt deze route af gemaakt:</string>
+    <string name="NotifyIllegalStopRoute">Je kan geen route stoppen die niet gestart is.</string>
+    <string name="NotifyUncompleteRoute">Je hebt deze route niet af gemaakt:</string>
+    <string name="ContinueLater">. Je kan deze later hervatten</string>
+    <string name="NotifyDeleteProgress">"Progressie van deze route verwijderd: "</string>
 </resources>

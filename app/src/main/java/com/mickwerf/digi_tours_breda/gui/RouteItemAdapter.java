@@ -133,17 +133,37 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
         Button stopbutton = holder.itemView.findViewById(R.id.stopRouteIcon);
         stopbutton.setOnClickListener(new View.OnClickListener() {
 
+            private Boolean hasCompletedRoute;
+            private boolean isSameRoute;
             @Override
             public void onClick(View v) {
                 MainActivity activity = (MainActivity) context;
                 Runnable runnable = () -> {
-                    //TODO: check whether the route is complete
+                    isSameRoute = activity.getMainViewModel().checkRoute(routes.get(position).getRouteName());
+                    if (isSameRoute) {
+                        this.hasCompletedRoute = activity.getMainViewModel().stopCurrentRoute();
+                    }
                 };
                 Thread t = new Thread(runnable);
                 t.start();
                 try {
                     t.join();
-                    //TODO: keep the user in route overview and end progress of route
+                    if (isSameRoute) {
+                        do {
+                            if (hasCompletedRoute) {
+                                String completeStopText = activity.getString(R.string.NotifyCompleteRoute)+ routes.get(position).getRouteName();
+                                Toast.makeText(context, completeStopText, Toast.LENGTH_SHORT).show();
+                            } else if (!hasCompletedRoute) {
+                                String incompletestopText = activity.getString(R.string.NotifyUncompleteRoute) + routes.get(position).getRouteName() + activity.getString(R.string.ContinueLater);
+                                Toast.makeText(context,   incompletestopText , Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        while (hasCompletedRoute == null);
+                    }
+                    else{
+
+                        Toast.makeText(context, R.string.NotifyIllegalStopRoute, Toast.LENGTH_SHORT).show();
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -158,13 +178,14 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
             public void onClick(View v) {
                 MainActivity activity = (MainActivity) context;
                 Runnable runnable = () -> {
-                    //TODO: delete progress
+                    activity.getMainViewModel().deleteRouteProgress(routes.get(position));
                 };
                 Thread t = new Thread(runnable);
                 t.start();
                 try {
                     t.join();
-                    //TODO: toast whether successfull?
+                    String text = activity.getString(R.string.NotifyDeleteProgress) + routes.get(position).getRouteName();
+                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
