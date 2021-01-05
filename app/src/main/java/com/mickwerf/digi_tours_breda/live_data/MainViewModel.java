@@ -106,4 +106,14 @@ public class MainViewModel extends AndroidViewModel {
     public String getLocationImagePath(Location location){
        return Repository.getInstance().getLocationImagePath(getApplication().getApplicationContext(),location);
     }
+
+    public Boolean setCurrentRoute(String routeName){
+        if(getUserSettings2().getRoute() == null){
+            Route activeRoute = Repository.getInstance().getRoute(getApplication().getApplicationContext(), routeName);
+            Repository.getInstance().setActiveRoute(getApplication().getApplicationContext(), activeRoute);
+            return true;
+        }
+        return false;
+
+    }
 }

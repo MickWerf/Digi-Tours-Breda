@@ -193,4 +193,8 @@ class Repository {
 
         return this.coordinateList;
     }
+
+    public Route getRoute(Context context, String routeName) {
+        return Database.getInstance(context).userDataAccess().getRoute(routeName);
+    }
 }

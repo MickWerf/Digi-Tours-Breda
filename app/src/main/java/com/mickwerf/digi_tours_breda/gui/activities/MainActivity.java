@@ -8,13 +8,12 @@ import androidx.lifecycle.ViewModelProvider;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
@@ -26,7 +25,6 @@ import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.ApiCallback;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 import com.mickwerf.digi_tours_breda.services.Notify;
-import com.yariksoffice.lingver.Lingver;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -50,20 +48,19 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel;
 
     private boolean isRequested = false;
+    private String presetFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        // TODO: remove when you understand the working of the RouteCallGet.
-//        new RouteCallGet.Builder(
-//                new Coordinate(4.789647,51.585497),
-//                new Coordinate(4.764318,51.591666),
-//                getApplicationContext()
-//        ).Call(apiResponse -> {
-//            // Fill the Open Street Map here.
-//        });
+        Intent intent = getIntent();
+
+        if (intent.hasExtra("loadFragment")) {
+            presetFragment = getIntent().getExtras().getString("loadFragment");
+        }
+
 
         requestPermissions(new String[] {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -73,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialise notification settings.
         Notify.initialise(getApplicationContext());
         this.mainViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
+
     }
 
     //Initialize all views
@@ -94,8 +92,12 @@ public class MainActivity extends AppCompatActivity {
 
         this.mapScreenFragment = new MapScreenFragment(this.mainViewModel,this);
 
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.routeOverviewFragment).commit();
-
+        if (presetFragment == null) {
+            fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
+        }else if (presetFragment.equals("settings")){
+            toSettingsView();
+            presetFragment = null;
+        }
 
     }
 
@@ -115,7 +117,11 @@ public class MainActivity extends AppCompatActivity {
     public void restartActivity(){
         Objects.requireNonNull(this).finish();
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("loadFragment", "settings");
         startActivity(intent);
+        toSettingsView();
+        Toast toast=Toast. makeText(getApplicationContext(),R.string.changedLanguage,Toast. LENGTH_SHORT);
+        toast.show();
     }
 
 
@@ -197,5 +203,9 @@ public class MainActivity extends AppCompatActivity {
 
     public MapScreenFragment getMapScreenFragment(){
         return this.mapScreenFragment;
+    }
+
+    public MainViewModel getMainViewModel() {
+        return mainViewModel;
     }
 }
