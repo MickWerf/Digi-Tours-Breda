@@ -33,7 +33,7 @@ public class DatabaseIntegrationTest {
     public void testRoutes() {
         //Check if the total number of routes is correct.
         List<Route> routes = this.dataAdminAccess.getAllRoutes();
-        Assert.assertEquals(6, routes.size());
+        Assert.assertEquals(7, routes.size());
 
         //Test updating routes
         Route route = routes.get(0);
@@ -48,10 +48,11 @@ public class DatabaseIntegrationTest {
      * Tests all location queries with the database.
      * Test id: I4.T1
      */
+    @Test
     public void testLocations() {
         //Test total number of sight seeing locations.
         List<Location> locations = this.dataAdminAccess.getAllSightSeeingLocations();
-        Assert.assertEquals(22, locations.size());
+        Assert.assertEquals(41, locations.size());
 
         //Tests the coordinate of a specific location.
         LocationCoordinate coordinate = this.dataAdminAccess.getLocationCoordinate(locations.get(0).getLocationName());
@@ -60,7 +61,7 @@ public class DatabaseIntegrationTest {
 
         //Test the total number of location coordinates.
         List<LocationCoordinate> coordinates = this.dataAdminAccess.getLocationCoordinates();
-        Assert.assertEquals(30, coordinates.size());
+        Assert.assertEquals(49, coordinates.size());
     }
 
     /**
