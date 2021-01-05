@@ -6,6 +6,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
@@ -43,6 +44,10 @@ public interface UserDataAccess {
     @Transaction
     @Query("SELECT * FROM location WHERE locationName LIKE :locationName")
     LocationCoordinate getLocationCoordinate(String locationName);
+
+    @Transaction
+    @Query("SELECT * FROM gps_coordinate WHERE location LIKE :locationName")
+    GpsCoordinate getGpsCoordinate(String locationName);
 
     @Transaction
     @Query("SELECT * FROM location")

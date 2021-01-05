@@ -9,9 +9,12 @@ import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
+import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
 import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
 import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +27,7 @@ class Repository {
     private List<Route> routes;
     private RouteWithLocations activeRoute;
     private UserSettings userSettings;
+    private List<GpsCoordinate> coordinateList = new ArrayList<>();
 
     public static Repository getInstance() {
         if (INSTANCE == null) {
@@ -103,13 +107,41 @@ class Repository {
     }
 
     public void setActiveRoute(Context context, Route route) {
-        UserSettings settings = getUserSettings(context);
-        settings.setRoute(route.getRouteName());
-        Database.getInstance(context).userDataAccess().updateCurrentUserSettings(settings);
+        Runnable runnable = () -> {
+            UserSettings settings = getUserSettings(context);
+            settings.setRoute(route.getRouteName());
+            Database.getInstance(context).userDataAccess().updateCurrentUserSettings(settings);
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void visitLocation(Context context, Location location) {
         location.setVisited(true);
         Database.getInstance(context).userDataAccess().updateLocation(location);
+    }
+
+    public List<GpsCoordinate> getLocationCoordinates(Context context, List<Location> locations) {
+
+        this.coordinateList.clear();
+        Runnable runnable = () -> {
+            for (Location location : locations){
+                this.coordinateList.add(Database.getInstance(context).userDataAccess().getGpsCoordinate(location.getLocationName()));
+            }
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return this.coordinateList;
     }
 }

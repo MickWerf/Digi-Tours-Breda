@@ -2,34 +2,33 @@ package com.mickwerf.digi_tours_breda.gui.fragments;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mickwerf.digi_tours_breda.R;
+import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
-import com.mickwerf.digi_tours_breda.data.entities.Route;
+import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
 import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 import com.mickwerf.digi_tours_breda.gui.NextLocationAdapter;
 import com.mickwerf.digi_tours_breda.gui.NextLocationItem;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 
 import java.util.LinkedList;
 
-import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
@@ -42,6 +41,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 public class MapScreenFragment extends Fragment {
@@ -60,6 +60,12 @@ public class MapScreenFragment extends Fragment {
     private MainViewModel mainViewModel;
     private RouteWithLocations activeRoute;
 
+    private Context context;
+
+    private ArrayList<Coordinate> coordinates;
+
+
+
     Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
         @Override
         public void onChanged(RouteWithLocations newActiveRoute) {
@@ -68,8 +74,9 @@ public class MapScreenFragment extends Fragment {
     };
 
 
-    public MapScreenFragment(MainViewModel mainViewModel) {
+    public MapScreenFragment(MainViewModel mainViewModel, Context context) {
         this.mainViewModel = mainViewModel;
+        this.context = context;
     }
 
 
@@ -78,7 +85,7 @@ public class MapScreenFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        Configuration.getInstance().load(getActivity().getApplication(), PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()));
+        //Configuration.getInstance().load(getActivity().getApplication(), PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()));
 
         requestPermissions(new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -198,14 +205,43 @@ public class MapScreenFragment extends Fragment {
         // Give the recycler view a default layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        GeoPoint startPoint = new GeoPoint(20.5992, 72.9342);
-        Marker startMarker = new Marker(mapView);
-        startMarker.setPosition(startPoint);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
-        mapView.getOverlays().add(startMarker);
+        RouteWithLocations route = mainViewModel.getActiveRoute2();
+
+        List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(route.getLocations());
+
+        System.out.println("SIZE1: "+LocationCoordinateList.size());
+//        System.out.println("GPS COORD: "+ LocationCoordinateList.get(0).getLocation().getLocationName());
+
+
+//        Coordinate start = new Coordinate(-122.086549, 37.421034);
+//        Coordinate end = new Coordinate(-122.077987, 37.423411);
+
+        for(int i = 0; i<LocationCoordinateList.size()-1;i++) {
+
+            Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
+            Coordinate end = new Coordinate(LocationCoordinateList.get(i+1).getLongitude(), LocationCoordinateList.get(i+1).getLatitude());
+
+
+            new RouteCallGet.Builder(
+                    start,
+                    end,
+                    this.context
+            ).Call(apiResponse -> {
+                coordinates = apiResponse.getCoordinates();
+                DrawRoute(coordinates);
+            });
+
+        }
+
+
     }
 
-    public void DrawRoute(ArrayList<GeoPoint> geoPoints){
+    public void DrawRoute(ArrayList<Coordinate> coordinates){
+        ArrayList<GeoPoint> geoPoints = new ArrayList<>();
+        for (Coordinate coordinate : coordinates){
+            geoPoints.add(new GeoPoint(coordinate.getLatitude(),coordinate.getLongitude()));
+        }
+
         Polyline line = new Polyline();
         line.setPoints(geoPoints);
         mapView.getOverlayManager().add(line);

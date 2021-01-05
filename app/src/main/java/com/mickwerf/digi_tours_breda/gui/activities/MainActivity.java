@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel,this);
 
-        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel);
+        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel,this);
 
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.routeOverviewFragment).commit();
 
@@ -166,5 +166,9 @@ public class MainActivity extends AppCompatActivity {
                 this.isRequested = true;
             }
         }
+    }
+
+    public MapScreenFragment getMapScreenFragment(){
+        return this.mapScreenFragment;
     }
 }

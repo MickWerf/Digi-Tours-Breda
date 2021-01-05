@@ -1,6 +1,8 @@
 package com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models;
 
-public class Coordinate {
+import java.io.Serializable;
+
+public class Coordinate implements Serializable {
 
     private double longitude;
     private double latitude;

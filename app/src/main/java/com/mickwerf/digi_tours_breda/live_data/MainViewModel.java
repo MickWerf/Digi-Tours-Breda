@@ -12,6 +12,7 @@ import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
+import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
 import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
 import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 import com.yariksoffice.lingver.Lingver;
@@ -47,6 +48,10 @@ public class MainViewModel extends AndroidViewModel {
 
     public UserSettings getUserSettings2(){
         return Repository.getInstance().getUserSettings(getApplication().getApplicationContext());
+    }
+
+    public List<GpsCoordinate> getLocationCoordinates(List<Location> locations){
+        return Repository.getInstance().getLocationCoordinates(getApplication().getApplicationContext(),locations);
     }
 
     public MutableLiveData<UserSettings> getUserSettings() {

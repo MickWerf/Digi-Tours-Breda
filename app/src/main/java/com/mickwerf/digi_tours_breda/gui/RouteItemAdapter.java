@@ -17,10 +17,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
+import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -29,11 +33,13 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
     private List<Route> routes;
     private Context context;
     private String language;
+    private MainViewModel mainViewModel;
 
-    public RouteItemAdapter(List<Route> routes, Context context, String language){
+    public RouteItemAdapter(List<Route> routes, Context context, MainViewModel mainViewModel){
         this.routes = routes;
         this.context = context;
-        this.language = language;
+        this.language = mainViewModel.getUserSettings2().getLanguage();
+        this.mainViewModel = mainViewModel;
     }
 
     @NonNull
@@ -50,7 +56,12 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
         String mCurrent = routes.get(position).getRouteName();
         holder.routeTitle.setText(mCurrent);
 
-
+        holder.startRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainViewModel.setActiveRoute(routes.get(position));
+            }
+        });
 
         String text = "";
         String filename = "";
