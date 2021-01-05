@@ -1,8 +1,8 @@
 package com.mickwerf.digi_tours_breda.gui.activities;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,9 +21,6 @@ import com.mickwerf.digi_tours_breda.gui.fragments.RouteOverviewFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.SettingScreenFragment;
 import com.mickwerf.digi_tours_breda.gui.popups.GPSLossPopup;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
-import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.ApiCallback;
-import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
-import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 import com.mickwerf.digi_tours_breda.services.Notify;
 
 import java.util.ArrayList;
@@ -50,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mainViewModel;
 
     private boolean isRequested = false;
+    private boolean hasGpsSignal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 //            // Fill the Open Street Map here.
 //        });
 
-        requestPermissions(new String[] {
+        requestPermissions(new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.MANAGE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -78,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Initialize all views
-    public void initialize(){
+    public void initialize() {
 
         this.homeButton = findViewById(R.id.HomeImageView);
         this.settingsButton = findViewById(R.id.SettingsImageView);
@@ -93,19 +91,21 @@ public class MainActivity extends AppCompatActivity {
 
         this.settingScreenFragment = new SettingScreenFragment();
 
-        this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel,this);
+        this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel, this);
 
-        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel,this);
+        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel, this);
 
         this.gpsLossPopup = new GPSLossPopup();
 
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.routeOverviewFragment).commit();
+        this.hasGpsSignal = checkGpsPermission();
+
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
 
 
     }
 
     //Set all on-click listeners
-    public void setClickListeners(){
+    public void setClickListeners() {
 
         this.settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,49 +133,62 @@ public class MainActivity extends AppCompatActivity {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    if (fragmentManager.getPrimaryNavigationFragment()) {
-                        Log.d("No GPS popup", "GPS deactivated.");
-                        fragmentManager.beginTransaction().add(R.id.fragmentContainer, gpsLossPopup).commit();
-                    }
-                } else if (fragmentManager.getPrimaryNavigationFragment()){
-                    Log.d("No GPS popup", "GPS activated.");
-                    fragmentManager.beginTransaction().remove(gpsLossPopup).commit();
-                }
+                checkGpsBlock();
             }
-        }, 0, 1000);
+        }, 0, 500);
+    }
+
+    private void checkGpsBlock() {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            if (hasGpsSignal) {
+                Log.d("No GPS popup", "GPS deactivated.");
+                hasGpsSignal = false;
+                fragmentManager.beginTransaction().add(R.id.fragmentContainer, gpsLossPopup).commit();
+            }
+        } else if (!hasGpsSignal) {
+            Log.d("No GPS popup", "GPS activated.");
+            hasGpsSignal = true;
+            fragmentManager.beginTransaction().remove(gpsLossPopup).commit();
+        }
+    }
+
+    private boolean checkGpsPermission() {
+        return !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     //Open settings view
-    public void toSettingsView(){
+    public void toSettingsView() {
         this.homeTextView.setVisibility(View.GONE);
         this.directionsTextView.setVisibility(View.GONE);
         this.settingsTextView.setVisibility(View.VISIBLE);
 
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.settingScreenFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.settingScreenFragment).commit();
     }
 
     //Open home view
-    public void toHomeView(){
+    public void toHomeView() {
         this.homeTextView.setVisibility(View.VISIBLE);
         this.directionsTextView.setVisibility(View.GONE);
         this.settingsTextView.setVisibility(View.GONE);
 
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.routeOverviewFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
     }
 
     //Open directions view
-    public void toDirectionsView(){
+    public void toDirectionsView() {
         this.homeTextView.setVisibility(View.GONE);
         this.directionsTextView.setVisibility(View.VISIBLE);
         this.settingsTextView.setVisibility(View.GONE);
 
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer,this.mapScreenFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.mapScreenFragment).commit();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if(!isRequested) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        if (!isRequested) {
             ArrayList<String> permissionsToRequest = new ArrayList<>();
             for (int i = 0; i < grantResults.length; i++) {
                 permissionsToRequest.add(permissions[i]);
@@ -197,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public MapScreenFragment getMapScreenFragment(){
+    public MapScreenFragment getMapScreenFragment() {
         return this.mapScreenFragment;
     }
 }
