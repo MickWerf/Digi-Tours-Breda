@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.mickwerf.digi_tours_breda.data.Database;
+import com.mickwerf.digi_tours_breda.data.entities.DataElement;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
@@ -91,9 +92,12 @@ public class MainViewModel extends AndroidViewModel {
         activeRoute.setValue(Repository.getInstance().getActiveRoute(getApplication().getApplicationContext()));
     }
 
-    public List<LocationElements> getLocationElements(Location location) {
+    public DataElement getLocationElements(Location location) {
         //todo possibly need to change with new query, though it may not be needed.
-        UserSettings settings = Repository.getInstance().getUserSettings(getApplication().getApplicationContext());
-        return Repository.getInstance().getLocationElements(getApplication().getApplicationContext(), location, settings);
+        return Repository.getInstance().getLocationElements(getApplication().getApplicationContext(), location);
+    }
+
+    public String getLocationImagePath(Location location){
+       return Repository.getInstance().getLocationImagePath(getApplication().getApplicationContext(),location);
     }
 }

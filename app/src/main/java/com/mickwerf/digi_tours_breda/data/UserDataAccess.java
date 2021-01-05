@@ -54,13 +54,8 @@ public interface UserDataAccess {
     List<LocationCoordinate> getLocationCoordinates();
 
     @Transaction
-    @Query("SELECT * " +
-            "FROM location, language, data_element " +
-            "WHERE data_element.location == location.locationName AND " +
-            "data_element.language == language.languageName AND " +
-            "locationName LIKE :locationName AND " +
-            "language.languageName LIKE :language")
-    List<LocationElements> getLocationElementsFromLanguage(String locationName, String language);
+    @Query("SELECT * FROM location WHERE locationName LIKE :locationName")
+    LocationElements getLocationElements(String locationName);
 
     @Update
     void updateLocation(Location... locations);

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.LocationManager;
 
 import com.mickwerf.digi_tours_breda.data.Database;
+import com.mickwerf.digi_tours_breda.data.entities.DataElement;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
@@ -28,6 +29,8 @@ class Repository {
     private RouteWithLocations activeRoute;
     private UserSettings userSettings;
     private List<GpsCoordinate> coordinateList = new ArrayList<>();
+    private DataElement dataElement;
+    private String imagePath;
 
     public static Repository getInstance() {
         if (INSTANCE == null) {
@@ -95,10 +98,56 @@ class Repository {
         return Database.getInstance(context).userDataAccess().getLanguages();
     }
 
-    public List<LocationElements> getLocationElements(Context context, Location location, UserSettings settings) {
+    public DataElement getLocationElements(Context context, Location location) {
+
+
+        Runnable runnable = () -> {
+
+            switch (getUserSettings(context).getLanguage()){
+
+                case "Nederlands":
+                    this.dataElement = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(0);
+                    break;
+                case "Engels":
+                    this.dataElement = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(1);
+                    break;
+                case "Duits":
+                    this.dataElement = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(2);
+                    break;
+            }
+
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+       return this.dataElement;
+
         //todo query for automatically getting correct language may need to be adjusted.
-        return Database.getInstance(context).userDataAccess().getLocationElementsFromLanguage(location.getLocationName(), settings.getLanguage());
     }
+
+    public String getLocationImagePath(Context context, Location location) {
+
+        Runnable runnable = () -> {
+            this.imagePath = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(3).getPath();
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //todo query for automatically getting correct language may need to be adjusted.
+        return imagePath;
+    }
+
+
 
     public void setLanguage(Context context, Language language) {
         UserSettings settings = Database.getInstance(context).userDataAccess().getUserSettings();

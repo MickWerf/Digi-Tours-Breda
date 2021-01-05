@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
+import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
 import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 import com.mickwerf.digi_tours_breda.gui.NextLocationAdapter;
 import com.mickwerf.digi_tours_breda.gui.NextLocationItem;
@@ -222,7 +223,10 @@ public class MapScreenFragment extends Fragment {
 
         RouteWithLocations route = mainViewModel.getActiveRoute2();
 
-        List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(route.getLocations());
+        List<Location> locations = route.getLocations();
+
+        List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
+
 //        LocationCoordinateList.clear();
 //        LocationCoordinateList.add(new GpsCoordinate(37.421022, -122.086627,"AA"));
 //        LocationCoordinateList.add(new GpsCoordinate(37.423834, -122.090104,"BB"));
@@ -237,7 +241,7 @@ public class MapScreenFragment extends Fragment {
 //        Coordinate end = new Coordinate(-122.077987, 37.423411);
 
         GeoPoint startPoint = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
-        DrawWayPoint(startPoint,LocationCoordinateList.get(0).getLocation());
+        DrawWayPoint(startPoint,locations.get(0));
 
 //        GeoPoint start3 = new GeoPoint(LocationCoordinateList.get(1).getLatitude(), LocationCoordinateList.get(1).getLongitude());
 //        DrawWayPoint(start3);
@@ -248,7 +252,7 @@ public class MapScreenFragment extends Fragment {
             Coordinate end = new Coordinate(LocationCoordinateList.get(i+1).getLongitude(), LocationCoordinateList.get(i+1).getLatitude());
 
             GeoPoint point = new GeoPoint(LocationCoordinateList.get(i+1).getLatitude(), LocationCoordinateList.get(i+1).getLongitude());
-            DrawWayPoint(point,LocationCoordinateList.get(i+1).getLocation());
+            DrawWayPoint(point,locations.get(i+1));
 
             new RouteCallGet.Builder(
                     start,
@@ -276,17 +280,17 @@ public class MapScreenFragment extends Fragment {
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
-    public void DrawWayPoint(GeoPoint geoPoint, String locationName){
+    public void DrawWayPoint(GeoPoint geoPoint, Location location){
         Marker marker = new Marker(mapView);
         marker.setIcon(getResources().getDrawable(R.drawable.place_icon_gray, context.getTheme()));
-        marker.setTitle(locationName);
+        marker.setTitle(location.getLocationName());
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
 
         marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker, MapView mapView) {
-                CreateSkipPopup(locationName);
+                CreateInfoPopup(location);
                 return true;
             }
         });
@@ -298,12 +302,20 @@ public class MapScreenFragment extends Fragment {
     private TextView titleTV;
     private Button okButton;
 
-    public void CreateInfoPopup(String title){
+    @SuppressLint("SetTextI18n")
+    public void CreateInfoPopup(Location location){
         View popup = getLayoutInflater().inflate(R.layout.info_location_popup,null);
 
         this.titleTV = (TextView) popup.findViewById(R.id.infoLocationTitle);
-        this.titleTV.setText(title);
+        this.titleTV.setText(location.getLocationName());
         this.infoTV = (TextView) popup.findViewById(R.id.infoLocationText);
+
+        String textPath = this.mainViewModel.getLocationElements(location).getPath();
+
+        String imagePath = this.mainViewModel.getLocationImagePath(location);
+
+        this.infoTV.setText(textPath + "\n"+imagePath);
+
         this.okButton = (Button) popup.findViewById(R.id.OkLocationButton);
 
 
@@ -323,11 +335,11 @@ public class MapScreenFragment extends Fragment {
     private TextView titleTVskipPopup;
     private Button skipButton;
 
-    public void CreateSkipPopup(String title){
+    public void CreateSkipPopup(Location location){
         View popup = getLayoutInflater().inflate(R.layout.skip_location_popup,null);
 
         this.titleTVskipPopup = (TextView) popup.findViewById(R.id.skipLocationTitle);
-        this.titleTVskipPopup.setText(title);
+        this.titleTVskipPopup.setText(location.getLocationName());
         this.skipButton = (Button) popup.findViewById(R.id.skipLocationButton);
 
 
