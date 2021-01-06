@@ -25,6 +25,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
@@ -47,6 +51,7 @@ import java.util.LinkedList;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.library.BuildConfig;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapController;
@@ -160,10 +165,10 @@ public class MapScreenFragment extends Fragment {
         super.onStart();
         this.mapView.onResume();
         this.locationOverlay.onResume();
-        
-        this.mapController.zoomTo(ZOOM_LEVEL);
+
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
+        this.mapController.zoomTo(ZOOM_LEVEL);
     }
 
     @Override
@@ -187,6 +192,9 @@ public class MapScreenFragment extends Fragment {
         }
     }
 
+    final static int GLOBE_WIDTH = 256; // a constant in Google's map projection
+    final static int ZOOM_MAX = 21;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -201,10 +209,10 @@ public class MapScreenFragment extends Fragment {
         this.locationOverlay.enableFollowLocation();
         this.mapView.getOverlays().add(this.locationOverlay);
         this.mapController = new MapController(this.mapView);
-        this.mapController.zoomTo(ZOOM_LEVEL);
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
-//        this.mapController.setCenter(new GeoPoint(4.780642,51.588949));
+        this.mapController.zoomTo(ZOOM_LEVEL);
+
 
         this.mainViewModel.getActiveRoute().observe(this, this.activeRouteObserver);
         this.activeRoute = this.mainViewModel.getActiveRoute2();
@@ -356,17 +364,17 @@ public class MapScreenFragment extends Fragment {
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             this.LocationMarkers.put(location, marker);
 
-            marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker, MapView mapView) {
-                    if (location.isVisited()) {
-                        CreateInfoPopup(location, marker);
-                    } else {
-                        CreateSkipPopup(location, marker);
-                    }
-                    return true;
-                }
-            });
+        marker.setOnMarkerClickListener((marker1, mapView) -> {
+            if(location.isVisited()){
+                CreateInfoPopup(location, marker1);
+            }else {
+                CreateSkipPopup(location, marker1);
+            }
+            this.mapController.zoomTo(ZOOM_LEVEL);
+            this.mapController.setCenter(marker1.getPosition());
+            this.mapController.animateTo(marker1.getPosition());
+            return true;
+        });
 
             mapView.getOverlays().add(marker);
         }
