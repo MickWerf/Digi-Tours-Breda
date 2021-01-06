@@ -41,4 +41,6 @@
         Besuchte Orte:\n
         Ein besuchter Ort auf einer Route wird durch einen blauen Stift angezeigt. Wenn Sie auf diesen Pin klicken, können Sie Informationen über den betreffenden Ort lesen.</string>
     <string name="CaseOfNoGpsText" translatable="false">Wenn kein GPS verfügbar ist, wird eine Benachrichtigung ausgegeben und die App kann nicht verwendet werden.</string>
+    <string name="progressDeletedBecauseComplete">" Der Fortschritt dieser Route wurde gelöscht, sodass Sie sie erneut gehen können."</string>
+    <string name="RouteCompleted">Herzlichen Glückwunsch, Sie haben die Route abgeschlossen!</string>
 </resources>

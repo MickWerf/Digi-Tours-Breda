@@ -124,7 +124,7 @@ public class MainViewModel extends AndroidViewModel {
     public boolean checkRouteCompletion() {
         RouteWithLocations searched = Repository.getInstance().getActiveRoute(getApplication().getApplicationContext());
         for (Location location : searched.getLocations()) {
-            if (!location.isVisited()) {
+            if (!location.isVisited()&&location.isSightSeeingLocation()) {
                 return false;
             }
         }
@@ -132,7 +132,6 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public Boolean stopCurrentRoute() {
-        System.out.println("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
         boolean result;
         if (checkRouteCompletion()) {

@@ -24,6 +24,8 @@
     <string name="NotifyUncompleteRoute">Je hebt deze route niet af gemaakt:</string>
     <string name="ContinueLater">. Je kan deze later hervatten</string>
     <string name="NotifyDeleteProgress">"Progressie van deze route verwijderd: "</string>
+    <string name="RouteCompleted">Gefeliciteerd, je hebt de route voltooid!</string>
+    <string name="progressDeletedBecauseComplete">De voortgang van deze route is gewist, dus je kunt hem weer lopen.</string>
     <string name="HowToUseText" translatable="false">Starten van een route:\n
         Om een route te starten ga je naar het linker scherm. Vervolgens klik je op de play knop van die route. Daarna opent de map en kan je de route gaan lopen.
         Als er al een route actief is moet je deze eerst stoppen om een andere route te kunnen starten. Onderaan het middelste scherm is ook te zien hoe ver je verwijderd bent van de komende locaties op de route.\n\n

@@ -68,4 +68,6 @@
     <string name="NotifyUncompleteRoute">"You haven't finished route: "</string>
     <string name="ContinueLater">. You can finish it later.</string>
     <string name="NotifyDeleteProgress">"Deleted progress of route: "</string>
+    <string name="RouteCompleted">Congratulations you have completed the route!</string>
+    <string name="progressDeletedBecauseComplete">Progress of this route have been deleted, so you can walk it again.</string>
 </resources>
