@@ -10,7 +10,7 @@
     <string name="NextUp">Next up:</string>
 
 
-    <string name="HowToUseText" translatable="false">Starting a route:\n
+    <string name="HowToUseText" >Starting a route:\n
         To start a route, go to the left screen. Then click on the play button for that route. Then the map opens and you can start walking the route.
         If a route is already active, you must stop it first to be able to start another route. At the bottom of the middle screen you can also see how far you are from the upcoming locations on the route.\n\n
 
@@ -26,7 +26,7 @@
 
         Locations visited:\n
         A visited location in a route is indicated by a blue pin. If you click on this pin you can read information about the location in question.</string>
-    <string name="CaseOfNoGpsText" translatable="false">If no GPS is available, a notification is given and the app cannot be used.</string>
+    <string name="CaseOfNoGpsText" >If no GPS is available, a notification is given and the app cannot be used.</string>
 
 
 
