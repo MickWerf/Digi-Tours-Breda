@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
         // Initialise notification settings.
         Notify.initialise(getApplicationContext());
         this.mainViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
-
     }
 
     //Initialize all views
@@ -110,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
             toSettingsView();
             presetFragment = null;
         }
+
+        stopService();
     }
 
     public void updateUserSettings(String localeCode, String Language) {
@@ -268,9 +269,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        System.out.println("mainactivity is stopped");
         startService();
     }
 
