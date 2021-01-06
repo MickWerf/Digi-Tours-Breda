@@ -50,27 +50,9 @@ public class GpsLogic {
             try {
                 GeoPoint myLocation = mapScreenFragment.getLocationOverlay().getMyLocation();
 //                myLocation = new GeoPoint(37.422066, -122.083975);
-                //TODO: check this if it works without crossroads
                 GeoPoint nearestLocation = getNearestLocation();
 
-                System.out.println("POINT1 LAT: "+myLocation.getLatitude() + "POINT1 LON: "+myLocation.getLongitude());
-                System.out.println("POINT2 LAT: "+nearestLocation.getLatitude() + "POINT2 LON: "+nearestLocation.getLongitude());
-
-
-
-//                android.location.Location location = new android.location.Location("Location");
-//                location.setLongitude(myLocation.getLongitude());
-//                location.setLatitude(myLocation.getLatitude());
-//
-//                android.location.Location location2 = new android.location.Location("Location2");
-//                location2.setLongitude(nearestLocation.getLongitude());
-//                location2.setLatitude(nearestLocation.getLatitude());
-
-
-//                System.out.println("DISTANCE: "+location.distanceTo(location2)*10);
-
                 double a = myLocation.distanceToAsDouble(nearestLocation);
-                System.out.println("A DISTANCE : "+a);
                 if(a <= 15.0){
                     CreatePopup();
                 }

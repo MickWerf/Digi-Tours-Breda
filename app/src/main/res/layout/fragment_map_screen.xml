@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".gui.fragments.MapScreenFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
 
     <org.osmdroid.views.MapView
         android:id="@+id/map_view"

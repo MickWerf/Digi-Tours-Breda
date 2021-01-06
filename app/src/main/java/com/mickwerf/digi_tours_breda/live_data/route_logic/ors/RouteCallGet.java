@@ -74,7 +74,6 @@ public class RouteCallGet {
                 .getJSONArray("coordinates");
         ArrayList<Coordinate> coordinates = new ArrayList<>();
         for (int i = 0; i < jsonCoordinates.length(); i++) {
-            System.out.println("SIZE2: "+jsonCoordinates.length());
             coordinates.add(new Coordinate(
                     jsonCoordinates.getJSONArray(i).getDouble(0),
                     jsonCoordinates.getJSONArray(i).getDouble(1)
@@ -161,8 +160,6 @@ public class RouteCallGet {
                 @Override
                 public void onFailure(Response response, Throwable throwable) {
                     Log.d(TAG, "Failed to receive a response.");
-
-                    // TODO Handle the failure in the UI.
                 }
 
                 @Override

@@ -175,8 +175,10 @@ public class MainActivity extends AppCompatActivity {
             if (hasGpsSignal) {
                 Log.d("No GPS popup", "GPS deactivated.");
                 hasGpsSignal = false;
+                Notify.vibrate(getApplicationContext());
+                Notify.playNotificationSound(getApplicationContext());
                 try {
-                    fragmentManager.beginTransaction().add(R.id.fragmentContainer, gpsLossPopup).commit();
+                    fragmentManager.beginTransaction().add(R.id.Frame, gpsLossPopup).commit();
                 } catch (IllegalStateException e) {
                     e.getLocalizedMessage();
                 }
