@@ -15,9 +15,6 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
@@ -31,8 +28,7 @@ import android.widget.Toast;
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
-import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
-import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
+import com.mickwerf.digi_tours_breda.data.relations.RouteWithSteps;
 import com.mickwerf.digi_tours_breda.gui.NextLocationAdapter;
 import com.mickwerf.digi_tours_breda.gui.NextLocationItem;
 import com.mickwerf.digi_tours_breda.gui.activities.MainActivity;
@@ -79,7 +75,7 @@ public class MapScreenFragment extends Fragment {
     private NextLocationAdapter mAdapter;
 
     private MainViewModel mainViewModel;
-    private RouteWithLocations activeRoute;
+    private RouteWithSteps activeRoute;
 
     private Context context;
 
@@ -100,9 +96,9 @@ public class MapScreenFragment extends Fragment {
 
 
 
-    Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
+    Observer<RouteWithSteps> activeRouteObserver = new Observer<RouteWithSteps>() {
         @Override
-        public void onChanged(RouteWithLocations newActiveRoute) {
+        public void onChanged(RouteWithSteps newActiveRoute) {
             activeRoute = newActiveRoute;
         }
     };
@@ -212,8 +208,10 @@ public class MapScreenFragment extends Fragment {
 
         if (this.activeRoute != null) {
             mLocationList.clear();
-            for (Location location : activeRoute.getLocations()) {
-                mLocationList.add(new NextLocationItem(location.getLocationName()));
+            for (Location location : mainViewModel.getLocations(activeRoute)) {
+                if (location.isSightSeeingLocation()) {
+                    mLocationList.add(new NextLocationItem(location.getLocationName()));
+                }
             }
 
 
@@ -226,9 +224,9 @@ public class MapScreenFragment extends Fragment {
             // Give the recycler view a default layout manager.
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-            RouteWithLocations route = mainViewModel.getActiveRoute2();
+            RouteWithSteps route = mainViewModel.getActiveRoute2();
             if (route != null) {
-                List<Location> locations = route.getLocations();
+                List<Location> locations = mainViewModel.getLocations(route);
 
                 List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
 
