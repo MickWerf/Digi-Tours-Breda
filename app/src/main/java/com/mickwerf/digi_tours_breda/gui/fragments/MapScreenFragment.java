@@ -128,9 +128,6 @@ public class MapScreenFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        //Configuration.getInstance().load(getActivity().getApplication(), PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()));
-
         requestPermissions(new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -240,27 +237,6 @@ public class MapScreenFragment extends Fragment {
                 }
 
                 List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
-                System.out.println("SIZEOFLIST: "+LocationCoordinateList.size());
-
-//        LocationCoordinateList.clear();
-//        LocationCoordinateList.add(new GpsCoordinate( 37.422065,-122.083974,"AA"));
-//        LocationCoordinateList.add(new GpsCoordinate( 37.423834,-122.090104,"BB"));
-//        LocationCoordinateList.add(new GpsCoordinate( 37.427498,-122.099427,"AA"));
-
-
-//        System.out.println("SIZE1: "+LocationCoordinateList.size());
-//        System.out.println("GPS COORD: "+ LocationCoordinateList.get(0).getLocation().getLocationName());
-
-
-//        Coordinate start = new Coordinate(-122.086549, 37.421034);
-//        Coordinate end = new Coordinate(-122.077987, 37.423411);
-
-//                GeoPoint firstMonument = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
-//                DrawWayPoint(firstMonument, locations.get(0));
-
-//        GeoPoint start3 = new GeoPoint(LocationCoordinateList.get(1).getLatitude(), LocationCoordinateList.get(1).getLongitude());
-//        DrawWayPoint(start3);
-
 
                 this.DistanceList = new ArrayList<>();
                 this.DistanceList.add(0);
@@ -273,8 +249,6 @@ public class MapScreenFragment extends Fragment {
                         Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
                         Coordinate end = new Coordinate(LocationCoordinateList.get(i + 1).getLongitude(), LocationCoordinateList.get(i + 1).getLatitude());
 
-                        System.out.println("BETWEEN : "+locations.get(i).getLocationName() + " AND "+locations.get(i+1).getLocationName());
-
                         new RouteCallGet.Builder(
                                 start,
                                 end,
@@ -285,8 +259,6 @@ public class MapScreenFragment extends Fragment {
                             DistanceList.add(measureDistance(coordinates));
 
                             DrawRoute(coordinates);
-                            System.out.println("DL SIZE: " + DistanceList.size());
-                            System.out.println("LocationCoordList: " + (LocationCoordinateList.size()));
 
                             if(DistanceList.size() == LocationCoordinateList.size()) {
 
@@ -331,8 +303,6 @@ public class MapScreenFragment extends Fragment {
 
             total = total + (int)(geoPoint.distanceToAsDouble(geoPoint2));
         }
-
-        System.out.println("TOTAL :::"+total);
 
         return total;
 

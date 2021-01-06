@@ -1,6 +1,7 @@
 package com.mickwerf.digi_tours_breda.live_data;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.mickwerf.digi_tours_breda.data.Database;
 import com.mickwerf.digi_tours_breda.data.entities.DataElement;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 class Repository {
     private static volatile Repository INSTANCE;
+    private static final String TAG = Repository.class.getSimpleName();
 
     private List<Route> routes;
     private RouteWithSteps activeRoute;
@@ -100,7 +102,7 @@ class Repository {
         this.locations = new ArrayList<>();
         Runnable runnable = () -> {
             for (RouteStep step : routeWithSteps.getRouteSteps()) {
-                System.out.println(step.getLocationName());
+                Log.d(TAG, step.getLocationName());
                 this.locations.add(Database.getInstance(context).userDataAccess().getLocation(step.getLocationName()));
             }
         };
@@ -150,7 +152,7 @@ class Repository {
     public String getLocationImagePath(Context context, Location location) {
 
         Runnable runnable = () -> {
-            System.out.println(location.getLocationName());
+            Log.d(TAG, location.getLocationName());
             this.imagePath = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(3).getPath();
         };
         Thread t = new Thread(runnable);

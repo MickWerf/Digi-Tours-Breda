@@ -3,6 +3,7 @@ package com.mickwerf.digi_tours_breda.data;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.room.Room;
@@ -35,6 +36,7 @@ import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
         exportSchema = false //disable exporting schema, this is unneeded for implementation.
 )
 public abstract class Database extends RoomDatabase {
+    private static final String TAG = Database.class.getSimpleName();
     private static volatile Database INSTANCE;
     public abstract UserDataAccess userDataAccess();
     public abstract AdminDataAccess adminDataAccess();
@@ -49,7 +51,7 @@ public abstract class Database extends RoomDatabase {
                                 .createFromAsset("TemplateDatabaseV4.3.db")
                                 .build();
                     } else {
-                        System.out.println("NO PERMISSION TO ACCESS DATABASE");
+                        Log.e(TAG, "NO PERMISSION TO ACCESS DATABASE");
                     }
                 }
             }
