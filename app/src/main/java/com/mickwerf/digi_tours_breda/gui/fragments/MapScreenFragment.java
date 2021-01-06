@@ -59,6 +59,8 @@ public class MapScreenFragment extends Fragment {
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
+    private final int ZOOM_LEVEL = 19;
+
     private MapView mapView;
 
     private MyLocationNewOverlay locationOverlay;
@@ -137,6 +139,10 @@ public class MapScreenFragment extends Fragment {
         super.onStart();
         this.mapView.onResume();
         this.locationOverlay.onResume();
+        
+        this.mapController.zoomTo(ZOOM_LEVEL);
+        this.mapController.setCenter(locationOverlay.getMyLocation());
+        this.mapController.animateTo(locationOverlay.getMyLocation());
     }
 
     @Override
@@ -174,7 +180,7 @@ public class MapScreenFragment extends Fragment {
         this.locationOverlay.enableFollowLocation();
         this.mapView.getOverlays().add(this.locationOverlay);
         this.mapController = new MapController(this.mapView);
-        this.mapController.zoomTo(5);
+        this.mapController.zoomTo(ZOOM_LEVEL);
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
 //        this.mapController.setCenter(new GeoPoint(4.780642,51.588949));
