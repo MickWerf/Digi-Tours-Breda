@@ -150,6 +150,7 @@ class Repository {
     public String getLocationImagePath(Context context, Location location) {
 
         Runnable runnable = () -> {
+            System.out.println(location.getLocationName());
             this.imagePath = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(3).getPath();
         };
         Thread t = new Thread(runnable);
