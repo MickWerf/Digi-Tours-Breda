@@ -50,6 +50,7 @@ public class GpsLogic {
             try {
                 GeoPoint myLocation = mapScreenFragment.getLocationOverlay().getMyLocation();
 //                myLocation = new GeoPoint(37.422066, -122.083975);
+                //TODO: check this if it works without crossroads
                 GeoPoint nearestLocation = getNearestLocation();
 
                 System.out.println("POINT1 LAT: "+myLocation.getLatitude() + "POINT1 LON: "+myLocation.getLongitude());

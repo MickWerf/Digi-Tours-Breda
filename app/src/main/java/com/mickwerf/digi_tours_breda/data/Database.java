@@ -13,7 +13,7 @@ import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
-import com.mickwerf.digi_tours_breda.data.entities.RouteLocationCrossReference;
+import com.mickwerf.digi_tours_breda.data.entities.RouteStep;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
 
 /**
@@ -28,10 +28,10 @@ import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
                 Language.class,
                 Location.class,
                 Route.class,
-                RouteLocationCrossReference.class,
+                RouteStep.class,
                 UserSettings.class
         },
-        version = 3, //sets the version to 3.
+        version = 4, //sets the version to 4.
         exportSchema = false //disable exporting schema, this is unneeded for implementation.
 )
 public abstract class Database extends RoomDatabase {
@@ -46,8 +46,7 @@ public abstract class Database extends RoomDatabase {
 
                     if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "db1.db")
-
-                                .createFromAsset("TemplateDatabaseV3.2.db")
+                                .createFromAsset("TemplateDatabaseV4.2.db")
                                 .build();
                     } else {
                         System.out.println("NO PERMISSION TO ACCESS DATABASE");

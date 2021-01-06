@@ -15,9 +15,6 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.view.LayoutInflater;
@@ -31,8 +28,7 @@ import android.widget.Toast;
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
-import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
-import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
+import com.mickwerf.digi_tours_breda.data.relations.RouteWithSteps;
 import com.mickwerf.digi_tours_breda.gui.NextLocationAdapter;
 import com.mickwerf.digi_tours_breda.gui.NextLocationItem;
 import com.mickwerf.digi_tours_breda.gui.activities.MainActivity;
@@ -79,7 +75,7 @@ public class MapScreenFragment extends Fragment {
     private NextLocationAdapter mAdapter;
 
     private MainViewModel mainViewModel;
-    private RouteWithLocations activeRoute;
+    private RouteWithSteps activeRoute;
 
     private Context context;
 
@@ -100,9 +96,9 @@ public class MapScreenFragment extends Fragment {
 
 
 
-    Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
+    Observer<RouteWithSteps> activeRouteObserver = new Observer<RouteWithSteps>() {
         @Override
-        public void onChanged(RouteWithLocations newActiveRoute) {
+        public void onChanged(RouteWithSteps newActiveRoute) {
             activeRoute = newActiveRoute;
         }
     };
@@ -212,8 +208,10 @@ public class MapScreenFragment extends Fragment {
 
         if (this.activeRoute != null) {
             mLocationList.clear();
-            for (Location location : activeRoute.getLocations()) {
-                mLocationList.add(new NextLocationItem(location.getLocationName()));
+            for (Location location : mainViewModel.getLocations(activeRoute)) {
+                if (location.isSightSeeingLocation()) {
+                    mLocationList.add(new NextLocationItem(location.getLocationName()));
+                }
             }
 
 
@@ -226,9 +224,15 @@ public class MapScreenFragment extends Fragment {
             // Give the recycler view a default layout manager.
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-            RouteWithLocations route = mainViewModel.getActiveRoute2();
+            RouteWithSteps route = mainViewModel.getActiveRoute2();
             if (route != null) {
-                List<Location> locations = route.getLocations();
+                List<Location> buffer = mainViewModel.getLocations(route);
+                List<Location> locations = new ArrayList<>();
+                for (Location location : buffer) {
+                    if (location.isSightSeeingLocation()) {
+                        locations.add(location);
+                    }
+                }
 
                 List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
 
@@ -291,30 +295,32 @@ public class MapScreenFragment extends Fragment {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void DrawWayPoint(GeoPoint geoPoint, Location location) {
-        Marker marker = new Marker(mapView);
-        if (location.isVisited()) {
-            marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
-        } else {
-            marker.setIcon(getResources().getDrawable(R.drawable.place_icon_gray, context.getTheme()));
-        }
-        marker.setTitle(location.getLocationName());
-        marker.setPosition(geoPoint);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        this.LocationMarkers.put(location,marker);
-
-        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                if(location.isVisited()){
-                    CreateInfoPopup(location,marker);
-                }else {
-                    CreateSkipPopup(location, marker);
-                }
-                return true;
+        if (location.isSightSeeingLocation()) {
+            Marker marker = new Marker(mapView);
+            if (location.isVisited()) {
+                marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+            } else {
+                marker.setIcon(getResources().getDrawable(R.drawable.place_icon_gray, context.getTheme()));
             }
-        });
+            marker.setTitle(location.getLocationName());
+            marker.setPosition(geoPoint);
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            this.LocationMarkers.put(location, marker);
 
-        mapView.getOverlays().add(marker);
+            marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker, MapView mapView) {
+                    if (location.isVisited()) {
+                        CreateInfoPopup(location, marker);
+                    } else {
+                        CreateSkipPopup(location, marker);
+                    }
+                    return true;
+                }
+            });
+
+            mapView.getOverlays().add(marker);
+        }
     }
 
     private TextView infoTV;
@@ -408,27 +414,39 @@ public class MapScreenFragment extends Fragment {
         this.skipButton = (Button) popup.findViewById(R.id.skipLocationButton);
 
         this.skipButton.setOnClickListener(new View.OnClickListener() {
+            private boolean routecomplete;
             @Override
             public void onClick(View view) {
                 mainViewModel.visitLocation(location);
-                boolean routecomplete = mainViewModel.checkRouteCompletion();
-                marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
-                dialog.cancel();
-                if (routecomplete){
-                    Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
-                    Runnable runnable = () -> {
-                        mainViewModel.stopCurrentRoute();
-                    };
-                    Thread t = new Thread(runnable);
-                    t.start();
-                    try {
-                        t.join();
-                        MainActivity activity = (MainActivity) context;
-                        activity.toHomeView();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                Runnable runnable = () -> {
+                    routecomplete = mainViewModel.checkRouteCompletion();
+
+                };
+                Thread t = new Thread(runnable);
+                t.start();
+                try {
+                    t.join();
+                    marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+                    dialog.cancel();
+                    if (routecomplete){
+                        Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
+                        Runnable runnable2 = () -> {
+                            mainViewModel.stopCurrentRoute();
+                        };
+                        Thread two = new Thread(runnable2);
+                        two.start();
+                        try {
+                            two.join();
+                            MainActivity activity = (MainActivity) context;
+                            activity.toHomeView();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+
             }
         });
 

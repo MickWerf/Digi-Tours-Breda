@@ -1,7 +1,6 @@
 package com.mickwerf.digi_tours_breda.data;
 
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
@@ -10,10 +9,11 @@ import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
+import com.mickwerf.digi_tours_breda.data.entities.RouteStep;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
 import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
 import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
-import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
+import com.mickwerf.digi_tours_breda.data.relations.RouteWithSteps;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public interface UserDataAccess {
 
     @Transaction
     @Query("SELECT * FROM route WHERE routeName LIKE :routeName")
-    RouteWithLocations getRouteWithLocations(String routeName);
+    RouteWithSteps getRouteWithSteps(String routeName);
 
     @Query("SELECT * FROM route WHERE routeName Like :routeName")
     Route getRoute(String routeName);
@@ -43,6 +43,9 @@ public interface UserDataAccess {
     //region Location & DataElement
     @Query("SELECT * FROM location WHERE is_sight_seeing_location LIKE 1")
     List<Location> getAllSightSeeingLocations();
+
+    @Query("SELECT * FROM location WHERE locationName LIKE :locationName")
+    Location getLocation(String locationName);
 
     @Transaction
     @Query("SELECT * FROM location WHERE locationName LIKE :locationName")
