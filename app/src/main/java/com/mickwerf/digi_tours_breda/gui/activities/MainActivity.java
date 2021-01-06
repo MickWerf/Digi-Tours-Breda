@@ -24,6 +24,7 @@ import com.mickwerf.digi_tours_breda.gui.fragments.RouteOverviewFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.SettingScreenFragment;
 import com.mickwerf.digi_tours_breda.gui.popups.GPSLossPopup;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
+import com.mickwerf.digi_tours_breda.services.ForegroundService;
 import com.mickwerf.digi_tours_breda.services.Notify;
 
 import java.util.ArrayList;
@@ -265,4 +266,24 @@ public class MainActivity extends AppCompatActivity {
     public MainViewModel getMainViewModel() {
         return mainViewModel;
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        System.out.println("mainactivity is stopped");
+        startService();
+    }
+
+    public void startService(){
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        startService(serviceIntent);
+    }
+
+    public void stopService(){
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+
+        stopService(serviceIntent);
+    }
+
+
 }
