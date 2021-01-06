@@ -160,8 +160,6 @@ public class RouteCallGet {
                 @Override
                 public void onFailure(Response response, Throwable throwable) {
                     Log.d(TAG, "Failed to receive a response.");
-
-                    // TODO Handle the failure in the UI.
                 }
 
                 @Override

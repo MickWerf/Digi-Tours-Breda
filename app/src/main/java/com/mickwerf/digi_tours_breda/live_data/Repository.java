@@ -90,7 +90,6 @@ class Repository {
     }
 
     public GpsCoordinate getGpsCoordinate() {
-        //todo Erwin zou hier naar gaan kijken.
         return null;
     }
 

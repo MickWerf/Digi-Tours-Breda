@@ -95,7 +95,7 @@ public class NextLocationAdapter extends RecyclerView.Adapter<NextLocationAdapte
         NextLocationItem current = mLocationList.get(position);
         String mCurrent = current.getLocationName();
         holder.LocationNameItemView.setText(mCurrent);
-        String pCurrent = this.Distancelist.get(position)+ "m distance"; //TODO: retrieve distance to location
+        String pCurrent = this.Distancelist.get(position)+ "m distance";
         holder.distanceItemView.setText(pCurrent);
     }
 

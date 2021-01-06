@@ -142,19 +142,16 @@ public class SettingScreenFragment extends Fragment {
     }
 
     public void changeToEnglish() {
-        //TODO change language to English
         mainActivity.updateUserSettings("en", "Engels");
         mainActivity.restartActivity();
     }
 
     public void changeToDutch() {
-        //TODO change language to Dutch
         mainActivity.updateUserSettings("nl", "Nederlands");
         mainActivity.restartActivity();
     }
 
     public void changeToGerman() {
-        //TODO change language to German
         mainActivity.updateUserSettings("de", "Duits");
         mainActivity.restartActivity();
     }
