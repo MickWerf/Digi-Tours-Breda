@@ -70,7 +70,7 @@ public class MapScreenFragment extends Fragment {
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
-    private final int ZOOM_LEVEL = 5;
+    private final int ZOOM_LEVEL = 19;
 
     private MapView mapView;
 
@@ -419,29 +419,41 @@ public class MapScreenFragment extends Fragment {
         this.okButton = (Button) popup.findViewById(R.id.OkLocationButton);
 
         this.okButton.setOnClickListener(new View.OnClickListener() {
+            private boolean routecomplete;
             @Override
             public void onClick(View view) {
                 mainViewModel.visitLocation(location);
-                boolean routecomplete = mainViewModel.checkRouteCompletion();
-                        marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
-                gpsLogic.setNotOpened(false);
-                dialog.cancel();
-                if (routecomplete){
-                    Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
-                    Runnable runnable = () -> {
-                        mainViewModel.stopCurrentRoute();
-                    };
-                    Thread t = new Thread(runnable);
-                    t.start();
-                    try {
-                        t.join();
-                        MainActivity activity = (MainActivity) context;
-                        activity.toHomeView();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                Runnable runnable = () -> {
+                    routecomplete = mainViewModel.checkRouteCompletion();
+
+                };
+                Thread t = new Thread(runnable);
+                t.start();
+                try {
+                    t.join();
+
+                    marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+                    gpsLogic.setNotOpened(false);
+                    dialog.cancel();
+                    if (routecomplete) {
+                        Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
+                        Runnable runnable2 = () -> {
+                            mainViewModel.stopCurrentRoute();
+                        };
+                        Thread two = new Thread(runnable2);
+                        two.start();
+                        try {
+                            two.join();
+                            MainActivity activity = (MainActivity) context;
+                            activity.toHomeView();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+
                     }
-
-
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -451,6 +463,7 @@ public class MapScreenFragment extends Fragment {
         dialog = dialogBuilder.create();
         dialog.show();
     }
+
 
     private TextView titleTVskipPopup;
     private Button skipButton;
