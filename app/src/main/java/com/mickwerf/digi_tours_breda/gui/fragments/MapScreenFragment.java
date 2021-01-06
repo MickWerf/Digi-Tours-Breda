@@ -297,7 +297,7 @@ public class MapScreenFragment extends Fragment {
 
 
                     try {
-                        Thread.sleep(130);
+                        Thread.sleep(25);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
