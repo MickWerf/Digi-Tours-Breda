@@ -289,30 +289,32 @@ public class MapScreenFragment extends Fragment {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void DrawWayPoint(GeoPoint geoPoint, Location location) {
-        Marker marker = new Marker(mapView);
-        if (location.isVisited()) {
-            marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
-        } else {
-            marker.setIcon(getResources().getDrawable(R.drawable.place_icon_gray, context.getTheme()));
-        }
-        marker.setTitle(location.getLocationName());
-        marker.setPosition(geoPoint);
-        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        this.LocationMarkers.put(location,marker);
-
-        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                if(location.isVisited()){
-                    CreateInfoPopup(location,marker);
-                }else {
-                    CreateSkipPopup(location, marker);
-                }
-                return true;
+        if (location.isSightSeeingLocation()) {
+            Marker marker = new Marker(mapView);
+            if (location.isVisited()) {
+                marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+            } else {
+                marker.setIcon(getResources().getDrawable(R.drawable.place_icon_gray, context.getTheme()));
             }
-        });
+            marker.setTitle(location.getLocationName());
+            marker.setPosition(geoPoint);
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            this.LocationMarkers.put(location, marker);
 
-        mapView.getOverlays().add(marker);
+            marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker, MapView mapView) {
+                    if (location.isVisited()) {
+                        CreateInfoPopup(location, marker);
+                    } else {
+                        CreateSkipPopup(location, marker);
+                    }
+                    return true;
+                }
+            });
+
+            mapView.getOverlays().add(marker);
+        }
     }
 
     private TextView infoTV;
@@ -409,8 +411,24 @@ public class MapScreenFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mainViewModel.visitLocation(location);
+                boolean routecomplete = mainViewModel.checkRouteCompletion();
                 marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
                 dialog.cancel();
+                if (routecomplete){
+                    Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
+                    Runnable runnable = () -> {
+                        mainViewModel.stopCurrentRoute();
+                    };
+                    Thread t = new Thread(runnable);
+                    t.start();
+                    try {
+                        t.join();
+                        MainActivity activity = (MainActivity) context;
+                        activity.toHomeView();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
