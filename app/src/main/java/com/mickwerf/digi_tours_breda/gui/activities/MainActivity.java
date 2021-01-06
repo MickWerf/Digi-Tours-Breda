@@ -7,10 +7,14 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -98,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel, this);
 
-        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel, this);
+        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel, this,this);
 
         this.gpsLossPopup = new GPSLossPopup();
 
@@ -203,6 +207,11 @@ public class MainActivity extends AppCompatActivity {
         this.directionsTextView.setVisibility(View.GONE);
         this.settingsTextView.setVisibility(View.VISIBLE);
 
+        if(this.mapScreenFragment != null){
+            this.mapScreenFragment.StopChecking();
+        }
+
+
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.settingScreenFragment).commit();
     }
 
@@ -211,6 +220,10 @@ public class MainActivity extends AppCompatActivity {
         this.homeTextView.setVisibility(View.VISIBLE);
         this.directionsTextView.setVisibility(View.GONE);
         this.settingsTextView.setVisibility(View.GONE);
+
+        if(this.mapScreenFragment != null){
+            this.mapScreenFragment.StopChecking();
+        }
 
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
     }
@@ -248,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
+    
     public MapScreenFragment getMapScreenFragment() {
         return this.mapScreenFragment;
     }

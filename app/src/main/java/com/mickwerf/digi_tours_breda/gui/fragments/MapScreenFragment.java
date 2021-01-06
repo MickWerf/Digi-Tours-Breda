@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
@@ -14,6 +15,11 @@ import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +37,13 @@ import com.mickwerf.digi_tours_breda.gui.NextLocationAdapter;
 import com.mickwerf.digi_tours_breda.gui.NextLocationItem;
 import com.mickwerf.digi_tours_breda.gui.activities.MainActivity;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.GpsLogic;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.osmdroid.config.Configuration;
@@ -82,6 +90,15 @@ public class MapScreenFragment extends Fragment {
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
+    private HashMap<Location,Marker> LocationMarkers = new HashMap<>();
+
+    private GpsLogic gpsLogic;
+
+    private MainActivity mainActivity;
+
+    private Vibrator vibrator;
+
+
 
     Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
         @Override
@@ -91,10 +108,13 @@ public class MapScreenFragment extends Fragment {
     };
 
 
-    public MapScreenFragment(MainViewModel mainViewModel, Context context) {
+    public MapScreenFragment(MainViewModel mainViewModel, Context context, MainActivity mainActivity) {
         this.mainViewModel = mainViewModel;
         this.context = context;
         this.dialogBuilder = new AlertDialog.Builder(context);
+        this.mainActivity = mainActivity;
+        this.vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
     }
 
 
@@ -190,56 +210,32 @@ public class MapScreenFragment extends Fragment {
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
-
-//        Runnable runnable = () -> {
-//            this.activeRoute = this.mainViewModel.getActiveRoute().getValue();
-//
-//        };
-//        Thread t = new Thread(runnable);
-//        t.start();
-//        try {
-//            t.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
-
         if (this.activeRoute != null) {
             mLocationList.clear();
             for (Location location : activeRoute.getLocations()) {
                 mLocationList.add(new NextLocationItem(location.getLocationName()));
             }
-        } else {
 
-            mLocationList.add(new NextLocationItem("test1"));
-            mLocationList.add(new NextLocationItem("test2"));
-            mLocationList.add(new NextLocationItem("test3"));
-            mLocationList.add(new NextLocationItem("test4"));
-            mLocationList.add(new NextLocationItem("test5"));
-            mLocationList.add(new NextLocationItem("test6"));
-            mLocationList.add(new NextLocationItem("test7"));
-            //TODO: deletetest code ^
-        }
 
-        // Create recycler view.
-        mRecyclerView = getView().findViewById(R.id.NextLocationRecyclerview);
-        // Create an adapter and supply the data to be displayed.
-        mAdapter = new NextLocationAdapter(getContext(), mLocationList);
-        // Connect the adapter with the recycler view.
-        mRecyclerView.setAdapter(mAdapter);
-        // Give the recycler view a default layout manager.
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            // Create recycler view.
+            mRecyclerView = getView().findViewById(R.id.NextLocationRecyclerview);
+            // Create an adapter and supply the data to be displayed.
+            mAdapter = new NextLocationAdapter(getContext(), mLocationList);
+            // Connect the adapter with the recycler view.
+            mRecyclerView.setAdapter(mAdapter);
+            // Give the recycler view a default layout manager.
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        RouteWithLocations route = mainViewModel.getActiveRoute2();
-        if (route!=null){
-            List<Location> locations = route.getLocations();
+            RouteWithLocations route = mainViewModel.getActiveRoute2();
+            if (route != null) {
+                List<Location> locations = route.getLocations();
 
-            List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
+                List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
 
 //        LocationCoordinateList.clear();
-//        LocationCoordinateList.add(new GpsCoordinate(37.421022, -122.086627,"AA"));
-//        LocationCoordinateList.add(new GpsCoordinate(37.423834, -122.090104,"BB"));
-//        LocationCoordinateList.add(new GpsCoordinate(37.427498, -122.099427,"AA"));
+//        LocationCoordinateList.add(new GpsCoordinate( 37.422065,-122.083974,"AA"));
+//        LocationCoordinateList.add(new GpsCoordinate( 37.423834,-122.090104,"BB"));
+//        LocationCoordinateList.add(new GpsCoordinate( 37.427498,-122.099427,"AA"));
 
 
 //        System.out.println("SIZE1: "+LocationCoordinateList.size());
@@ -249,31 +245,36 @@ public class MapScreenFragment extends Fragment {
 //        Coordinate start = new Coordinate(-122.086549, 37.421034);
 //        Coordinate end = new Coordinate(-122.077987, 37.423411);
 
-            GeoPoint startPoint = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
-            DrawWayPoint(startPoint, locations.get(0));
+                GeoPoint startPoint = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
+                DrawWayPoint(startPoint, locations.get(0));
 
 //        GeoPoint start3 = new GeoPoint(LocationCoordinateList.get(1).getLatitude(), LocationCoordinateList.get(1).getLongitude());
 //        DrawWayPoint(start3);
 
-            for (int i = 0; i < LocationCoordinateList.size() - 1; i++) {
+                for (int i = 0; i < LocationCoordinateList.size() - 1; i++) {
 
-                Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
-                Coordinate end = new Coordinate(LocationCoordinateList.get(i + 1).getLongitude(), LocationCoordinateList.get(i + 1).getLatitude());
+                    Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
+                    Coordinate end = new Coordinate(LocationCoordinateList.get(i + 1).getLongitude(), LocationCoordinateList.get(i + 1).getLatitude());
 
-                GeoPoint point = new GeoPoint(LocationCoordinateList.get(i + 1).getLatitude(), LocationCoordinateList.get(i + 1).getLongitude());
-                DrawWayPoint(point, locations.get(i + 1));
+                    GeoPoint point = new GeoPoint(LocationCoordinateList.get(i + 1).getLatitude(), LocationCoordinateList.get(i + 1).getLongitude());
+                    DrawWayPoint(point, locations.get(i + 1));
 
-                new RouteCallGet.Builder(
-                        start,
-                        end,
-                        this.context
-                ).Call(apiResponse -> {
-                    coordinates = apiResponse.getCoordinates();
-                    DrawRoute(coordinates);
-                });
+                    new RouteCallGet.Builder(
+                            start,
+                            end,
+                            this.context
+                    ).Call(apiResponse -> {
+                        coordinates = apiResponse.getCoordinates();
+                        DrawRoute(coordinates);
+                    });
+
+                }
+
+                gpsLogic = new GpsLogic(this,locations,LocationCoordinateList,LocationMarkers);
+                gpsLogic.start();
+
 
             }
-
         }
     }
 
@@ -299,11 +300,16 @@ public class MapScreenFragment extends Fragment {
         marker.setTitle(location.getLocationName());
         marker.setPosition(geoPoint);
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        this.LocationMarkers.put(location,marker);
 
         marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker, MapView mapView) {
-                CreateInfoPopup(location, marker);
+                if(location.isVisited()){
+                    CreateInfoPopup(location,marker);
+                }else {
+                    CreateSkipPopup(location, marker);
+                }
                 return true;
             }
         });
@@ -355,6 +361,7 @@ public class MapScreenFragment extends Fragment {
                 mainViewModel.visitLocation(location);
                 boolean routecomplete = mainViewModel.checkRouteCompletion();
                         marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+                gpsLogic.setNotOpened(false);
                 dialog.cancel();
                 if (routecomplete){
                     Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
@@ -386,7 +393,8 @@ public class MapScreenFragment extends Fragment {
     private Button skipButton;
     private ImageView skipImageView;
 
-    public void CreateSkipPopup(Location location) {
+
+    public void CreateSkipPopup(Location location, Marker marker) {
         View popup = getLayoutInflater().inflate(R.layout.skip_location_popup, null);
 
         this.skipImageView = (ImageView) popup.findViewById(R.id.skipLocationImage);
@@ -399,16 +407,44 @@ public class MapScreenFragment extends Fragment {
         this.titleTVskipPopup.setText(location.getLocationName());
         this.skipButton = (Button) popup.findViewById(R.id.skipLocationButton);
 
-
-        dialogBuilder.setView(popup);
-        dialog = dialogBuilder.create();
-
         this.skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mainViewModel.visitLocation(location);
+                marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
                 dialog.cancel();
             }
         });
+
+
+
+        dialogBuilder.setView(popup);
+        dialog = dialogBuilder.create();
         dialog.show();
     }
-}
+
+    public MyLocationNewOverlay getLocationOverlay() {
+        return locationOverlay;
+    }
+
+    public void StopChecking(){
+        if(this.gpsLogic != null){
+            this.gpsLogic.stop();
+        }
+    }
+
+    public void createPopUp(Location location, Marker marker){
+        this.mainActivity.runOnUiThread(()-> {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                vibrator.vibrate(500);
+            }
+            CreateInfoPopup(location,marker);
+        });
+    }
+
+
+    }
+
