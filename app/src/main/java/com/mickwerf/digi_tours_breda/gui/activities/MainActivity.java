@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
 
         this.hasGpsSignal = checkGpsPermission();
 
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
     }
 
     public void updateUserSettings(String localeCode, String Language) {
@@ -210,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
         this.directionsTextView.setVisibility(View.GONE);
         this.settingsTextView.setVisibility(View.VISIBLE);
 
-        if(this.routeOverviewFragment != null){
+        if(this.mapScreenFragment != null){
             this.mapScreenFragment.StopChecking();
         }
 
@@ -224,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         this.directionsTextView.setVisibility(View.GONE);
         this.settingsTextView.setVisibility(View.GONE);
 
-        if(this.routeOverviewFragment != null){
+        if(this.mapScreenFragment != null){
             this.mapScreenFragment.StopChecking();
         }
 
