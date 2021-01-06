@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,6 +93,9 @@ public class MapScreenFragment extends Fragment {
 
     private MainActivity mainActivity;
 
+    private Vibrator vibrator;
+
+
 
     Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
         @Override
@@ -104,6 +110,8 @@ public class MapScreenFragment extends Fragment {
         this.context = context;
         this.dialogBuilder = new AlertDialog.Builder(context);
         this.mainActivity = mainActivity;
+        this.vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
     }
 
 
@@ -402,6 +410,12 @@ public class MapScreenFragment extends Fragment {
 
     public void createPopUp(Location location, Marker marker){
         this.mainActivity.runOnUiThread(()-> {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                vibrator.vibrate(500);
+            }
             CreateInfoPopup(location,marker);
         });
     }
