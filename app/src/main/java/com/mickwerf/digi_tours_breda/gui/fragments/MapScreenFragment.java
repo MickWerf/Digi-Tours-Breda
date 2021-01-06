@@ -414,27 +414,39 @@ public class MapScreenFragment extends Fragment {
         this.skipButton = (Button) popup.findViewById(R.id.skipLocationButton);
 
         this.skipButton.setOnClickListener(new View.OnClickListener() {
+            private boolean routecomplete;
             @Override
             public void onClick(View view) {
                 mainViewModel.visitLocation(location);
-                boolean routecomplete = mainViewModel.checkRouteCompletion();
-                marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
-                dialog.cancel();
-                if (routecomplete){
-                    Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
-                    Runnable runnable = () -> {
-                        mainViewModel.stopCurrentRoute();
-                    };
-                    Thread t = new Thread(runnable);
-                    t.start();
-                    try {
-                        t.join();
-                        MainActivity activity = (MainActivity) context;
-                        activity.toHomeView();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                Runnable runnable = () -> {
+                    routecomplete = mainViewModel.checkRouteCompletion();
+
+                };
+                Thread t = new Thread(runnable);
+                t.start();
+                try {
+                    t.join();
+                    marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+                    dialog.cancel();
+                    if (routecomplete){
+                        Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
+                        Runnable runnable2 = () -> {
+                            mainViewModel.stopCurrentRoute();
+                        };
+                        Thread two = new Thread(runnable2);
+                        two.start();
+                        try {
+                            two.join();
+                            MainActivity activity = (MainActivity) context;
+                            activity.toHomeView();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+
             }
         });
 
