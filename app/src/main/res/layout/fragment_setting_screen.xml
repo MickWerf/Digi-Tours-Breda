@@ -140,18 +140,26 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/noGpsText" />
 
-            <TextView
+
+            <ScrollView
                 android:id="@+id/HowToUseTV"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu."
-                android:textColor="#000000"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView6" >
+
+            <TextView
+                android:id="@+id/HowToUseTV1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/HowToUseText"
+                android:textColor="#000000"/>
+
+            </ScrollView>
 
             <TextView
                 android:id="@+id/noGpsTV"
@@ -159,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
-                android:text="Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu."
+                android:text="@string/CaseOfNoGpsText"
                 android:textColor="#000000"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
