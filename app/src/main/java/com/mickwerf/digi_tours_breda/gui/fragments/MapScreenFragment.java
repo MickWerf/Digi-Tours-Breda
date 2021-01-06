@@ -137,6 +137,10 @@ public class MapScreenFragment extends Fragment {
         super.onStart();
         this.mapView.onResume();
         this.locationOverlay.onResume();
+        
+        this.mapController.zoomTo(ZOOM_LEVEL);
+        this.mapController.setCenter(locationOverlay.getMyLocation());
+        this.mapController.animateTo(locationOverlay.getMyLocation());
     }
 
     @Override
