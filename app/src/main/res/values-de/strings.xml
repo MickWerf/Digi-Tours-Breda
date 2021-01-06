@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Digi-Tours-Breda</string>
+    <string name="Routes">Routen</string>
+    <string name="Settings">Einstellungen</string>
+    <string name="Directions">Richtungen</string>
+    <string name="Language">Sprache:</string>
+    <string name="HowToUse">Wie benutzt man:</string>
+    <string name="InCaseOfNoGPS">falls kein GPS vorhanden ist:</string>
+    <string name="NextUp">" Nächster:"</string>
+    <string name="hello_blank_fragment">leer</string>
+    <string name="route_fragment_title1">" Guten Morgen!"</string>
+    <string name="route_fragment_title2">Guten Nachmittag!</string>
+    <string name="route_fragment_title3">Guten Abend!</string>
+    <string name="route_fragment_title4">Gute Nacht!</string>
+    <string name="splash_screen_title">DigiTours Breda Auflage</string>
+    <string name="no_gps_title">" Kein GPS-Signal"</string>
+    <string name="no_gps_text">Wir können Ihre aktuelle Position derzeit nicht finden.</string>
+    <string name="channel_name">Navigation</string>
+    <string name="changedLanguage">Sie haben die Sprache in Deutsch geändert</string>
+    <string name="NotifyDeleteProgress">" Fortschritt von dieser Route entfernt:"</string>
+    <string name="ContinueLater">" . Sie können es später fortsetzen"</string>
+    <string name="NotifyUncompleteRoute">" Sie haben diese Route nicht abgeschlossen:"</string>
+    <string name="NotifyIllegalStopRoute">" Sie können eine nicht gestartete Route nicht stoppen."</string>
+    <string name="NotifyCompleteRoute">" Sie haben diese Route abgeschlossen:"</string>
+    <string name="NotStartableRoute">" Route konnte nicht gestartet werden."</string>
+    <string name="HowToUseText" translatable="false">Eine Route starten:\n
+        Um eine Route zu starten, gehen Sie zum linken Bildschirm. Klicken Sie dann auf die Wiedergabetaste für diese Route. Dann öffnet sich die Karte und Sie können die Route beginnen.
+        Wenn eine Route bereits aktiv ist, müssen Sie sie zuerst anhalten, bevor Sie eine andere Route starten können. Am unteren Rand des mittleren Bildschirms können Sie auch sehen, wie weit Sie von den bevorstehenden Orten auf der Route entfernt sind.\n\n
+
+        Stoppen einer Route aktive Route:\n
+        Um eine Route zu stoppen, gehen Sie zum linken Bildschirm. Klicken Sie dann auf die Stopp-Schaltfläche der aktiven Route. Ihr Fortschritt wird gespeichert, wenn Sie eine Route anhalten.\n\n
+
+        Fortschritt löschen:\n
+        Um den Fortschritt einer Route zu löschen, gehen Sie zum linken Bildschirm. Klicken Sie dann auf den Papierkorb der Route, für die Sie den Fortschritt löschen möchten.\n\n
+
+        Nicht besuchte Orte:\n
+        Ein nicht besuchter Ort auf einer Route wird durch einen grauen Stift angezeigt. Wenn Sie auf diesen Pin klicken, können Sie den Speicherort überspringen. Wenn Sie den Ort überspringen
+        Der Ort ist als besucht markiert und dieser Stift ist blau gefärbt.\n\n
+
+        Besuchte Orte:\n
+        Ein besuchter Ort auf einer Route wird durch einen blauen Stift angezeigt. Wenn Sie auf diesen Pin klicken, können Sie Informationen über den betreffenden Ort lesen.</string>
+    <string name="CaseOfNoGpsText" translatable="false">Wenn kein GPS verfügbar ist, wird eine Benachrichtigung ausgegeben und die App kann nicht verwendet werden.</string>
+    <string name="progressDeletedBecauseComplete">" Der Fortschritt dieser Route wurde gelöscht, sodass Sie sie erneut gehen können."</string>
+    <string name="RouteCompleted">Herzlichen Glückwunsch, Sie haben die Route abgeschlossen!</string>
+</resources>

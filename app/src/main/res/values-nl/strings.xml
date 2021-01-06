@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Digi-Tours-Breda</string>
+    <string name="NextUp">Volgende:</string>
+    <string name="hello_blank_fragment">Hallo blank fragment</string>
+    <string name="route_fragment_title1">Goede Morgen!</string>
+    <string name="route_fragment_title2">Goede Middag!</string>
+    <string name="route_fragment_title3">Goede Avond!</string>
+    <string name="route_fragment_title4">Goede Nacht!</string>
+    <string name="splash_screen_title">DigiTours Breda Editie</string>
+    <string name="no_gps_text">We kunnen uw huidige positie niet vinden</string>
+    <string name="no_gps_title">Geen GPS signaal</string>
+    <string name="InCaseOfNoGPS">In geval van geen GPS:</string>
+    <string name="HowToUse">Hoe te gebruik:</string>
+    <string name="Language">"Taal: "</string>
+    <string name="Directions">Richtingen</string>
+    <string name="Settings">Opties</string>
+    <string name="Routes">Routes</string>
+    <string name="channel_name" translatable="false">Navigatie</string>
+    <string name="changedLanguage">Je hebt de taal veranderd naar: Nederlands</string>
+    <string name="NotStartableRoute">Kon de route niet starten.</string>
+    <string name="NotifyCompleteRoute">Je hebt deze route af gemaakt:</string>
+    <string name="NotifyIllegalStopRoute">Je kan geen route stoppen die niet gestart is.</string>
+    <string name="NotifyUncompleteRoute">Je hebt deze route niet af gemaakt:</string>
+    <string name="ContinueLater">. Je kan deze later hervatten</string>
+    <string name="NotifyDeleteProgress">"Progressie van deze route verwijderd: "</string>
+    <string name="RouteCompleted">Gefeliciteerd, je hebt de route voltooid!</string>
+    <string name="progressDeletedBecauseComplete">De voortgang van deze route is gewist, dus je kunt hem weer lopen.</string>
+    <string name="HowToUseText" translatable="false">Starten van een route:\n
+        Om een route te starten ga je naar het linker scherm. Vervolgens klik je op de play knop van die route. Daarna opent de map en kan je de route gaan lopen.
+        Als er al een route actief is moet je deze eerst stoppen om een andere route te kunnen starten. Onderaan het middelste scherm is ook te zien hoe ver je verwijderd bent van de komende locaties op de route.\n\n
+
+        Stoppen van een route actieve route:\n
+        Om een route te stoppen ga je naar het linker scherm. Vervolgens klik je op de stop knop van de actieve route. Je voortgang blijft opgeslagen als je een route stopt.\n\n
+
+        Verwijderen van de voortgang:\n
+        Om de voortgang van een route te verwijderen ga je naar het linker scherm. Vervolgens klik je op de prullenbak knop van de route waarbij je de voortgang wilt verwijderen.\n\n
+
+        Onbezochte locaties:\n
+        Een onbezochte locatie in een route wordt aangegeven door een grijze pin. Als op deze pin geklikt wordt kan je ervoor kiezen de locatie te skippen. Als je de locatie skipt
+        wordt de locatie als bezocht gemarkeerd en krijgt deze pin een blauwe kleur.\n\n
+
+        Bezochte locaties:\n
+        Een bezochte locatie in een route wordt aangegeven door een blauwe pin. Als op deze pin geklikt wordt kan je informatie lezen over de desbetreffende locatie.</string>
+    <string name="CaseOfNoGpsText" translatable="false">Als er geen gps beschikbaar is wordt er hierover een melding gegeven en is de app niet bruikbaar.</string>tring>
+</resources>

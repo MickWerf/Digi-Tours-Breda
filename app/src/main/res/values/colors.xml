@@ -7,4 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="rich_black">#131B23</color>
+    <color name="indigo_dye">#1B4864</color>
+    <color name="star_blue">#2274A5</color>
+    <color name="sky_blue">#86B3CE</color>
+    <color name="alice_blue">#E9F1F7</color>
+    <color name="platinum">#DDE3E0</color>
+    <color name="alabaster">#E8E8DF</color>
+
 </resources>

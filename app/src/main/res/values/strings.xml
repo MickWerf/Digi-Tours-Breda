@@ -1,5 +1,72 @@
+
 <resources>
     <string name="app_name">Digi-Tours-Breda</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="Routes">Routes</string>
+    <string name="Settings">Settings</string>
+    <string name="Directions">Directions</string>
+    <string name="Language">Language:</string>
+    <string name="HowToUse">How to use:</string>
+    <string name="InCaseOfNoGPS">In case of no gps:</string>
+    <string name="NextUp">Next up:</string>
+
+
+    <string name="HowToUseText" >Starting a route:\n
+        To start a route, go to the left screen. Then click on the play button for that route. Then the map opens and you can start walking the route.
+        If a route is already active, you must stop it first to be able to start another route. At the bottom of the middle screen you can also see how far you are from the upcoming locations on the route.\n\n
+
+        Stopping a route active route:\n
+        To stop a route, go to the left screen. Then click on the stop button of the active route. Your progress is saved when you stop a route.\n\n
+
+        Delete progress:\n
+        To delete the progress of a route, go to the left screen. Then click on the trash can button of the route for which you want to delete the progress.\n\n
+
+        Unvisited locations:\n
+        An unvisited location in a route is indicated by a gray pin. If you click on this pin you can choose to skip the location. If you skip the location
+        the location is marked as visited and this pin is colored blue.\n\n
+
+        Locations visited:\n
+        A visited location in a route is indicated by a blue pin. If you click on this pin you can read information about the location in question.</string>
+    <string name="CaseOfNoGpsText" >If no GPS is available, a notification is given and the app cannot be used.</string>
+
+
+
+
+
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    //Strings for the route overview fragment
+    <string name="route_fragment_title1">Good Morning!</string>
+    <string name="route_fragment_title2">Good Afternoon!</string>
+    <string name="route_fragment_title3">Good Evening!</string>
+    <string name="route_fragment_title4">Good Night!</string>
+
+    //Strings for the splash screen activity
+    <string name="splash_screen_title">DigiTours Breda Edition</string>
+
+    //Strings for the no GPS signal pop up
+    <string name="no_gps_title">No GPS signal</string>
+    <string name="no_gps_text">We can not locate your current position at the moment.</string>
+
+    //Strings for the skip location pop up
+    <string name="skip_location_title" translatable="false">Titel</string>
+    <string name="skip_location_button" translatable="false">Skip</string>
+
+    //Strings for the ok location pop up
+    <string name="ok_location_popup_title" translatable="false">Titel</string>
+    <string name="ok_location_popup_text" translatable="false">Mooie gebouw</string>
+    <string name="ok_location_popup_button" translatable="false">ok</string>
+    <string name="channel_name">Navigation</string>
+    <string name="changedLanguage" >You changed the language to: English</string>
+
+
+    <string name="NotStartableRoute">Could not start route</string>
+    <string name="NotifyCompleteRoute">"You have complete route: "</string>
+    <string name="NotifyIllegalStopRoute">You cannot stop a route that hasnt been started.</string>
+    <string name="NotifyUncompleteRoute">"You haven't finished route: "</string>
+    <string name="ContinueLater">. You can finish it later.</string>
+    <string name="NotifyDeleteProgress">"Deleted progress of route: "</string>
+    <string name="RouteCompleted">Congratulations you have completed the route!</string>
+    <string name="progressDeletedBecauseComplete">Progress of this route have been deleted, so you can walk it again.</string>
 </resources>
