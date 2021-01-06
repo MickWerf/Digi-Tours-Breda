@@ -226,7 +226,13 @@ public class MapScreenFragment extends Fragment {
 
             RouteWithSteps route = mainViewModel.getActiveRoute2();
             if (route != null) {
-                List<Location> locations = mainViewModel.getLocations(route);
+                List<Location> buffer = mainViewModel.getLocations(route);
+                List<Location> locations = new ArrayList<>();
+                for (Location location : buffer) {
+                    if (location.isSightSeeingLocation()) {
+                        locations.add(location);
+                    }
+                }
 
                 List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
 
