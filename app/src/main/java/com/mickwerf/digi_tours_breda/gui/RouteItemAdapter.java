@@ -103,13 +103,17 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
         Button startbutton = holder.itemView.findViewById(R.id.startRouteIcon);
         startbutton.setOnClickListener(new View.OnClickListener() {
             private Boolean canChangeActiveRoute;
-
+            private boolean routeAlreadyCcompleted;
             @Override
             public void onClick(View v) {
                 MainActivity activity = (MainActivity) context;
                 Runnable runnable = () -> {
 
                     this.canChangeActiveRoute = activity.getMainViewModel().setCurrentRoute(routes.get(position).getRouteName());
+                    routeAlreadyCcompleted = activity.getMainViewModel().checkRouteCompletion();
+                    if (routeAlreadyCcompleted){
+                        activity.getMainViewModel().deleteRouteProgress(activity.getMainViewModel().getActiveRoute2().getRoute());
+                    }
                 };
                 Thread t = new Thread(runnable);
                 t.start();
@@ -118,6 +122,9 @@ public class RouteItemAdapter extends RecyclerView.Adapter<RouteItemAdapter.Rout
                     do {
                         if (canChangeActiveRoute) {
                             activity.toDirectionsView();
+                            if (routeAlreadyCcompleted){
+                                Toast.makeText(context, R.string.progressDeletedBecauseComplete, Toast.LENGTH_SHORT).show();
+                            }
                         } else if (!canChangeActiveRoute) {
                             Toast.makeText(context, R.string.NotStartableRoute, Toast.LENGTH_SHORT).show();
                         }

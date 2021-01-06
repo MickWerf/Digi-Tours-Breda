@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
@@ -28,6 +29,7 @@ import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
 import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 import com.mickwerf.digi_tours_breda.gui.NextLocationAdapter;
 import com.mickwerf.digi_tours_breda.gui.NextLocationItem;
+import com.mickwerf.digi_tours_breda.gui.activities.MainActivity;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
@@ -345,8 +347,26 @@ public class MapScreenFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mainViewModel.visitLocation(location);
-                marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+                boolean routecomplete = mainViewModel.checkRouteCompletion();
+                        marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
                 dialog.cancel();
+                if (routecomplete){
+                    Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
+                    Runnable runnable = () -> {
+                        mainViewModel.stopCurrentRoute();
+                    };
+                    Thread t = new Thread(runnable);
+                    t.start();
+                    try {
+                        t.join();
+                        MainActivity activity = (MainActivity) context;
+                        activity.toHomeView();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
             }
         });
 
