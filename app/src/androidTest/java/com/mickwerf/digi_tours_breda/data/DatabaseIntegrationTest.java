@@ -8,7 +8,6 @@ import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
 import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
 import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
-import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 
 import org.junit.Assert;
 import org.junit.Before;

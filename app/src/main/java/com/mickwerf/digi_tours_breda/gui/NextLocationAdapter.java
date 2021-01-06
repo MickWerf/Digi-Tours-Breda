@@ -10,16 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class NextLocationAdapter extends RecyclerView.Adapter<NextLocationAdapter.NextLocationViewHolder> {
 
     private final LinkedList<NextLocationItem> mLocationList;
     private final LayoutInflater mInflater;
+    private ArrayList<Integer> Distancelist;
+
 
     class NextLocationViewHolder extends RecyclerView.ViewHolder {
         public final TextView LocationNameItemView;
         public final TextView distanceItemView;
+
 
         private final Context context;
         final NextLocationAdapter mAdapter;
@@ -42,9 +46,10 @@ public class NextLocationAdapter extends RecyclerView.Adapter<NextLocationAdapte
     }
 
 
-    public NextLocationAdapter(Context context, LinkedList<NextLocationItem> projectList) {
+    public NextLocationAdapter(Context context, LinkedList<NextLocationItem> projectList, ArrayList<Integer> DistanceList) {
         mInflater = LayoutInflater.from(context);
         this.mLocationList = projectList;
+        this.Distancelist = DistanceList;
     }
 
 
@@ -90,7 +95,7 @@ public class NextLocationAdapter extends RecyclerView.Adapter<NextLocationAdapte
         NextLocationItem current = mLocationList.get(position);
         String mCurrent = current.getLocationName();
         holder.LocationNameItemView.setText(mCurrent);
-        String pCurrent = "??? distance"; //TODO: retrieve distance to location
+        String pCurrent = this.Distancelist.get(position)+ "m distance"; //TODO: retrieve distance to location
         holder.distanceItemView.setText(pCurrent);
     }
 

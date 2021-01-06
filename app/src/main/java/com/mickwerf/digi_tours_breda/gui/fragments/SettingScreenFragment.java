@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mickwerf.digi_tours_breda.R;
@@ -22,7 +23,7 @@ public class SettingScreenFragment extends Fragment {
     private ImageView howToUseIV;
     private ImageView noGpsIV;
 
-    private TextView howToUseTV;
+    private ScrollView howToUseTV;
     private TextView noGpsTV;
 
     private TextView howToUseText;

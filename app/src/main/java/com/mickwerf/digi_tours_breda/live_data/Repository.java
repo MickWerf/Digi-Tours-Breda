@@ -1,7 +1,6 @@
 package com.mickwerf.digi_tours_breda.live_data;
 
 import android.content.Context;
-import android.location.LocationManager;
 
 import com.mickwerf.digi_tours_breda.data.Database;
 import com.mickwerf.digi_tours_breda.data.entities.DataElement;
@@ -9,11 +8,9 @@ import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
+import com.mickwerf.digi_tours_breda.data.entities.RouteStep;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
-import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
-import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
-import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
-import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
+import com.mickwerf.digi_tours_breda.data.relations.RouteWithSteps;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +23,12 @@ class Repository {
     private static volatile Repository INSTANCE;
 
     private List<Route> routes;
-    private RouteWithLocations activeRoute;
+    private RouteWithSteps activeRoute;
     private UserSettings userSettings;
     private List<GpsCoordinate> coordinateList = new ArrayList<>();
     private DataElement dataElement;
     private String imagePath;
+    private List<Location> locations;
 
     public static Repository getInstance() {
         if (INSTANCE == null) {
@@ -57,10 +55,10 @@ class Repository {
         return routes;
     }
 
-    public RouteWithLocations getActiveRoute(Context context) {
+    public RouteWithSteps getActiveRoute(Context context) {
 
         Runnable runnable = () -> {
-            activeRoute = Database.getInstance(context).userDataAccess().getRouteWithLocations(getUserSettings(context).getRoute());
+            activeRoute = Database.getInstance(context).userDataAccess().getRouteWithSteps(getUserSettings(context).getRoute());
         };
         Thread t = new Thread(runnable);
         t.start();
@@ -98,6 +96,25 @@ class Repository {
         return Database.getInstance(context).userDataAccess().getLanguages();
     }
 
+    public List<Location> getLocations(Context context, RouteWithSteps routeWithSteps) {
+        this.locations = new ArrayList<>();
+        Runnable runnable = () -> {
+            for (RouteStep step : routeWithSteps.getRouteSteps()) {
+                System.out.println(step.getLocationName());
+                this.locations.add(Database.getInstance(context).userDataAccess().getLocation(step.getLocationName()));
+            }
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return this.locations;
+    }
+
     public DataElement getLocationElements(Context context, Location location) {
 
 
@@ -133,6 +150,7 @@ class Repository {
     public String getLocationImagePath(Context context, Location location) {
 
         Runnable runnable = () -> {
+            System.out.println(location.getLocationName());
             this.imagePath = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(3).getPath();
         };
         Thread t = new Thread(runnable);
@@ -219,8 +237,9 @@ class Repository {
     }
 
     public void deleteRouteProgress(Context applicationContext, Route route) {
-        RouteWithLocations resetRoute = Database.getInstance(applicationContext).userDataAccess().getRouteWithLocations(route.getRouteName());
-        for (Location location: resetRoute.getLocations()) {
+        RouteWithSteps resetRoute = Database.getInstance(applicationContext).userDataAccess().getRouteWithSteps(route.getRouteName());
+        for (RouteStep step : resetRoute.getRouteSteps()) {
+            Location location = Database.getInstance(applicationContext).userDataAccess().getLocation(step.getLocationName());
             location.setVisited(false);
             Database.getInstance(applicationContext).userDataAccess().updateLocation(location);
         }

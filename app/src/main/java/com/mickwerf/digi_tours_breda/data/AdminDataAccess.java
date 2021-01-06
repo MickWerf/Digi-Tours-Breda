@@ -3,15 +3,13 @@ package com.mickwerf.digi_tours_breda.data;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
-import androidx.room.Query;
-import androidx.room.Update;
 
 import com.mickwerf.digi_tours_breda.data.entities.DataElement;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
-import com.mickwerf.digi_tours_breda.data.entities.RouteLocationCrossReference;
+import com.mickwerf.digi_tours_breda.data.entities.RouteStep;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
 
 /**
@@ -42,7 +40,7 @@ public interface AdminDataAccess extends UserDataAccess {
     void insertUserSettings(UserSettings... userSettings);
 
     @Insert
-    void insertRouteLocationCross(RouteLocationCrossReference... crossReferences);
+    void insertRouteSteps(RouteStep... crossReferences);
     //endregion
 
     //region Delete

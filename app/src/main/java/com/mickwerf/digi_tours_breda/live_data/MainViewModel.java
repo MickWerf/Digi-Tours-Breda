@@ -12,10 +12,9 @@ import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
+import com.mickwerf.digi_tours_breda.data.entities.RouteStep;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
-import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
-import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
-import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
+import com.mickwerf.digi_tours_breda.data.relations.RouteWithSteps;
 import com.yariksoffice.lingver.Lingver;
 
 import java.util.List;
@@ -31,7 +30,7 @@ public class MainViewModel extends AndroidViewModel {
 
     private final MutableLiveData<UserSettings> userSettings = new MutableLiveData<>();
     private final MutableLiveData<GpsCoordinate> gpsCoordinate = new MutableLiveData<>();
-    private final MutableLiveData<RouteWithLocations> activeRoute = new MutableLiveData<>();
+    private final MutableLiveData<RouteWithSteps> activeRoute = new MutableLiveData<>();
     private final MutableLiveData<List<Route>> routes = new MutableLiveData<>();
 
     public MainViewModel(@NonNull Application application) {
@@ -75,12 +74,16 @@ public class MainViewModel extends AndroidViewModel {
         return Repository.getInstance().getLanguages(getApplication().getApplicationContext());
     }
 
-    public MutableLiveData<RouteWithLocations> getActiveRoute() {
+    public List<Location> getLocations(RouteWithSteps routeWithSteps) {
+        return Repository.getInstance().getLocations(getApplication().getApplicationContext(), routeWithSteps);
+    }
+
+    public MutableLiveData<RouteWithSteps> getActiveRoute() {
         activeRoute.postValue(Repository.getInstance().getActiveRoute(getApplication().getApplicationContext()));
         return activeRoute;
     }
 
-    public RouteWithLocations getActiveRoute2() {
+    public RouteWithSteps getActiveRoute2() {
         return Repository.getInstance().getActiveRoute(getApplication().getApplicationContext());
     }
 
@@ -122,9 +125,10 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public boolean checkRouteCompletion() {
-        RouteWithLocations searched = Repository.getInstance().getActiveRoute(getApplication().getApplicationContext());
-        for (Location location : searched.getLocations()) {
-            if (!location.isVisited()) {
+        RouteWithSteps searched = Repository.getInstance().getActiveRoute(getApplication().getApplicationContext());
+        for (RouteStep step : searched.getRouteSteps()) {
+            Location location = Database.getInstance(getApplication().getApplicationContext()).userDataAccess().getLocation(step.getLocationName());
+            if (!location.isVisited()&&location.isSightSeeingLocation()) {
                 return false;
             }
         }
@@ -132,7 +136,6 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public Boolean stopCurrentRoute() {
-        System.out.println("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
         boolean result;
         if (checkRouteCompletion()) {

@@ -9,9 +9,24 @@
     <string name="InCaseOfNoGPS">In case of no gps:</string>
     <string name="NextUp">Next up:</string>
 
-    <!-- TODO: fill in these 2 -->
-    <string name="CaseOfNoGpsText" translatable="false">AAA</string>
-    <string name="HowToUseText" translatable="false">AAA</string>
+
+    <string name="HowToUseText" translatable="false">Starting a route:\n
+        To start a route, go to the left screen. Then click on the play button for that route. Then the map opens and you can start walking the route.
+        If a route is already active, you must stop it first to be able to start another route. At the bottom of the middle screen you can also see how far you are from the upcoming locations on the route.\n\n
+
+        Stopping a route active route:\n
+        To stop a route, go to the left screen. Then click on the stop button of the active route. Your progress is saved when you stop a route.\n\n
+
+        Delete progress:\n
+        To delete the progress of a route, go to the left screen. Then click on the trash can button of the route for which you want to delete the progress.\n\n
+
+        Unvisited locations:\n
+        An unvisited location in a route is indicated by a gray pin. If you click on this pin you can choose to skip the location. If you skip the location
+        the location is marked as visited and this pin is colored blue.\n\n
+
+        Locations visited:\n
+        A visited location in a route is indicated by a blue pin. If you click on this pin you can read information about the location in question.</string>
+    <string name="CaseOfNoGpsText" translatable="false">If no GPS is available, a notification is given and the app cannot be used.</string>
 
 
 
@@ -53,4 +68,6 @@
     <string name="NotifyUncompleteRoute">"You haven't finished route: "</string>
     <string name="ContinueLater">. You can finish it later.</string>
     <string name="NotifyDeleteProgress">"Deleted progress of route: "</string>
+    <string name="RouteCompleted">Congratulations you have completed the route!</string>
+    <string name="progressDeletedBecauseComplete">Progress of this route have been deleted, so you can walk it again.</string>
 </resources>

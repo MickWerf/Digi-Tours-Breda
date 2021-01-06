@@ -64,24 +64,6 @@ public class RouteOverviewFragment extends Fragment {
         this.mainViewModel.getRoutes().observe(this, this.routesUpdateObserver);
         this.routes = this.mainViewModel.getRoutes2();
 
-//        Runnable runnable = () -> {
-////            this.routes = this.mainViewModel.getRoutes().getValue();
-//            this.mainViewModel.getRoutes().observe(this, this.routesUpdateObserver);
-//
-//        };
-//        Thread t = new Thread(runnable);
-//        t.start();
-//        try {
-//            t.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if(this.routes == null){
-//            this.routes = new ArrayList<>();
-//        }
-
-
         recyclerView = view.findViewById(R.id.routeRecyclerView);
         adapter = new RouteItemAdapter(routes,this.context,this.mainViewModel);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -100,9 +82,9 @@ public class RouteOverviewFragment extends Fragment {
 
         if(timeOfDay >= 0 && timeOfDay < 12){
             return this.getString(R.string.route_fragment_title1);
-        }else if(timeOfDay >= 12 && timeOfDay < 16){
+        }else if(timeOfDay >= 12 && timeOfDay < 18){
             return this.getString(R.string.route_fragment_title2);
-        }else if(timeOfDay >= 16 && timeOfDay < 21){
+        }else if(timeOfDay >= 18 && timeOfDay < 21){
             return this.getString(R.string.route_fragment_title3);
         }else if(timeOfDay >= 21 && timeOfDay < 24){
             return this.getString(R.string.route_fragment_title4);

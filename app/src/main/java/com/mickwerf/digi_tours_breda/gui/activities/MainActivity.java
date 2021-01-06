@@ -98,19 +98,17 @@ public class MainActivity extends AppCompatActivity {
 
         this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel, this);
 
-        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel, this);
+        this.mapScreenFragment = new MapScreenFragment(this.mainViewModel, this,this);
 
+        this.gpsLossPopup = new GPSLossPopup();
+
+        this.hasGpsSignal = checkGpsPermission();
         if (presetFragment == null) {
             fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
         } else if (presetFragment.equals("settings")) {
             toSettingsView();
             presetFragment = null;
         }
-        this.gpsLossPopup = new GPSLossPopup();
-
-        this.hasGpsSignal = checkGpsPermission();
-
-        fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
     }
 
     public void updateUserSettings(String localeCode, String Language) {
@@ -205,6 +203,11 @@ public class MainActivity extends AppCompatActivity {
         this.directionsTextView.setVisibility(View.GONE);
         this.settingsTextView.setVisibility(View.VISIBLE);
 
+        if(this.mapScreenFragment != null){
+            this.mapScreenFragment.StopChecking();
+        }
+
+
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.settingScreenFragment).commit();
     }
 
@@ -213,6 +216,10 @@ public class MainActivity extends AppCompatActivity {
         this.homeTextView.setVisibility(View.VISIBLE);
         this.directionsTextView.setVisibility(View.GONE);
         this.settingsTextView.setVisibility(View.GONE);
+
+        if(this.mapScreenFragment != null){
+            this.mapScreenFragment.StopChecking();
+        }
 
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.routeOverviewFragment).commit();
     }
@@ -250,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
+    
     public MapScreenFragment getMapScreenFragment() {
         return this.mapScreenFragment;
     }
