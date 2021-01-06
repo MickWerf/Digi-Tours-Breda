@@ -24,4 +24,6 @@
     <string name="NotifyIllegalStopRoute">" Sie können eine nicht gestartete Route nicht stoppen."</string>
     <string name="NotifyCompleteRoute">" Sie haben diese Route abgeschlossen:"</string>
     <string name="NotStartableRoute">" Route konnte nicht gestartet werden."</string>
+    <string name="progressDeletedBecauseComplete">" Der Fortschritt dieser Route wurde gelöscht, sodass Sie sie erneut gehen können."</string>
+    <string name="RouteCompleted">Herzlichen Glückwunsch, Sie haben die Route abgeschlossen!</string>
 </resources>

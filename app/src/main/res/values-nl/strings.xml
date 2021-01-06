@@ -24,4 +24,6 @@
     <string name="NotifyUncompleteRoute">Je hebt deze route niet af gemaakt:</string>
     <string name="ContinueLater">. Je kan deze later hervatten</string>
     <string name="NotifyDeleteProgress">"Progressie van deze route verwijderd: "</string>
+    <string name="RouteCompleted">Gefeliciteerd, je hebt de route voltooid!</string>
+    <string name="progressDeletedBecauseComplete">De voortgang van deze route is gewist, dus je kunt hem weer lopen.</string>
 </resources>
