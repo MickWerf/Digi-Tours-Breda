@@ -140,19 +140,6 @@ public class MapScreenFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_map_screen, container, false);
 
-//        this.mapView = getActivity().findViewById(R.id.map_view);
-//        this.mapView.getZoomController().setVisibility(CustomZoomButtonsController.Visibility.NEVER);
-//        this.mapView.setMultiTouchControls(true);
-//        this.mapView.setTileSource(TileSourceFactory.MAPNIK);
-//
-//        this.locationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(getActivity().getApplicationContext()), this.mapView);
-//        this.locationOverlay.enableMyLocation();
-//        this.locationOverlay.enableFollowLocation();
-//        this.mapView.getOverlays().add(this.locationOverlay);
-//        this.mapController = new MapController(this.mapView);
-//        this.mapController.zoomTo(19);
-//        this.mapController.setCenter(locationOverlay.getMyLocation());
-//        this.mapController.animateTo(locationOverlay.getMyLocation());
 
         return view;
     }
