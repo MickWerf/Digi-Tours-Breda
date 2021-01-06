@@ -59,9 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private boolean hasGpsSignal;
     private String presetFragment = null;
 
-    private Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -267,11 +264,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-    public static void Vibrate(){
-
-    }
-
+    
     public MapScreenFragment getMapScreenFragment() {
         return this.mapScreenFragment;
     }
