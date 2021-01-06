@@ -172,7 +172,7 @@ public class MapScreenFragment extends Fragment {
         this.locationOverlay.enableFollowLocation();
         this.mapView.getOverlays().add(this.locationOverlay);
         this.mapController = new MapController(this.mapView);
-        this.mapController.zoomTo(5);
+        this.mapController.zoomTo(20);
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
 //        this.mapController.setCenter(new GeoPoint(4.780642,51.588949));
