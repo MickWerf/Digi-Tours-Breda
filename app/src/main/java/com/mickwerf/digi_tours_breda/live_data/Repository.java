@@ -4,14 +4,18 @@ import android.content.Context;
 import android.location.LocationManager;
 
 import com.mickwerf.digi_tours_breda.data.Database;
+import com.mickwerf.digi_tours_breda.data.entities.DataElement;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
+import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
 import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
 import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +28,9 @@ class Repository {
     private List<Route> routes;
     private RouteWithLocations activeRoute;
     private UserSettings userSettings;
+    private List<GpsCoordinate> coordinateList = new ArrayList<>();
+    private DataElement dataElement;
+    private String imagePath;
 
     public static Repository getInstance() {
         if (INSTANCE == null) {
@@ -91,10 +98,56 @@ class Repository {
         return Database.getInstance(context).userDataAccess().getLanguages();
     }
 
-    public List<LocationElements> getLocationElements(Context context, Location location, UserSettings settings) {
+    public DataElement getLocationElements(Context context, Location location) {
+
+
+        Runnable runnable = () -> {
+
+            switch (getUserSettings(context).getLanguage()){
+
+                case "Nederlands":
+                    this.dataElement = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(0);
+                    break;
+                case "Engels":
+                    this.dataElement = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(1);
+                    break;
+                case "Duits":
+                    this.dataElement = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(2);
+                    break;
+            }
+
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+       return this.dataElement;
+
         //todo query for automatically getting correct language may need to be adjusted.
-        return Database.getInstance(context).userDataAccess().getLocationElementsFromLanguage(location.getLocationName(), settings.getLanguage());
     }
+
+    public String getLocationImagePath(Context context, Location location) {
+
+        Runnable runnable = () -> {
+            this.imagePath = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(3).getPath();
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //todo query for automatically getting correct language may need to be adjusted.
+        return imagePath;
+    }
+
+
 
     public void setLanguage(Context context, Language language) {
         UserSettings settings = Database.getInstance(context).userDataAccess().getUserSettings();
@@ -103,13 +156,75 @@ class Repository {
     }
 
     public void setActiveRoute(Context context, Route route) {
-        UserSettings settings = getUserSettings(context);
-        settings.setRoute(route.getRouteName());
-        Database.getInstance(context).userDataAccess().updateCurrentUserSettings(settings);
+        Runnable runnable = () -> {
+            UserSettings settings = getUserSettings(context);
+            settings.setRoute(route.getRouteName());
+            Database.getInstance(context).userDataAccess().updateCurrentUserSettings(settings);
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void visitLocation(Context context, Location location) {
-        location.setVisited(true);
-        Database.getInstance(context).userDataAccess().updateLocation(location);
+        Runnable runnable = () -> {
+            location.setVisited(true);
+            Database.getInstance(context).userDataAccess().updateLocation(location);
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public List<GpsCoordinate> getLocationCoordinates(Context context, List<Location> locations) {
+
+        this.coordinateList.clear();
+        Runnable runnable = () -> {
+            for (Location location : locations){
+                this.coordinateList.add(Database.getInstance(context).userDataAccess().getGpsCoordinate(location.getLocationName()));
+            }
+        };
+        Thread t = new Thread(runnable);
+        t.start();
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return this.coordinateList;
+    }
+
+    public Route getRoute(Context context, String routeName) {
+        return Database.getInstance(context).userDataAccess().getRoute(routeName);
+    }
+
+    public void CompleteRoute(Context context, String completedRoute){
+        for (Route route:routes) {
+            if (route.getRouteName().equals(completedRoute)){
+                route.setComplete(true);
+                Database.getInstance(context).userDataAccess().updateRoute(route);
+            }
+        }
+    }
+
+    public void deleteRouteProgress(Context applicationContext, Route route) {
+        RouteWithLocations resetRoute = Database.getInstance(applicationContext).userDataAccess().getRouteWithLocations(route.getRouteName());
+        for (Location location: resetRoute.getLocations()) {
+            location.setVisited(false);
+            Database.getInstance(applicationContext).userDataAccess().updateLocation(location);
+        }
+        resetRoute.getRoute().setComplete(false);
+        Database.getInstance(applicationContext).userDataAccess().updateRoute(resetRoute.getRoute());
     }
 }

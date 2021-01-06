@@ -6,6 +6,7 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
+import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
@@ -32,6 +33,9 @@ public interface UserDataAccess {
     @Query("SELECT * FROM route WHERE routeName LIKE :routeName")
     RouteWithLocations getRouteWithLocations(String routeName);
 
+    @Query("SELECT * FROM route WHERE routeName Like :routeName")
+    Route getRoute(String routeName);
+
     @Update
     void updateRoute(Route... routes);
     //endregion
@@ -45,17 +49,16 @@ public interface UserDataAccess {
     LocationCoordinate getLocationCoordinate(String locationName);
 
     @Transaction
+    @Query("SELECT * FROM gps_coordinate WHERE location LIKE :locationName")
+    GpsCoordinate getGpsCoordinate(String locationName);
+
+    @Transaction
     @Query("SELECT * FROM location")
     List<LocationCoordinate> getLocationCoordinates();
 
     @Transaction
-    @Query("SELECT * " +
-            "FROM location, language, data_element " +
-            "WHERE data_element.location == location.locationName AND " +
-            "data_element.language == language.languageName AND " +
-            "locationName LIKE :locationName AND " +
-            "language.languageName LIKE :language")
-    List<LocationElements> getLocationElementsFromLanguage(String locationName, String language);
+    @Query("SELECT * FROM location WHERE locationName LIKE :locationName")
+    LocationElements getLocationElements(String locationName);
 
     @Update
     void updateLocation(Location... locations);

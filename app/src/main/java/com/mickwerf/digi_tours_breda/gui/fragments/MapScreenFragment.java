@@ -1,35 +1,43 @@
 package com.mickwerf.digi_tours_breda.gui.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.core.app.ActivityCompat;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.mickwerf.digi_tours_breda.R;
+import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
-import com.mickwerf.digi_tours_breda.data.entities.Route;
+import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
 import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 import com.mickwerf.digi_tours_breda.gui.NextLocationAdapter;
 import com.mickwerf.digi_tours_breda.gui.NextLocationItem;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedList;
 
 import org.osmdroid.config.Configuration;
+import org.osmdroid.library.BuildConfig;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
@@ -42,6 +50,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class MapScreenFragment extends Fragment {
@@ -60,6 +69,16 @@ public class MapScreenFragment extends Fragment {
     private MainViewModel mainViewModel;
     private RouteWithLocations activeRoute;
 
+    private Context context;
+
+    private ArrayList<Coordinate> coordinates;
+
+    private List<Location> locations;
+
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+
+
     Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
         @Override
         public void onChanged(RouteWithLocations newActiveRoute) {
@@ -68,8 +87,10 @@ public class MapScreenFragment extends Fragment {
     };
 
 
-    public MapScreenFragment(MainViewModel mainViewModel) {
+    public MapScreenFragment(MainViewModel mainViewModel, Context context) {
         this.mainViewModel = mainViewModel;
+        this.context = context;
+        this.dialogBuilder = new AlertDialog.Builder(context);
     }
 
 
@@ -78,7 +99,7 @@ public class MapScreenFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        Configuration.getInstance().load(getActivity().getApplication(), PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()));
+        //Configuration.getInstance().load(getActivity().getApplication(), PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()));
 
         requestPermissions(new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION,
@@ -151,12 +172,16 @@ public class MapScreenFragment extends Fragment {
         this.locationOverlay.enableFollowLocation();
         this.mapView.getOverlays().add(this.locationOverlay);
         this.mapController = new MapController(this.mapView);
-        this.mapController.zoomTo(19);
+        this.mapController.zoomTo(5);
         this.mapController.setCenter(locationOverlay.getMyLocation());
         this.mapController.animateTo(locationOverlay.getMyLocation());
+//        this.mapController.setCenter(new GeoPoint(4.780642,51.588949));
 
-        this.mainViewModel.getActiveRoute().observe(this,this.activeRouteObserver);
+        this.mainViewModel.getActiveRoute().observe(this, this.activeRouteObserver);
         this.activeRoute = this.mainViewModel.getActiveRoute2();
+
+        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
+
 
 //        Runnable runnable = () -> {
 //            this.activeRoute = this.mainViewModel.getActiveRoute().getValue();
@@ -171,21 +196,20 @@ public class MapScreenFragment extends Fragment {
 //        }
 
 
-
-        if(this.activeRoute != null) {
+        if (this.activeRoute != null) {
             mLocationList.clear();
             for (Location location : activeRoute.getLocations()) {
                 mLocationList.add(new NextLocationItem(location.getLocationName()));
             }
-        }else {
+        } else {
 
-        mLocationList.add(new NextLocationItem("test1"));
-        mLocationList.add(new NextLocationItem("test2"));
-        mLocationList.add(new NextLocationItem("test3"));
-        mLocationList.add(new NextLocationItem("test4"));
-        mLocationList.add(new NextLocationItem("test5"));
-        mLocationList.add(new NextLocationItem("test6"));
-        mLocationList.add(new NextLocationItem("test7"));
+            mLocationList.add(new NextLocationItem("test1"));
+            mLocationList.add(new NextLocationItem("test2"));
+            mLocationList.add(new NextLocationItem("test3"));
+            mLocationList.add(new NextLocationItem("test4"));
+            mLocationList.add(new NextLocationItem("test5"));
+            mLocationList.add(new NextLocationItem("test6"));
+            mLocationList.add(new NextLocationItem("test7"));
             //TODO: deletetest code ^
         }
 
@@ -198,23 +222,167 @@ public class MapScreenFragment extends Fragment {
         // Give the recycler view a default layout manager.
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        GeoPoint startPoint = new GeoPoint(20.5992, 72.9342);
-        Marker startMarker = new Marker(mapView);
-        startMarker.setPosition(startPoint);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
-        mapView.getOverlays().add(startMarker);
+        RouteWithLocations route = mainViewModel.getActiveRoute2();
+        if (route!=null){
+            List<Location> locations = route.getLocations();
+
+            List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
+
+//        LocationCoordinateList.clear();
+//        LocationCoordinateList.add(new GpsCoordinate(37.421022, -122.086627,"AA"));
+//        LocationCoordinateList.add(new GpsCoordinate(37.423834, -122.090104,"BB"));
+//        LocationCoordinateList.add(new GpsCoordinate(37.427498, -122.099427,"AA"));
+
+
+//        System.out.println("SIZE1: "+LocationCoordinateList.size());
+//        System.out.println("GPS COORD: "+ LocationCoordinateList.get(0).getLocation().getLocationName());
+
+
+//        Coordinate start = new Coordinate(-122.086549, 37.421034);
+//        Coordinate end = new Coordinate(-122.077987, 37.423411);
+
+            GeoPoint startPoint = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
+            DrawWayPoint(startPoint, locations.get(0));
+
+//        GeoPoint start3 = new GeoPoint(LocationCoordinateList.get(1).getLatitude(), LocationCoordinateList.get(1).getLongitude());
+//        DrawWayPoint(start3);
+
+            for (int i = 0; i < LocationCoordinateList.size() - 1; i++) {
+
+                Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
+                Coordinate end = new Coordinate(LocationCoordinateList.get(i + 1).getLongitude(), LocationCoordinateList.get(i + 1).getLatitude());
+
+                GeoPoint point = new GeoPoint(LocationCoordinateList.get(i + 1).getLatitude(), LocationCoordinateList.get(i + 1).getLongitude());
+                DrawWayPoint(point, locations.get(i + 1));
+
+                new RouteCallGet.Builder(
+                        start,
+                        end,
+                        this.context
+                ).Call(apiResponse -> {
+                    coordinates = apiResponse.getCoordinates();
+                    DrawRoute(coordinates);
+                });
+
+            }
+
+        }
     }
 
-    public void DrawRoute(ArrayList<GeoPoint> geoPoints){
+    public void DrawRoute(ArrayList<Coordinate> coordinates) {
+        ArrayList<GeoPoint> geoPoints = new ArrayList<>();
+        for (Coordinate coordinate : coordinates) {
+            geoPoints.add(new GeoPoint(coordinate.getLatitude(), coordinate.getLongitude()));
+        }
+
         Polyline line = new Polyline();
         line.setPoints(geoPoints);
         mapView.getOverlayManager().add(line);
     }
 
-    public void DrawWayPoint(GeoPoint geoPoint){
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void DrawWayPoint(GeoPoint geoPoint, Location location) {
         Marker marker = new Marker(mapView);
+        if (location.isVisited()) {
+            marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+        } else {
+            marker.setIcon(getResources().getDrawable(R.drawable.place_icon_gray, context.getTheme()));
+        }
+        marker.setTitle(location.getLocationName());
         marker.setPosition(geoPoint);
-        marker.setAnchor(Marker.ANCHOR_CENTER,Marker.ANCHOR_BOTTOM);
+        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+        marker.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                CreateInfoPopup(location, marker);
+                return true;
+            }
+        });
+
         mapView.getOverlays().add(marker);
+    }
+
+    private TextView infoTV;
+    private TextView titleTV;
+    private Button okButton;
+    private ImageView imageView;
+
+    @SuppressLint("SetTextI18n")
+    public void CreateInfoPopup(Location location, Marker marker) {
+        View popup = getLayoutInflater().inflate(R.layout.info_location_popup, null);
+
+        this.titleTV = (TextView) popup.findViewById(R.id.infoLocationTitle);
+        this.titleTV.setText(location.getLocationName());
+        this.infoTV = (TextView) popup.findViewById(R.id.infoLocationText);
+        this.imageView = (ImageView) popup.findViewById(R.id.infoLocationImage);
+
+        String textPath = this.mainViewModel.getLocationElements(location).getPath();
+
+        String imagePath = this.mainViewModel.getLocationImagePath(location);
+
+        int id = context.getResources().getIdentifier(imagePath, "drawable", context.getPackageName());
+
+        this.imageView.setImageResource(id);
+
+        String text = "";
+        try (InputStream inputStream = context.getAssets().open(textPath)) {
+            Scanner reader = new Scanner(inputStream);
+            while (reader.hasNext()) {
+                text += reader.nextLine();
+            }
+
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.infoTV.setText(text);
+
+        this.okButton = (Button) popup.findViewById(R.id.OkLocationButton);
+
+        this.okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainViewModel.visitLocation(location);
+                marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+                dialog.cancel();
+            }
+        });
+
+
+        dialogBuilder.setView(popup);
+        dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    private TextView titleTVskipPopup;
+    private Button skipButton;
+    private ImageView skipImageView;
+
+    public void CreateSkipPopup(Location location) {
+        View popup = getLayoutInflater().inflate(R.layout.skip_location_popup, null);
+
+        this.skipImageView = (ImageView) popup.findViewById(R.id.skipLocationImage);
+        String imagePath = this.mainViewModel.getLocationImagePath(location);
+
+        int id = context.getResources().getIdentifier(imagePath, "drawable", context.getPackageName());
+        this.skipImageView.setImageResource(id);
+
+        this.titleTVskipPopup = (TextView) popup.findViewById(R.id.skipLocationTitle);
+        this.titleTVskipPopup.setText(location.getLocationName());
+        this.skipButton = (Button) popup.findViewById(R.id.skipLocationButton);
+
+
+        dialogBuilder.setView(popup);
+        dialog = dialogBuilder.create();
+
+        this.skipButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
     }
 }

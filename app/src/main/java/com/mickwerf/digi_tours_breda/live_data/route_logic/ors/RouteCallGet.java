@@ -74,11 +74,14 @@ public class RouteCallGet {
                 .getJSONArray("coordinates");
         ArrayList<Coordinate> coordinates = new ArrayList<>();
         for (int i = 0; i < jsonCoordinates.length(); i++) {
+            System.out.println("SIZE2: "+jsonCoordinates.length());
             coordinates.add(new Coordinate(
                     jsonCoordinates.getJSONArray(i).getDouble(0),
                     jsonCoordinates.getJSONArray(i).getDouble(1)
             ));
         }
+
+        this.coordinates = coordinates;
 
         // Initialise bbox.
         JSONArray jsonBbox = response.getJSONArray("bbox");

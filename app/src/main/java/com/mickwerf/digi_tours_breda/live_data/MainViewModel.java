@@ -7,11 +7,13 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import com.mickwerf.digi_tours_breda.data.Database;
+import com.mickwerf.digi_tours_breda.data.entities.DataElement;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
+import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
 import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
 import com.mickwerf.digi_tours_breda.data.relations.RouteWithLocations;
 import com.yariksoffice.lingver.Lingver;
@@ -21,7 +23,7 @@ import java.util.Locale;
 
 /**
  * ViewModel for the Main Activity.
- *
+ * <p>
  * Manages all Live Data and serves as a connector class between the front and backend.
  */
 public class MainViewModel extends AndroidViewModel {
@@ -34,6 +36,12 @@ public class MainViewModel extends AndroidViewModel {
 
     public MainViewModel(@NonNull Application application) {
         super(application);
+        //TODO: change this to be more good looking V
+        try {
+            Lingver.init(application);
+        } catch (Exception e) {
+
+        }
     }
 
     public MutableLiveData<List<Route>> getRoutes() {
@@ -41,12 +49,16 @@ public class MainViewModel extends AndroidViewModel {
         return routes;
     }
 
-    public List<Route> getRoutes2(){
+    public List<Route> getRoutes2() {
         return Repository.getInstance().getRoutes(getApplication().getApplicationContext());
     }
 
-    public UserSettings getUserSettings2(){
+    public UserSettings getUserSettings2() {
         return Repository.getInstance().getUserSettings(getApplication().getApplicationContext());
+    }
+
+    public List<GpsCoordinate> getLocationCoordinates(List<Location> locations) {
+        return Repository.getInstance().getLocationCoordinates(getApplication().getApplicationContext(), locations);
     }
 
     public MutableLiveData<UserSettings> getUserSettings() {
@@ -68,7 +80,7 @@ public class MainViewModel extends AndroidViewModel {
         return activeRoute;
     }
 
-    public RouteWithLocations getActiveRoute2(){
+    public RouteWithLocations getActiveRoute2() {
         return Repository.getInstance().getActiveRoute(getApplication().getApplicationContext());
     }
 
@@ -76,9 +88,9 @@ public class MainViewModel extends AndroidViewModel {
         Repository.getInstance().setActiveRoute(getApplication().getApplicationContext(), newRoute);
     }
 
-    public void setCurrentLanguage(Language language) {
+    public void setCurrentLanguage(Language language, Locale newLocale) {
         Repository.getInstance().setLanguage(getApplication().getApplicationContext(), language);
-        Lingver.getInstance().setLocale(getApplication().getApplicationContext(), LOCALE_DEFAULT);
+        Lingver.getInstance().setLocale(getApplication().getApplicationContext(), newLocale);
     }
 
     public void visitLocation(Location location) {
@@ -86,9 +98,55 @@ public class MainViewModel extends AndroidViewModel {
         activeRoute.setValue(Repository.getInstance().getActiveRoute(getApplication().getApplicationContext()));
     }
 
-    public List<LocationElements> getLocationElements(Location location) {
+    public DataElement getLocationElements(Location location) {
         //todo possibly need to change with new query, though it may not be needed.
-        UserSettings settings = Repository.getInstance().getUserSettings(getApplication().getApplicationContext());
-        return Repository.getInstance().getLocationElements(getApplication().getApplicationContext(), location, settings);
+        return Repository.getInstance().getLocationElements(getApplication().getApplicationContext(), location);
+    }
+
+    public String getLocationImagePath(Location location) {
+        return Repository.getInstance().getLocationImagePath(getApplication().getApplicationContext(), location);
+    }
+
+    public Boolean setCurrentRoute(String routeName) {
+        if (getUserSettings2().getRoute().equals("Null")) {
+            Route activeRoute = Repository.getInstance().getRoute(getApplication().getApplicationContext(), routeName);
+            Repository.getInstance().setActiveRoute(getApplication().getApplicationContext(), activeRoute);
+            return true;
+        }
+        return false;
+
+    }
+
+    public boolean checkRoute(String Routename) {
+        return getUserSettings2().getRoute().equals(Routename);
+    }
+
+    public boolean checkRouteCompletion() {
+        RouteWithLocations searched = Repository.getInstance().getActiveRoute(getApplication().getApplicationContext());
+        for (Location location : searched.getLocations()) {
+            if (!location.isVisited()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Boolean stopCurrentRoute() {
+        System.out.println("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+
+        boolean result;
+        if (checkRouteCompletion()) {
+            Repository.getInstance().CompleteRoute(getApplication().getApplicationContext(), getUserSettings2().getRoute());
+            result = true;
+        } else {
+            result = false;
+        }
+        Route nullRoute = new Route("Null", false, "null", "null", "null", "null");
+        Repository.getInstance().setActiveRoute(getApplication().getApplicationContext(), nullRoute);
+        return result;
+    }
+
+    public void deleteRouteProgress(Route route) {
+        Repository.getInstance().deleteRouteProgress(getApplication().getApplicationContext(), route);
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Digi-Tours-Breda</string>
+    <string name="Routes">Routes</string>
+    <string name="Settings">Settings</string>
+    <string name="Directions">Directions</string>
+    <string name="Language">Language:</string>
+    <string name="HowToUse">How to use:</string>
+    <string name="InCaseOfNoGPS">In case of no gps:</string>
+    <string name="NextUp">Next up:</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="route_fragment_title1">Good Morning!</string>
+    <string name="route_fragment_title2">Good Afternoon!</string>
+    <string name="route_fragment_title3">Good Evening!</string>
+    <string name="route_fragment_title4">Good Night!</string>
+    <string name="splash_screen_title">DigiTours Breda Edition</string>
+    <string name="no_gps_text">We can not locate your current position at the moment.</string>
+    <string name="no_gps_title">No GPS signal</string>
+    <string name="channel_name">Navigation</string>
+    <string name="changedLanguage">You changed the language to: English</string>
+    <string name="NotStartableRoute">Could not start route</string>
+    <string name="NotifyCompleteRoute">"You have complete route: "</string>
+    <string name="NotifyIllegalStopRoute">You cannot stop a route that hasnt been started.</string>
+    <string name="NotifyUncompleteRoute">"You haven't finished route: "</string>
+    <string name="ContinueLater">. You can finish it later.</string>
+    <string name="NotifyDeleteProgress">"Deleted progress of route: "</string>
+</resources>
