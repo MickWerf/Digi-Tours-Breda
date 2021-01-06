@@ -40,9 +40,11 @@ import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.GpsLogic;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
+import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Segment;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -67,7 +69,7 @@ public class MapScreenFragment extends Fragment {
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
 
-    private final int ZOOM_LEVEL = 19;
+    private final int ZOOM_LEVEL = 5;
 
     private MapView mapView;
 
@@ -98,7 +100,9 @@ public class MapScreenFragment extends Fragment {
 
     private Vibrator vibrator;
 
+    private ArrayList<Integer> DistanceList;
 
+    private int i;
 
     Observer<RouteWithLocations> activeRouteObserver = new Observer<RouteWithLocations>() {
         @Override
@@ -114,6 +118,7 @@ public class MapScreenFragment extends Fragment {
         this.dialogBuilder = new AlertDialog.Builder(context);
         this.mainActivity = mainActivity;
         this.vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        this.DistanceList = new ArrayList<>();
 
     }
 
@@ -210,6 +215,7 @@ public class MapScreenFragment extends Fragment {
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
+
         if (this.activeRoute != null) {
             mLocationList.clear();
             for (Location location : activeRoute.getLocations()) {
@@ -217,20 +223,12 @@ public class MapScreenFragment extends Fragment {
             }
 
 
-            // Create recycler view.
-            mRecyclerView = getView().findViewById(R.id.NextLocationRecyclerview);
-            // Create an adapter and supply the data to be displayed.
-            mAdapter = new NextLocationAdapter(getContext(), mLocationList);
-            // Connect the adapter with the recycler view.
-            mRecyclerView.setAdapter(mAdapter);
-            // Give the recycler view a default layout manager.
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
             RouteWithLocations route = mainViewModel.getActiveRoute2();
             if (route != null) {
                 List<Location> locations = route.getLocations();
 
                 List<GpsCoordinate> LocationCoordinateList = this.mainViewModel.getLocationCoordinates(locations);
+                System.out.println("SIZEOFLIST: "+LocationCoordinateList.size());
 
 //        LocationCoordinateList.clear();
 //        LocationCoordinateList.add(new GpsCoordinate( 37.422065,-122.083974,"AA"));
@@ -245,38 +243,89 @@ public class MapScreenFragment extends Fragment {
 //        Coordinate start = new Coordinate(-122.086549, 37.421034);
 //        Coordinate end = new Coordinate(-122.077987, 37.423411);
 
-                GeoPoint startPoint = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
-                DrawWayPoint(startPoint, locations.get(0));
+//                GeoPoint firstMonument = new GeoPoint(LocationCoordinateList.get(0).getLatitude(), LocationCoordinateList.get(0).getLongitude());
+//                DrawWayPoint(firstMonument, locations.get(0));
 
 //        GeoPoint start3 = new GeoPoint(LocationCoordinateList.get(1).getLatitude(), LocationCoordinateList.get(1).getLongitude());
 //        DrawWayPoint(start3);
 
-                for (int i = 0; i < LocationCoordinateList.size() - 1; i++) {
 
-                    Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
-                    Coordinate end = new Coordinate(LocationCoordinateList.get(i + 1).getLongitude(), LocationCoordinateList.get(i + 1).getLatitude());
+                this.DistanceList = new ArrayList<>();
+                this.DistanceList.add(0);
+                for (i = 0; i < LocationCoordinateList.size(); i++) {
 
-                    GeoPoint point = new GeoPoint(LocationCoordinateList.get(i + 1).getLatitude(), LocationCoordinateList.get(i + 1).getLongitude());
-                    DrawWayPoint(point, locations.get(i + 1));
+                    GeoPoint point = new GeoPoint(LocationCoordinateList.get(i).getLatitude(), LocationCoordinateList.get(i).getLongitude());
+                    DrawWayPoint(point, locations.get(i));
 
-                    new RouteCallGet.Builder(
-                            start,
-                            end,
-                            this.context
-                    ).Call(apiResponse -> {
-                        coordinates = apiResponse.getCoordinates();
-                        DrawRoute(coordinates);
-                    });
+                    if(i < LocationCoordinateList.size()-1) {
+                        Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
+                        Coordinate end = new Coordinate(LocationCoordinateList.get(i + 1).getLongitude(), LocationCoordinateList.get(i + 1).getLatitude());
+
+                        System.out.println("BETWEEN : "+locations.get(i).getLocationName() + " AND "+locations.get(i+1).getLocationName());
+
+                        new RouteCallGet.Builder(
+                                start,
+                                end,
+                                this.context
+                        ).Call(apiResponse -> {
+                            coordinates = apiResponse.getCoordinates();
+
+                            DistanceList.add(measureDistance(coordinates));
+
+                            DrawRoute(coordinates);
+                            System.out.println("DL SIZE: " + DistanceList.size());
+                            System.out.println("LocationCoordList: " + (LocationCoordinateList.size()));
+
+                            if(DistanceList.size() == LocationCoordinateList.size()) {
+
+                                // Create recycler view.
+                                mRecyclerView = getView().findViewById(R.id.NextLocationRecyclerview);
+                                // Create an adapter and supply the data to be displayed.
+                                mAdapter = new NextLocationAdapter(getContext(), mLocationList, DistanceList);
+                                // Connect the adapter with the recycler view.
+                                mRecyclerView.setAdapter(mAdapter);
+                                // Give the recycler view a default layout manager.
+                                mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                                gpsLogic = new GpsLogic(this, locations, LocationCoordinateList, LocationMarkers);
+                                gpsLogic.start();
+
+                            }
+
+                        });
+                    }
+
+
+                    try {
+                        Thread.sleep(130);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
-                gpsLogic = new GpsLogic(this,locations,LocationCoordinateList,LocationMarkers);
-                gpsLogic.start();
 
 
             }
         }
     }
+
+    public int measureDistance(ArrayList<Coordinate> coordinates){
+        int total = 0;
+
+        for (int i = 0; i<coordinates.size()-1;i++){
+            GeoPoint geoPoint = new GeoPoint(coordinates.get(i).getLatitude(),coordinates.get(i).getLongitude());
+            GeoPoint geoPoint2 = new GeoPoint(coordinates.get(i+1).getLatitude(),coordinates.get(i+1).getLongitude());
+
+            total = total + (int)(geoPoint.distanceToAsDouble(geoPoint2));
+        }
+
+        System.out.println("TOTAL :::"+total);
+
+        return total;
+
+    }
+
 
     public void DrawRoute(ArrayList<Coordinate> coordinates) {
         ArrayList<GeoPoint> geoPoints = new ArrayList<>();

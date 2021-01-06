@@ -20,7 +20,7 @@ import okhttp3.Response;
 public class HttpUtil {
 
     private final String TAG = getClass().getName();
-    final static String API_KEY = "5b3ce3597851110001cf62487411bf9180244737b62cc916beed2d7b"; // Key of Dennis
+    final static String API_KEY = "5b3ce3597851110001cf6248f2e5fccb08354400b1bb7bfbc7ab2a69"; // Key of Dennis
     private final int MAX_URL_LEN = 2048;
 
     private OkHttpClient client;
