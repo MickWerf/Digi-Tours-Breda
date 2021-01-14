@@ -24,6 +24,8 @@ import com.mickwerf.digi_tours_breda.gui.fragments.RouteOverviewFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.SettingScreenFragment;
 import com.mickwerf.digi_tours_breda.gui.popups.GPSLossPopup;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
+import com.mickwerf.digi_tours_breda.services.ForegroundNotification;
+import com.mickwerf.digi_tours_breda.services.ForegroundService;
 import com.mickwerf.digi_tours_breda.services.Notify;
 
 import java.util.ArrayList;
@@ -109,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
             toSettingsView();
             presetFragment = null;
         }
+
+//        stopService();
     }
 
     public void updateUserSettings(String localeCode, String Language) {
@@ -267,4 +271,29 @@ public class MainActivity extends AppCompatActivity {
     public MainViewModel getMainViewModel() {
         return mainViewModel;
     }
+
+    @Override
+    protected void onStop() {
+//        if(!this.mainViewModel.getUserSettings2().getRoute().equals("Null")) {
+//            Intent intent = new Intent(this, ForegroundService.class);
+//            intent.putExtra()
+//            startService(intent);
+//        }
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        stopService();
+    }
+
+    public void stopService(){
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+
+        stopService(serviceIntent);
+    }
+
+
+
 }

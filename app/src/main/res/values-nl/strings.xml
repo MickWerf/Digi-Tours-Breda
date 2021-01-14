@@ -42,6 +42,7 @@
 
         Bezochte locaties:\n
         Een bezochte locatie in een route wordt aangegeven door een blauwe pin. Als op deze pin geklikt wordt kan je informatie lezen over de desbetreffende locatie.</string>
-    <string name="CaseOfNoGpsText" translatable="false">Als er geen gps beschikbaar is wordt er hierover een melding gegeven en is de app niet bruikbaar.</string>
+    <string name="ArrivedAt">Aangekomen bij:</string>
     <string name="powered_by">Aangedreven door:</string>tring>
+    <string name="CaseOfNoGpsText" translatable="false">Als er geen gps beschikbaar is wordt er hierover een melding gegeven en is de app niet bruikbaar.</string>
 </resources>

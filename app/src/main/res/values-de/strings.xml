@@ -44,4 +44,6 @@
     <string name="progressDeletedBecauseComplete">" Der Fortschritt dieser Route wurde gelöscht, sodass Sie sie erneut gehen können."</string>
     <string name="RouteCompleted">Herzlichen Glückwunsch, Sie haben die Route abgeschlossen!</string>
     <string name="powered_by">" Unterstützt von:"</string>
+    <string name="ArrivedAt">Angekommen um:</string>
+
 </resources>
