@@ -26,22 +26,10 @@
     <string name="NotifyDeleteProgress">"Progressie van deze route verwijderd: "</string>
     <string name="RouteCompleted">Gefeliciteerd, je hebt de route voltooid!</string>
     <string name="progressDeletedBecauseComplete">De voortgang van deze route is gewist, dus je kunt hem weer lopen.</string>
-    <string name="HowToUseText" translatable="false">Starten van een route:\n
-        Om een route te starten ga je naar het linker scherm. Vervolgens klik je op de play knop van die route. Daarna opent de map en kan je de route gaan lopen.
-        Als er al een route actief is moet je deze eerst stoppen om een andere route te kunnen starten. Onderaan het middelste scherm is ook te zien hoe ver je verwijderd bent van de komende locaties op de route.\n\n
-
-        Stoppen van een route actieve route:\n
-        Om een route te stoppen ga je naar het linker scherm. Vervolgens klik je op de stop knop van de actieve route. Je voortgang blijft opgeslagen als je een route stopt.\n\n
-
-        Verwijderen van de voortgang:\n
-        Om de voortgang van een route te verwijderen ga je naar het linker scherm. Vervolgens klik je op de prullenbak knop van de route waarbij je de voortgang wilt verwijderen.\n\n
-
-        Onbezochte locaties:\n
-        Een onbezochte locatie in een route wordt aangegeven door een grijze pin. Als op deze pin geklikt wordt kan je ervoor kiezen de locatie te skippen. Als je de locatie skipt
-        wordt de locatie als bezocht gemarkeerd en krijgt deze pin een blauwe kleur.\n\n
-
-        Bezochte locaties:\n
-        Een bezochte locatie in een route wordt aangegeven door een blauwe pin. Als op deze pin geklikt wordt kan je informatie lezen over de desbetreffende locatie.</string>
+    <string name="HowToUseText" translatable="false">
+        Starten van een route:\nOm een route te starten ga je naar het linker scherm. Vervolgens klik je op de play knop van die route. Daarna opent de map en kan je de route gaan lopen.
+        Als er al een route actief is moet je deze eerst stoppen om een andere route te kunnen starten. Onderaan het middelste scherm is ook te zien hoe ver je verwijderd bent van de komende locaties op de route.\n\nStoppen van een route actieve route:\nOm een route te stoppen ga je naar het linker scherm. Vervolgens klik je op de stop knop van de actieve route. Je voortgang blijft opgeslagen als je een route stopt.\n\nVerwijderen van de voortgang:\nOm de voortgang van een route te verwijderen ga je naar het linker scherm. Vervolgens klik je op de prullenbak knop van de route waarbij je de voortgang wilt verwijderen.\n\nOnbezochte locaties:\nEen onbezochte locatie in een route wordt aangegeven door een grijze pin. Als op deze pin geklikt wordt kan je ervoor kiezen de locatie te skippen. Als je de locatie skipt
+        wordt de locatie als bezocht gemarkeerd en krijgt deze pin een blauwe kleur.\n\nBezochte locaties:\nEen bezochte locatie in een route wordt aangegeven door een blauwe pin. Als op deze pin geklikt wordt kan je informatie lezen over de desbetreffende locatie.</string>
     <string name="ArrivedAt">Aangekomen bij:</string>
     <string name="powered_by">Aangedreven door:</string>tring>
     <string name="CaseOfNoGpsText" translatable="false">Als er geen gps beschikbaar is wordt er hierover een melding gegeven en is de app niet bruikbaar.</string>
