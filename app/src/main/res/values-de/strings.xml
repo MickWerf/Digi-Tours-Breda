@@ -43,4 +43,6 @@
     <string name="CaseOfNoGpsText" translatable="false">Wenn kein GPS verfügbar ist, wird eine Benachrichtigung ausgegeben und die App kann nicht verwendet werden.</string>
     <string name="progressDeletedBecauseComplete">" Der Fortschritt dieser Route wurde gelöscht, sodass Sie sie erneut gehen können."</string>
     <string name="RouteCompleted">Herzlichen Glückwunsch, Sie haben die Route abgeschlossen!</string>
+    <string name="ArrivedAt">Angekommen um:</string>
+
 </resources>

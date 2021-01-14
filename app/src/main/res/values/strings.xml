@@ -8,6 +8,8 @@
     <string name="HowToUse">How to use:</string>
     <string name="InCaseOfNoGPS">In case of no gps:</string>
     <string name="NextUp">Next up:</string>
+    <string name="ArrivedAt">Arrived at:</string>
+
 
 
     <string name="HowToUseText" >Starting a route:\n

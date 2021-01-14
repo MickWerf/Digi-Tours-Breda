@@ -43,4 +43,5 @@
         Locations visited:\n
         A visited location in a route is indicated by a blue pin. If you click on this pin you can read information about the location in question.</string>
     <string name="CaseOfNoGpsText" translatable="false">If no GPS is available, a notification is given and the app cannot be used.</string>
+    <string name="ArrivedAt">Arrived at:</string>
 </resources>
