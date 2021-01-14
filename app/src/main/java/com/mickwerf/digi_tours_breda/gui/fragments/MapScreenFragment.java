@@ -331,9 +331,10 @@ public class MapScreenFragment extends Fragment {
             }else {
                 CreateSkipPopup(location, marker1);
             }
-            this.mapController.zoomTo(ZOOM_LEVEL);
+
             this.mapController.setCenter(marker1.getPosition());
-            this.mapController.animateTo(marker1.getPosition());
+            this.mapController.zoomTo(ZOOM_LEVEL);
+
             return true;
         });
 
