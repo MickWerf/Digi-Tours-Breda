@@ -6,11 +6,13 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 /**
  * Room entity which describes a gps coordinate.
  */
 @Entity(tableName = "gps_coordinate")
-public class GpsCoordinate {
+public class GpsCoordinate implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
