@@ -40,8 +40,16 @@ public class Notify {
      * @param waypoint Name of the waypoint.
      * @param context  Necessary to access the system service.
      */
-    public static void createNotification(String waypoint, String directions, Context context) {
-        createNotification(waypoint, directions, null, context);
+    public static NotificationCompat.Builder createNotification(String waypoint, String directions, Context context) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.logo_small)
+                .setContentTitle("Arrived at " + waypoint)
+                .setContentText(directions)
+                .setStyle(new NotificationCompat.BigTextStyle())
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        context.getSystemService(NotificationManager.class).notify((int) System.currentTimeMillis(), builder.build());
+
+        return builder;
     }
 
     /**

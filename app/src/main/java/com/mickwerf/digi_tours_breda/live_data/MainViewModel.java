@@ -39,7 +39,7 @@ public class MainViewModel extends AndroidViewModel {
         try {
             Lingver.init(application);
         } catch (Exception e) {
-
+            // Please don't come here
         }
     }
 
@@ -102,7 +102,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public DataElement getLocationElements(Location location) {
-        //todo possibly need to change with new query, though it may not be needed.
+        // TODO possibly need to change with new query, though it may not be needed.
         return Repository.getInstance().getLocationElements(getApplication().getApplicationContext(), location);
     }
 
@@ -117,7 +117,6 @@ public class MainViewModel extends AndroidViewModel {
             return true;
         }
         return false;
-
     }
 
     public boolean checkRoute(String Routename) {
@@ -136,7 +135,6 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public Boolean stopCurrentRoute() {
-
         boolean result;
         if (checkRouteCompletion()) {
             Repository.getInstance().CompleteRoute(getApplication().getApplicationContext(), getUserSettings2().getRoute());

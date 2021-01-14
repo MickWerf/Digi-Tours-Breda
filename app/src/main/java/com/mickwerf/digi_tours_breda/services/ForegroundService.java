@@ -8,7 +8,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
@@ -18,12 +17,10 @@ import androidx.core.app.NotificationManagerCompat;
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.gui.activities.MainActivity;
 import com.mickwerf.digi_tours_breda.gui.fragments.MapScreenFragment;
-import com.mickwerf.digi_tours_breda.live_data.route_logic.GpsLogic;
 
 import static com.mickwerf.digi_tours_breda.services.ServiceChannel.CHANNEL_ID;
 
 public class ForegroundService extends Service {
-    //private static final int NOTIFY_ID = 1;
 
     @Override
     public void onCreate() {
@@ -32,8 +29,6 @@ public class ForegroundService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        //startForeground(NOTIFY_ID, getMyActivityNotification());
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);

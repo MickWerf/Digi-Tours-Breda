@@ -19,7 +19,6 @@ import com.mickwerf.digi_tours_breda.gui.activities.MainActivity;
 
 public class SettingScreenFragment extends Fragment {
 
-
     private ImageView howToUseIV;
     private ImageView noGpsIV;
 
@@ -42,13 +41,9 @@ public class SettingScreenFragment extends Fragment {
         this.mainActivity = mainActivity;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_setting_screen, container, false);
     }
 
@@ -76,69 +71,15 @@ public class SettingScreenFragment extends Fragment {
     }
 
     public void setOnClickListeners(){
-
-        this.howToUseIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showHowToUse();
-            }
-        });
-
-        this.noGpsIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showNoGpsCase();
-            }
-        });
-
-        this.howToUseIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showHowToUse();
-            }
-        });
-
-        this.noGpsIV.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showNoGpsCase();
-            }
-        });
-
-        this.dutchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeToDutch();
-            }
-        });
-
-        this.englishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeToEnglish();
-            }
-        });
-
-        this.germanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                changeToGerman();
-            }
-        });
-
-        this.howToUseText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showHowToUse();
-            }
-        });
-
-        this.noGpsText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showNoGpsCase();
-            }
-        });
+        this.howToUseIV.setOnClickListener(view -> showHowToUse());
+        this.noGpsIV.setOnClickListener(view -> showNoGpsCase());
+        this.howToUseIV.setOnClickListener(view -> showHowToUse());
+        this.noGpsIV.setOnClickListener(view -> showNoGpsCase());
+        this.dutchButton.setOnClickListener(view -> changeToDutch());
+        this.englishButton.setOnClickListener(view -> changeToEnglish());
+        this.germanButton.setOnClickListener(view -> changeToGerman());
+        this.howToUseText.setOnClickListener(view -> showHowToUse());
+        this.noGpsText.setOnClickListener(view -> showNoGpsCase());
     }
 
     public void changeToEnglish() {

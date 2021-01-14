@@ -1,9 +1,6 @@
 package com.mickwerf.digi_tours_breda.services;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -11,13 +8,10 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.gui.activities.MainActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-import static com.mickwerf.digi_tours_breda.services.NotificationChannel.CHANNEL_ID;
 
 public class ForegroundNotification extends Service {
 

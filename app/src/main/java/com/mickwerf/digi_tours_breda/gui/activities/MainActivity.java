@@ -24,11 +24,13 @@ import com.mickwerf.digi_tours_breda.gui.fragments.RouteOverviewFragment;
 import com.mickwerf.digi_tours_breda.gui.fragments.SettingScreenFragment;
 import com.mickwerf.digi_tours_breda.gui.popups.GPSLossPopup;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
-import com.mickwerf.digi_tours_breda.services.ForegroundNotification;
 import com.mickwerf.digi_tours_breda.services.ForegroundService;
 import com.mickwerf.digi_tours_breda.services.Notify;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Locale;
@@ -62,12 +64,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
-
-        if (intent.hasExtra("loadFragment")) {
+        if (getIntent().hasExtra("loadFragment")) {
             presetFragment = getIntent().getExtras().getString("loadFragment");
         }
-
 
         requestPermissions(new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -79,12 +78,10 @@ public class MainActivity extends AppCompatActivity {
         // Initialise notification settings.
         Notify.initialise(getApplicationContext());
         this.mainViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
-
     }
 
     //Initialize all views
     public void initialize() {
-
         this.homeButton = findViewById(R.id.HomeImageView);
         this.settingsButton = findViewById(R.id.SettingsImageView);
         this.directionsButton = findViewById(R.id.DirectionsImageView);
@@ -97,11 +94,8 @@ public class MainActivity extends AppCompatActivity {
         this.locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         this.settingScreenFragment = new SettingScreenFragment(this);
-
         this.routeOverviewFragment = new RouteOverviewFragment(this.mainViewModel, this);
-
         this.mapScreenFragment = new MapScreenFragment(this.mainViewModel, this,this);
-
         this.gpsLossPopup = new GPSLossPopup();
 
         this.hasGpsSignal = checkGpsPermission();
@@ -111,14 +105,10 @@ public class MainActivity extends AppCompatActivity {
             toSettingsView();
             presetFragment = null;
         }
-
-//        stopService();
     }
 
     public void updateUserSettings(String localeCode, String Language) {
-        Runnable runnable = () -> {
-            mainViewModel.setCurrentLanguage(new Language(Language), new Locale(localeCode.toLowerCase()));
-        };
+        Runnable runnable = () -> mainViewModel.setCurrentLanguage(new Language(Language), new Locale(localeCode.toLowerCase()));
         Thread t = new Thread(runnable);
         t.start();
         try {
@@ -141,27 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
     //Set all on-click listeners
     public void setClickListeners() {
-
-        this.settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toSettingsView();
-            }
-        });
-
-        this.homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toHomeView();
-            }
-        });
-
-        this.directionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toDirectionsView();
-            }
-        });
+        this.settingsButton.setOnClickListener(view -> toSettingsView());
+        this.homeButton.setOnClickListener(view -> toHomeView());
+        this.directionsButton.setOnClickListener(view -> toDirectionsView());
 
         // Timer to check GPS availability
         Timer timer = new Timer();
@@ -213,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
             this.mapScreenFragment.StopChecking();
         }
 
-
         fragmentManager.beginTransaction().replace(R.id.fragmentContainer, this.settingScreenFragment).commit();
     }
 
@@ -240,13 +211,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                           int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions,
+                                           @NotNull int[] grantResults) {
         if (!isRequested) {
-            ArrayList<String> permissionsToRequest = new ArrayList<>();
-            for (int i = 0; i < grantResults.length; i++) {
-                permissionsToRequest.add(permissions[i]);
-            }
+            ArrayList<String> permissionsToRequest = new ArrayList<>(Arrays.asList(permissions).subList(0, grantResults.length));
 
             if (permissionsToRequest.size() > 0) {
                 ActivityCompat.requestPermissions(
@@ -273,16 +241,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-//        if(!this.mainViewModel.getUserSettings2().getRoute().equals("Null")) {
-//            Intent intent = new Intent(this, ForegroundService.class);
-//            intent.putExtra()
-//            startService(intent);
-//        }
-        super.onStop();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         stopService();
@@ -290,7 +248,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void stopService(){
         Intent serviceIntent = new Intent(this, ForegroundService.class);
-
         stopService(serviceIntent);
     }
 

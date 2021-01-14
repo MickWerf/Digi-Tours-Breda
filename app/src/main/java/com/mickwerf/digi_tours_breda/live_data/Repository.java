@@ -42,7 +42,6 @@ class Repository {
     }
 
     public List<Route> getRoutes(Context context) {
-
         Runnable runnable = () -> {
             routes = Database.getInstance(context).userDataAccess().getAllRoutes();
             for (Route route: routes) {
@@ -51,7 +50,6 @@ class Repository {
                     break;
                 }
             }
-
         };
         Thread t = new Thread(runnable);
         t.start();
@@ -60,15 +58,11 @@ class Repository {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         return routes;
     }
 
     public RouteWithSteps getActiveRoute(Context context) {
-
-        Runnable runnable = () -> {
-            activeRoute = Database.getInstance(context).userDataAccess().getRouteWithSteps(getUserSettings(context).getRoute());
-        };
+        Runnable runnable = () -> activeRoute = Database.getInstance(context).userDataAccess().getRouteWithSteps(getUserSettings(context).getRoute());
         Thread t = new Thread(runnable);
         t.start();
         try {
@@ -76,15 +70,11 @@ class Repository {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         return activeRoute;
     }
 
     public UserSettings getUserSettings(Context context) {
-
-        Runnable runnable = () -> {
-            this.userSettings = Database.getInstance(context).userDataAccess().getUserSettings();
-        };
+        Runnable runnable = () -> this.userSettings = Database.getInstance(context).userDataAccess().getUserSettings();
         Thread t = new Thread(runnable);
         t.start();
         try {
@@ -92,7 +82,6 @@ class Repository {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         return this.userSettings;
     }
 
@@ -124,12 +113,8 @@ class Repository {
     }
 
     public DataElement getLocationElements(Context context, Location location) {
-
-
         Runnable runnable = () -> {
-
             switch (getUserSettings(context).getLanguage()){
-
                 case "Nederlands":
                     this.dataElement = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(0);
                     break;
@@ -140,7 +125,6 @@ class Repository {
                     this.dataElement = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(2);
                     break;
             }
-
         };
         Thread t = new Thread(runnable);
         t.start();
@@ -150,13 +134,11 @@ class Repository {
             e.printStackTrace();
         }
 
+        // TODO query for automatically getting correct language may need to be adjusted.
        return this.dataElement;
-
-        //todo query for automatically getting correct language may need to be adjusted.
     }
 
     public String getLocationImagePath(Context context, Location location) {
-
         Runnable runnable = () -> {
             Log.d(TAG, location.getLocationName());
             this.imagePath = Database.getInstance(context).userDataAccess().getLocationElements(location.getLocationName()).getElements().get(3).getPath();
@@ -172,8 +154,6 @@ class Repository {
         //todo query for automatically getting correct language may need to be adjusted.
         return imagePath;
     }
-
-
 
     public void setLanguage(Context context, Language language) {
         UserSettings settings = Database.getInstance(context).userDataAccess().getUserSettings();
@@ -208,12 +188,9 @@ class Repository {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public List<GpsCoordinate> getLocationCoordinates(Context context, List<Location> locations) {
-
         this.coordinateList.clear();
         Runnable runnable = () -> {
             for (Location location : locations){
