@@ -50,16 +50,17 @@ public class Notify {
      * @param intent   Necessary to open the intent when notification is pressed.
      * @param context  Necessary to access the system service.
      */
-    public static void createNotification(String waypoint, String directions, Intent intent, Context context) {
+    public static NotificationCompat.Builder createNotification(String waypoint, String directions, Intent intent, Context context) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.logo_small)
                 .setContentTitle("Arrived at " + waypoint)
                 .setContentText(directions)
                 .setStyle(new NotificationCompat.BigTextStyle())
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        if (intent != null)
-            builder.setContentIntent(PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_NO_CREATE));
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_NO_CREATE));
         context.getSystemService(NotificationManager.class).notify((int) System.currentTimeMillis(), builder.build());
+
+        return builder;
     }
 
     /**

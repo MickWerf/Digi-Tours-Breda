@@ -144,7 +144,7 @@ public class MainViewModel extends AndroidViewModel {
         } else {
             result = false;
         }
-        Route nullRoute = new Route("Null", false, "null", "null", "null", "null");
+        Route nullRoute = Repository.getInstance().getRoute(getApplication().getApplicationContext(), "Null");
         Repository.getInstance().setActiveRoute(getApplication().getApplicationContext(), nullRoute);
         return result;
     }

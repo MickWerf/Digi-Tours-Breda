@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -41,9 +42,11 @@ import com.mickwerf.digi_tours_breda.live_data.route_logic.GpsLogic;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Segment;
+import com.mickwerf.digi_tours_breda.services.ForegroundService;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -95,7 +98,7 @@ public class MapScreenFragment extends Fragment {
 
     private HashMap<Location,Marker> LocationMarkers = new HashMap<>();
 
-    private GpsLogic gpsLogic;
+    public static GpsLogic gpsLogic;
 
     private MainActivity mainActivity;
 
@@ -216,7 +219,7 @@ public class MapScreenFragment extends Fragment {
             RouteWithSteps route = mainViewModel.getActiveRoute2();
             if (route != null) {
                 List<Location> buffer = mainViewModel.getLocations(route);
-                List<Location> locations = new ArrayList<>();
+                ArrayList<Location> locations = new ArrayList<>();
                 for (Location location : buffer) {
                     if (location.isSightSeeingLocation()) {
                         locations.add(location);
@@ -258,8 +261,9 @@ public class MapScreenFragment extends Fragment {
                                 // Give the recycler view a default layout manager.
                                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                                gpsLogic = new GpsLogic(this, locations, LocationCoordinateList, LocationMarkers);
-                                gpsLogic.start();
+                                gpsLogic = new GpsLogic(this, locations, (ArrayList<GpsCoordinate>)LocationCoordinateList, LocationMarkers,mainActivity);
+                                Intent intent = new Intent(context, ForegroundService.class);
+                                context.startService(intent);
 
                             }
 
@@ -271,6 +275,7 @@ public class MapScreenFragment extends Fragment {
                         Thread.sleep(25);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        Toast.makeText(getActivity(), R.string.FailedToReceive, Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -327,9 +332,10 @@ public class MapScreenFragment extends Fragment {
             }else {
                 CreateSkipPopup(location, marker1);
             }
-            this.mapController.zoomTo(ZOOM_LEVEL);
+
             this.mapController.setCenter(marker1.getPosition());
-            this.mapController.animateTo(marker1.getPosition());
+            this.mapController.zoomTo(ZOOM_LEVEL);
+
             return true;
         });
 
@@ -489,8 +495,8 @@ public class MapScreenFragment extends Fragment {
     }
 
     public void StopChecking(){
-        if(this.gpsLogic != null){
-            this.gpsLogic.stop();
+        if(gpsLogic != null){
+            gpsLogic.stop();
         }
     }
 

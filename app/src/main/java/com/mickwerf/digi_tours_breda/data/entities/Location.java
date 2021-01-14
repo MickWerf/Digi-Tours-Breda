@@ -5,11 +5,13 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 /**
  * Room entity which describes a location.
  */
 @Entity(tableName = "location")
-public class Location {
+public class Location implements Serializable {
     @NonNull
     @PrimaryKey
     private String locationName;
