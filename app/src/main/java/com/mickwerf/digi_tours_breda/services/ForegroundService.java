@@ -77,7 +77,7 @@ public class ForegroundService extends Service {
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
 
 
-        managerCompat.notify(2,builder.build());
+        managerCompat.notify(1,builder.build());
 
 
 
