@@ -8,6 +8,7 @@ import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
 import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
 import com.mickwerf.digi_tours_breda.data.relations.LocationElements;
+import com.mickwerf.digi_tours_breda.data.relations.RouteWithSteps;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,8 +40,8 @@ public class DatabaseIntegrationTest {
         boolean previousStatus = route.isComplete();
         route.setComplete(!previousStatus);
         this.dataAdminAccess.updateRoute(route);
-        RouteWithLocations routeWithLocations = this.dataAdminAccess.getRouteWithLocations(route.getRouteName());
-        Assert.assertEquals(!previousStatus, routeWithLocations.getRoute().isComplete());
+        RouteWithSteps routeWithSteps = this.dataAdminAccess.getRouteWithSteps(route.getRouteName());
+        Assert.assertEquals(!previousStatus, routeWithSteps.getRoute().isComplete());
     }
 
     /**
@@ -112,7 +113,7 @@ public class DatabaseIntegrationTest {
      */
     @Test
     public void testDataElements() {
-        List<LocationElements> locationElements = this.dataAdminAccess.getLocationElementsFromLanguage("Avans Hogeschool", "Nederlands");
-        Assert.assertEquals(1, locationElements.size());
+        LocationElements locationElements = this.dataAdminAccess.getLocationElements("Avans Hogeschool");
+        Assert.assertEquals(1, locationElements.getElements().size());
     }
 }
