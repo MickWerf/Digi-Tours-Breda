@@ -88,7 +88,7 @@ public class GpsLogic implements LocationListener {
                 if(a <= 15.0){
                     CreatePopup();
                 }
-                Thread.sleep(2500);
+                Thread.sleep(500);
             } catch (Exception e) {
                 e.printStackTrace();
             }
