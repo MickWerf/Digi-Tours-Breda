@@ -45,6 +45,13 @@ class Repository {
 
         Runnable runnable = () -> {
             routes = Database.getInstance(context).userDataAccess().getAllRoutes();
+            for (Route route: routes) {
+                if (route.getRouteName().equals("Null")){
+                    routes.remove(route);
+                    break;
+                }
+            }
+
         };
         Thread t = new Thread(runnable);
         t.start();
