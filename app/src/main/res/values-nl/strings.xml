@@ -26,7 +26,7 @@
     <string name="NotifyDeleteProgress">"Progressie van deze route verwijderd: "</string>
     <string name="RouteCompleted">Gefeliciteerd, je hebt de route voltooid!</string>
     <string name="progressDeletedBecauseComplete">De voortgang van deze route is gewist, dus je kunt hem weer lopen.</string>
-    <string name="HowToUseText" translatable="false">Starten van een route:\n
+    <string name="HowToUseText">Starten van een route:\n
         Om een route te starten ga je naar het linker scherm. Vervolgens klik je op de play knop van die route. Daarna opent de map en kan je de route gaan lopen.
         Als er al een route actief is moet je deze eerst stoppen om een andere route te kunnen starten. Onderaan het middelste scherm is ook te zien hoe ver je verwijderd bent van de komende locaties op de route.\n\n
 
@@ -44,5 +44,6 @@
         Een bezochte locatie in een route wordt aangegeven door een blauwe pin. Als op deze pin geklikt wordt kan je informatie lezen over de desbetreffende locatie.</string>
     <string name="ArrivedAt">Aangekomen bij:</string>
     <string name="powered_by">Aangedreven door:</string>tring>
-    <string name="CaseOfNoGpsText" translatable="false">Als er geen gps beschikbaar is wordt er hierover een melding gegeven en is de app niet bruikbaar.</string>
+    <string name="CaseOfNoGpsText">Als er geen gps beschikbaar is wordt er hierover een melding gegeven en is de app niet bruikbaar.</string>
+    <string name="FailedToReceive">Er zijn te veel verzoeken ingediend. Probeer het over een paar minuten opnieuw.</string>
 </resources>

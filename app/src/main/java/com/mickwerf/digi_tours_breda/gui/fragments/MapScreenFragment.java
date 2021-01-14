@@ -275,6 +275,7 @@ public class MapScreenFragment extends Fragment {
                         Thread.sleep(25);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        Toast.makeText(getActivity(), R.string.FailedToReceive, Toast.LENGTH_LONG).show();
                     }
 
                 }
