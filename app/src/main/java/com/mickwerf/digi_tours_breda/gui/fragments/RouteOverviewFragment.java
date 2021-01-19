@@ -1,13 +1,11 @@
 package com.mickwerf.digi_tours_breda.gui.fragments;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,12 +16,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mickwerf.digi_tours_breda.R;
-import com.mickwerf.digi_tours_breda.data.Database;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
 import com.mickwerf.digi_tours_breda.gui.RouteItemAdapter;
 import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -52,14 +48,10 @@ public class RouteOverviewFragment extends Fragment {
         this.language = mainViewModel.getUserSettings2().getLanguage();
     }
 
-
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_route_overview, container, false);
-
 
         this.mainViewModel.getRoutes().observe(this, this.routesUpdateObserver);
         this.routes = this.mainViewModel.getRoutes2();
@@ -68,7 +60,6 @@ public class RouteOverviewFragment extends Fragment {
         adapter = new RouteItemAdapter(routes,this.context,this.mainViewModel);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
         recyclerView.setAdapter(adapter);
-
 
         TextView title = view.findViewById(R.id.title);
         title.setText(timeOfDay());
@@ -91,7 +82,4 @@ public class RouteOverviewFragment extends Fragment {
         }
         return "";
     }
-
-
-
 }

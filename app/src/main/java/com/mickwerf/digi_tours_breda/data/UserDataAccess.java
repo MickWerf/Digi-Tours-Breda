@@ -9,7 +9,6 @@ import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Language;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
 import com.mickwerf.digi_tours_breda.data.entities.Route;
-import com.mickwerf.digi_tours_breda.data.entities.RouteStep;
 import com.mickwerf.digi_tours_breda.data.entities.UserSettings;
 import com.mickwerf.digi_tours_breda.data.relations.LocationCoordinate;
 import com.mickwerf.digi_tours_breda.data.relations.LocationElements;

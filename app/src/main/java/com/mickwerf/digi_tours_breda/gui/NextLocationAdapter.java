@@ -8,7 +8,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mickwerf.digi_tours_breda.R;
-import com.mickwerf.digi_tours_breda.data.entities.Location;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -17,14 +18,11 @@ public class NextLocationAdapter extends RecyclerView.Adapter<NextLocationAdapte
 
     private final LinkedList<NextLocationItem> mLocationList;
     private final LayoutInflater mInflater;
-    private ArrayList<Integer> Distancelist;
-
+    private ArrayList<Integer> distanceList;
 
     class NextLocationViewHolder extends RecyclerView.ViewHolder {
         public final TextView LocationNameItemView;
         public final TextView distanceItemView;
-
-
         private final Context context;
         final NextLocationAdapter mAdapter;
 
@@ -45,13 +43,11 @@ public class NextLocationAdapter extends RecyclerView.Adapter<NextLocationAdapte
         }
     }
 
-
     public NextLocationAdapter(Context context, LinkedList<NextLocationItem> projectList, ArrayList<Integer> DistanceList) {
         mInflater = LayoutInflater.from(context);
         this.mLocationList = projectList;
-        this.Distancelist = DistanceList;
+        this.distanceList = DistanceList;
     }
-
 
     /**
      * Called when RecyclerView needs a new ViewHolder of the given type to
@@ -72,9 +68,9 @@ public class NextLocationAdapter extends RecyclerView.Adapter<NextLocationAdapte
      * @param viewType The view type of the new View. @return A new ViewHolder
      *                 that holds a View of the given view type.
      */
+    @NotNull
     @Override
-    public NextLocationAdapter.NextLocationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Inflate an item view.
+    public NextLocationAdapter.NextLocationViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View mItemView = mInflater.inflate(
                 R.layout.item_nextlocation, parent, false);
         return new NextLocationViewHolder(mItemView, this);
@@ -95,7 +91,7 @@ public class NextLocationAdapter extends RecyclerView.Adapter<NextLocationAdapte
         NextLocationItem current = mLocationList.get(position);
         String mCurrent = current.getLocationName();
         holder.LocationNameItemView.setText(mCurrent);
-        String pCurrent = this.Distancelist.get(position)+ "m distance";
+        String pCurrent = this.distanceList.get(position)+ "m distance";
         holder.distanceItemView.setText(pCurrent);
     }
 

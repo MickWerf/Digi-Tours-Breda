@@ -5,13 +5,14 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 
+import com.mickwerf.digi_tours_breda.R;
+
 public class ServiceChannel extends Application {
-    public static final String CHANNEL_ID = "ServiceChannel";
+    public static final String CHANNEL_ID = "NotificationChannel";
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         createNotificationChannel();
     }
 
@@ -19,7 +20,7 @@ public class ServiceChannel extends Application {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_ID,
-                    "Test Service Channel",
+                    getApplicationContext().getString(R.string.channel_name),
                     NotificationManager.IMPORTANCE_DEFAULT
             );
 
