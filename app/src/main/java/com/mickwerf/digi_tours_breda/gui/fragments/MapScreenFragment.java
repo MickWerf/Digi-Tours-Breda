@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,10 +27,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.mickwerf.digi_tours_breda.R;
 import com.mickwerf.digi_tours_breda.data.entities.GpsCoordinate;
 import com.mickwerf.digi_tours_breda.data.entities.Location;
@@ -41,20 +38,18 @@ import com.mickwerf.digi_tours_breda.live_data.MainViewModel;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.GpsLogic;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.RouteCallGet;
 import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Coordinate;
-import com.mickwerf.digi_tours_breda.live_data.route_logic.ors.models.Segment;
 import com.mickwerf.digi_tours_breda.services.ForegroundService;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
-import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import org.jetbrains.annotations.NotNull;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.library.BuildConfig;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapController;
@@ -72,11 +67,9 @@ import java.util.Scanner;
 public class MapScreenFragment extends Fragment {
 
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-
     private final int ZOOM_LEVEL = 19;
 
     private MapView mapView;
-
     private MyLocationNewOverlay locationOverlay;
     private MapController mapController;
 
@@ -84,27 +77,22 @@ public class MapScreenFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private NextLocationAdapter mAdapter;
 
+    private MainActivity mainActivity;
     private MainViewModel mainViewModel;
     private RouteWithSteps activeRoute;
 
     private Context context;
 
     private ArrayList<Coordinate> coordinates;
-
-    private List<Location> locations;
+    private ArrayList<Integer> DistanceList;
 
     private AlertDialog.Builder dialogBuilder;
     private AlertDialog dialog;
 
-    private HashMap<Location,Marker> LocationMarkers = new HashMap<>();
+    private HashMap<Location, Marker> LocationMarkers = new HashMap<>();
 
     public static GpsLogic gpsLogic;
-
-    private MainActivity mainActivity;
-
     private Vibrator vibrator;
-
-    private ArrayList<Integer> DistanceList;
 
     private int i;
 
@@ -115,7 +103,6 @@ public class MapScreenFragment extends Fragment {
         }
     };
 
-
     public MapScreenFragment(MainViewModel mainViewModel, Context context, MainActivity mainActivity) {
         this.mainViewModel = mainViewModel;
         this.context = context;
@@ -123,9 +110,7 @@ public class MapScreenFragment extends Fragment {
         this.mainActivity = mainActivity;
         this.vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         this.DistanceList = new ArrayList<>();
-
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -140,11 +125,7 @@ public class MapScreenFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_map_screen, container, false);
-
-
-        return view;
+        return inflater.inflate(R.layout.fragment_map_screen, container, false);
     }
 
     @Override
@@ -166,11 +147,8 @@ public class MapScreenFragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (int i = 0; i < grantResults.length; i++) {
-            permissionsToRequest.add(permissions[i]);
-        }
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, int[] grantResults) {
+        ArrayList<String> permissionsToRequest = new ArrayList<>(Arrays.asList(permissions).subList(0, grantResults.length));
         if (permissionsToRequest.size() > 0) {
             ActivityCompat.requestPermissions(
                     this.getActivity(),
@@ -200,12 +178,10 @@ public class MapScreenFragment extends Fragment {
         this.mapController.animateTo(locationOverlay.getMyLocation());
         this.mapController.zoomTo(ZOOM_LEVEL);
 
-
         this.mainViewModel.getActiveRoute().observe(this, this.activeRouteObserver);
         this.activeRoute = this.mainViewModel.getActiveRoute2();
 
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
-
 
         if (this.activeRoute != null) {
             mLocationList.clear();
@@ -214,7 +190,6 @@ public class MapScreenFragment extends Fragment {
                     mLocationList.add(new NextLocationItem(location.getLocationName()));
                 }
             }
-
 
             RouteWithSteps route = mainViewModel.getActiveRoute2();
             if (route != null) {
@@ -235,7 +210,7 @@ public class MapScreenFragment extends Fragment {
                     GeoPoint point = new GeoPoint(LocationCoordinateList.get(i).getLatitude(), LocationCoordinateList.get(i).getLongitude());
                     DrawWayPoint(point, locations.get(i));
 
-                    if(i < LocationCoordinateList.size()-1) {
+                    if (i < LocationCoordinateList.size() - 1) {
                         Coordinate start = new Coordinate(LocationCoordinateList.get(i).getLongitude(), LocationCoordinateList.get(i).getLatitude());
                         Coordinate end = new Coordinate(LocationCoordinateList.get(i + 1).getLongitude(), LocationCoordinateList.get(i + 1).getLatitude());
 
@@ -250,8 +225,7 @@ public class MapScreenFragment extends Fragment {
 
                             DrawRoute(coordinates);
 
-                            if(DistanceList.size() == LocationCoordinateList.size()) {
-
+                            if (DistanceList.size() == LocationCoordinateList.size()) {
                                 // Create recycler view.
                                 mRecyclerView = getView().findViewById(R.id.NextLocationRecyclerview);
                                 // Create an adapter and supply the data to be displayed.
@@ -261,15 +235,12 @@ public class MapScreenFragment extends Fragment {
                                 // Give the recycler view a default layout manager.
                                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-                                gpsLogic = new GpsLogic(this, locations, (ArrayList<GpsCoordinate>)LocationCoordinateList, LocationMarkers,mainActivity);
+                                gpsLogic = new GpsLogic(this, locations, (ArrayList<GpsCoordinate>) LocationCoordinateList, LocationMarkers, mainActivity);
                                 Intent intent = new Intent(context, ForegroundService.class);
                                 context.startService(intent);
-
                             }
-
                         });
                     }
-
 
                     try {
                         Thread.sleep(25);
@@ -277,27 +248,21 @@ public class MapScreenFragment extends Fragment {
                         e.printStackTrace();
                         Toast.makeText(getActivity(), R.string.FailedToReceive, Toast.LENGTH_LONG).show();
                     }
-
                 }
-
-
-
             }
         }
     }
 
-    public int measureDistance(ArrayList<Coordinate> coordinates){
+    public int measureDistance(ArrayList<Coordinate> coordinates) {
         int total = 0;
 
-        for (int i = 0; i<coordinates.size()-1;i++){
-            GeoPoint geoPoint = new GeoPoint(coordinates.get(i).getLatitude(),coordinates.get(i).getLongitude());
-            GeoPoint geoPoint2 = new GeoPoint(coordinates.get(i+1).getLatitude(),coordinates.get(i+1).getLongitude());
+        for (int i = 0; i < coordinates.size() - 1; i++) {
+            GeoPoint geoPoint = new GeoPoint(coordinates.get(i).getLatitude(), coordinates.get(i).getLongitude());
+            GeoPoint geoPoint2 = new GeoPoint(coordinates.get(i + 1).getLatitude(), coordinates.get(i + 1).getLongitude());
 
-            total = total + (int)(geoPoint.distanceToAsDouble(geoPoint2));
+            total = total + (int) (geoPoint.distanceToAsDouble(geoPoint2));
         }
-
         return total;
-
     }
 
 
@@ -326,18 +291,18 @@ public class MapScreenFragment extends Fragment {
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             this.LocationMarkers.put(location, marker);
 
-        marker.setOnMarkerClickListener((marker1, mapView) -> {
-            if(location.isVisited()){
-                CreateInfoPopup(location, marker1);
-            }else {
-                CreateSkipPopup(location, marker1);
-            }
+            marker.setOnMarkerClickListener((marker1, mapView) -> {
+                if (location.isVisited()) {
+                    CreateInfoPopup(location, marker1);
+                } else {
+                    CreateSkipPopup(location, marker1);
+                }
 
-            this.mapController.setCenter(marker1.getPosition());
-            this.mapController.zoomTo(ZOOM_LEVEL);
+                this.mapController.setCenter(marker1.getPosition());
+                this.mapController.zoomTo(ZOOM_LEVEL);
 
-            return true;
-        });
+                return true;
+            });
 
             mapView.getOverlays().add(marker);
         }
@@ -358,53 +323,48 @@ public class MapScreenFragment extends Fragment {
         this.imageView = (ImageView) popup.findViewById(R.id.infoLocationImage);
 
         String textPath = this.mainViewModel.getLocationElements(location).getPath();
-
         String imagePath = this.mainViewModel.getLocationImagePath(location);
 
         int id = context.getResources().getIdentifier(imagePath, "drawable", context.getPackageName());
 
         this.imageView.setImageResource(id);
 
-        String text = "";
+        StringBuilder text = new StringBuilder();
         try (InputStream inputStream = context.getAssets().open(textPath)) {
             Scanner reader = new Scanner(inputStream);
             while (reader.hasNext()) {
-                text += reader.nextLine();
+                text.append(reader.nextLine());
             }
-
             reader.close();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.infoTV.setText(text);
 
+        this.infoTV.setText(text.toString());
         this.okButton = (Button) popup.findViewById(R.id.OkLocationButton);
 
         this.okButton.setOnClickListener(new View.OnClickListener() {
-            private boolean routecomplete;
+            private boolean routeComplete;
+
             @Override
             public void onClick(View view) {
                 mainViewModel.visitLocation(location);
-                Runnable runnable = () -> {
-                    routecomplete = mainViewModel.checkRouteCompletion();
-
-                };
+                Runnable runnable = () -> routeComplete = mainViewModel.checkRouteCompletion();
                 Thread t = new Thread(runnable);
                 t.start();
                 try {
                     t.join();
 
-                    marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+                    marker.setIcon(ResourcesCompat.getDrawable(getResources(),R.drawable.place_icon_blue, context.getTheme()));
                     gpsLogic.setNotOpened(false);
                     dialog.cancel();
-                    if (routecomplete) {
+
+                    if (routeComplete) {
                         Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
-                        Runnable runnable2 = () -> {
-                            mainViewModel.stopCurrentRoute();
-                        };
+                        Runnable runnable2 = () -> mainViewModel.stopCurrentRoute();
                         Thread two = new Thread(runnable2);
                         two.start();
+
                         try {
                             two.join();
                             MainActivity activity = (MainActivity) context;
@@ -412,8 +372,6 @@ public class MapScreenFragment extends Fragment {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-
-
                     }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -421,17 +379,14 @@ public class MapScreenFragment extends Fragment {
             }
         });
 
-
         dialogBuilder.setView(popup);
         dialog = dialogBuilder.create();
         dialog.show();
     }
 
-
     private TextView titleTVskipPopup;
     private Button skipButton;
     private ImageView skipImageView;
-
 
     public void CreateSkipPopup(Location location, Marker marker) {
         View popup = getLayoutInflater().inflate(R.layout.skip_location_popup, null);
@@ -448,26 +403,24 @@ public class MapScreenFragment extends Fragment {
 
         this.skipButton.setOnClickListener(new View.OnClickListener() {
             private boolean routecomplete;
+
             @Override
             public void onClick(View view) {
                 mainViewModel.visitLocation(location);
-                Runnable runnable = () -> {
-                    routecomplete = mainViewModel.checkRouteCompletion();
-
-                };
+                Runnable runnable = () -> routecomplete = mainViewModel.checkRouteCompletion();
                 Thread t = new Thread(runnable);
                 t.start();
                 try {
                     t.join();
-                    marker.setIcon(getResources().getDrawable(R.drawable.place_icon_blue, context.getTheme()));
+                    marker.setIcon(ResourcesCompat.getDrawable(getResources(),R.drawable.place_icon_blue, context.getTheme()));
                     dialog.cancel();
-                    if (routecomplete){
+
+                    if (routecomplete) {
                         Toast.makeText(context, R.string.RouteCompleted, Toast.LENGTH_SHORT).show();
-                        Runnable runnable2 = () -> {
-                            mainViewModel.stopCurrentRoute();
-                        };
+                        Runnable runnable2 = () -> mainViewModel.stopCurrentRoute();
                         Thread two = new Thread(runnable2);
                         two.start();
+
                         try {
                             two.join();
                             MainActivity activity = (MainActivity) context;
@@ -479,10 +432,8 @@ public class MapScreenFragment extends Fragment {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
         });
-
 
 
         dialogBuilder.setView(popup);
@@ -494,24 +445,21 @@ public class MapScreenFragment extends Fragment {
         return locationOverlay;
     }
 
-    public void StopChecking(){
-        if(gpsLogic != null){
+    public void StopChecking() {
+        if (gpsLogic != null) {
             gpsLogic.stop();
         }
     }
 
-    public void createPopUp(Location location, Marker marker){
-        this.mainActivity.runOnUiThread(()-> {
-
+    public void createPopUp(Location location, Marker marker) {
+        this.mainActivity.runOnUiThread(() -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
             } else {
-                vibrator.vibrate(500);
+                vibrator.vibrate(VibrationEffect.createOneShot(500, 250));
             }
-            CreateInfoPopup(location,marker);
+            CreateInfoPopup(location, marker);
         });
     }
-
-
-    }
+}
 
